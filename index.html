@@ -469,14 +469,14 @@ body {
 
 <!-- ── TABS ────────────────────────────────────────── -->
 <div class="tabs">
-  <button class="tab-btn" onclick="switchTab('dashboard')">📊 Dashboard</button>
-  <button class="tab-btn active" onclick="switchTab('data')">⚙️ Update Holdings</button>
+  <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('data')">⚙️ Update Holdings</button>
 </div>
 
 <!-- ══════════════════════════════════════════════════ -->
 <!-- DASHBOARD TAB                                       -->
 <!-- ══════════════════════════════════════════════════ -->
-<div id="dashboard" class="tab-panel">
+<div id="dashboard" class="tab-panel active">
 <div class="dash-wrap">
 
 <div class="dash-header" style="display: block; margin-bottom: 1.75rem; border-bottom: 1.5px solid var(--border); padding-bottom: 1rem;">
@@ -490,7 +490,7 @@ body {
       A self-directed three-pillar retirement strategy spanning 7 accounts and over 60 holdings. The three pillars are not separate accounts — they are virtual designations applied across our existing Schwab and Fidelity accounts, with each position permanently assigned to a pillar and managed accordingly.<br><br><strong>Pillar 1 — Income</strong> generates passive dividend income across 6 accounts — no principal sold, dividends redeployed until retirement.<br><strong>Pillar 2 — Growth</strong> is Brad's 401k compounding untouched until RMDs begin in 2035.<br><strong>Pillar 3 — Health/LTC</strong> is a self-funded reserve held virtually inside the IRAs, fully replacing traditional LTC insurance and providing a dedicated pool for future healthcare and miscellaneous medical expenses.
     </p>
     
-    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of May 15, 2026 &nbsp;04:41 PM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
+    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of May 16, 2026 &nbsp;11:27 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
     
   </div>
   <!-- SUMMARY CARDS -->
@@ -1568,7 +1568,7 @@ body {
 <!-- ══════════════════════════════════════════════════ -->
 <!-- DATA TAB                                            -->
 <!-- ══════════════════════════════════════════════════ -->
-<div id="data" class="tab-panel active">
+<div id="data" class="tab-panel">
 <div class="data-wrap">
   <div class="data-intro">
     <strong>Holdings Editor</strong> — Update share counts, prices, and dividend rates below then click <strong>Apply Updates</strong> to recalculate the entire dashboard. Prices update the portfolio value. Dividend rates update income projections. The pillar and account assignments are fixed in the data structure.
@@ -2638,7 +2638,7 @@ body {
     <button class="update-btn" onclick="applyUpdates()">↻ Apply Updates &amp; Recalculate</button>
     <button class="update-btn" style="background:var(--navy)" onclick="saveDashboard()">💾 Save Dashboard</button>
     <button class="update-btn" style="background:transparent;color:var(--navy);padding:8px 10px;font-size:0.85rem" onclick="updateGitHubToken()" title="Update GitHub token">⚙️</button>
-    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 4:41:01 PM</span>
+    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 11:27:52 AM</span>
   </div>
 </div>
 </div>
@@ -2648,7 +2648,7 @@ body {
 // DATA — ALL HOLDINGS (edit here or via Data tab)
 // ════════════════════════════════════════════════════
 /*DATA_START*/const DATA = {
-  "asOf": "May 15, 2026",
+  "asOf": "May 16, 2026",
   "capOne": {
     "balance": 60000,
     "apy": 0.032
@@ -4291,4 +4291,5 @@ renderDashboard();
 
 
 
-<div id="syno-notification-is-installed"></div><div id="syno-notification-is-installed"></div></body></html>
+<div id="syno-notification-is-installed"></div><div id="syno-notification-is-installed"></div>
+</body></html>
