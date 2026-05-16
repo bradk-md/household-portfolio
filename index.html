@@ -4105,10 +4105,10 @@ function addPosition() {
 // ════════════════════════════════════════════════════
 // SAVE DASHBOARD — pushes to GitHub Pages
 // ════════════════════════════════════════════════════
-const GH_REPO     = 'bradk-md/kitchen-portfolio';
+const GH_REPO     = 'bradk-md/household-portfolio';
 const GH_PATH     = 'index.html';
 const GH_BRANCH   = 'main';
-const GH_LIVE_URL = 'https://bradk-md.github.io/kitchen-portfolio/';
+const GH_LIVE_URL = 'https://bradk-md.github.io/household-portfolio/';
 const TOKEN_KEY   = 'kpd_github_token';
 
 function getToken() { return localStorage.getItem(TOKEN_KEY); }
@@ -4217,6 +4217,7 @@ async function pushToGitHub(html, token) {
 
 async function saveDashboard() {
   applyUpdates();
+  switchTab('dashboard');
 
   const src = document.documentElement.outerHTML;
   const startTag = '/*DATA_START*/';
