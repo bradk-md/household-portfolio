@@ -490,7 +490,7 @@ body {
       A self-directed three-pillar retirement strategy spanning 7 accounts and over 60 holdings. The three pillars are not separate accounts — they are virtual designations applied across our existing Schwab and Fidelity accounts, with each position permanently assigned to a pillar and managed accordingly.<br><br><strong>Pillar 1 — Income</strong> generates passive dividend income across 6 accounts — no principal sold, dividends redeployed until retirement.<br><strong>Pillar 2 — Growth</strong> is Brad's and Lisa's 401k accounts compounding untouched until RMDs begin in 2035.<br><strong>Pillar 3 — Health/LTC</strong> is a self-funded reserve held virtually inside the IRAs, fully replacing traditional LTC insurance and providing a dedicated pool for future healthcare and miscellaneous medical expenses.
     </p>
     
-    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of May 17, 2026 &nbsp;08:47 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
+    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of May 17, 2026 &nbsp;12:52 PM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
     
   </div>
   <!-- SUMMARY CARDS -->
@@ -2557,16 +2557,16 @@ body {
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:0.9rem">
       <div>
         <div style="font-size:0.7rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--gray);margin-bottom:4px">Finnhub API Key <span style="font-weight:400;text-transform:none;letter-spacing:0">(prices · <a href="https://finnhub.io" target="_blank" style="color:var(--blue)">finnhub.io</a>)</span></div>
-        <input id="finnhubKey" type="text" placeholder="Paste your Finnhub API key here..."
-          style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--text)"
-          onchange="localStorage.setItem('finnhubKey',this.value)">
+        <input id="finnhubKey" type="text" placeholder="Paste your Finnhub API key here..." style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--text)" onchange="localStorage.setItem('finnhubKey',this.value)">
       </div>
       <div>
         <div style="font-size:0.7rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--gray);margin-bottom:4px">Alpha Vantage API Key <span style="font-weight:400;text-transform:none;letter-spacing:0">(dividends · <a href="https://www.alphavantage.co/support/#api-key" target="_blank" style="color:var(--blue)">alphavantage.co</a>)</span></div>
-        <input id="alphaKey" type="text" placeholder="Paste your Alpha Vantage API key here..."
-          style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--text)"
-          onchange="localStorage.setItem('alphaKey',this.value)">
+        <input id="alphaKey" type="text" placeholder="Paste your Alpha Vantage API key here..." style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--text)" onchange="localStorage.setItem('alphaKey',this.value)">
       </div>
+    <div style="display:flex;gap:8px;margin-bottom:0.75rem;flex-wrap:wrap">
+      <button class="update-btn" style="background:var(--blue);margin:0" onclick="refreshPrices()">📡 Refresh All Prices</button>
+      <button class="update-btn" style="background:var(--purple);margin:0" onclick="refreshDividends()">💰 Refresh Dividends</button>
+    </div>
     <span class="update-msg" id="priceMsg">✓ 0 updated · 0 confirmed unchanged · 45 not found</span>
     <div id="priceProgress" style="margin-top: 0.75rem; font-family: &quot;DM Mono&quot;, monospace; font-size: 0.75rem; color: var(--gray); line-height: 1.8; max-height: 140px; overflow-y: auto; background: var(--lgray); border-radius: 6px; padding: 8px 10px; display: block;"><em>Fetching last confirmed dividend per share for each position...</em><br><br><span style="color:#B05020">✗ O: no dividend data found</span><br><span style="color:#B05020">✗ PTY: no dividend data found</span><br><span style="color:#B05020">✗ ET: no dividend data found</span><br><span style="color:#B05020">✗ ARCC: no dividend data found</span><br><span style="color:#B05020">✗ SPG: no dividend data found</span><br><span style="color:#B05020">✗ IRM: no dividend data found</span><br><span style="color:#B05020">✗ MAIN: no dividend data found</span><br><span style="color:#B05020">✗ OKE: no dividend data found</span><br><span style="color:#B05020">✗ DLR: no dividend data found</span><br><span style="color:#B05020">✗ LADR: no dividend data found</span><br><span style="color:#B05020">✗ STAG: no dividend data found</span><br><span style="color:#B05020">✗ IIPR: no dividend data found</span><br><span style="color:#B05020">✗ PBA: no dividend data found</span><br><span style="color:#B05020">✗ BIP: no dividend data found</span><br><span style="color:#B05020">✗ UTF: no dividend data found</span><br><span style="color:#B05020">✗ BME: no dividend data found</span><br><span style="color:#B05020">✗ SCHD: no dividend data found</span><br><span style="color:#B05020">✗ PDO: no dividend data found</span><br><span style="color:#B05020">✗ WPC: no dividend data found</span><br><span style="color:#B05020">✗ VICI: no dividend data found</span><br><span style="color:#B05020">✗ DFP: no dividend data found</span><br><span style="color:#B05020">✗ PLD: no dividend data found</span><br><span style="color:#B05020">✗ SCHZ: no dividend data found</span><br><span style="color:#B05020">✗ BLOK: no dividend data found</span><br><span style="color:#B05020">✗ DIS: no dividend data found</span><br><span style="color:#B05020">✗ PFFA: no dividend data found</span><br><span style="color:#B05020">✗ BIZD: no dividend data found</span><br><span style="color:#B05020">✗ GOF: no dividend data found</span><br><span style="color:#B05020">✗ THQ: no dividend data found</span><br><span style="color:#B05020">✗ AMLP: no dividend data found</span><br><span style="color:#B05020">✗ AGNC: no dividend data found</span><br><span style="color:#B05020">✗ BSTZ: no dividend data found</span><br><span style="color:#B05020">✗ JPC: no dividend data found</span><br><span style="color:#B05020">✗ JRI: no dividend data found</span><br><span style="color:#B05020">✗ ABR: no dividend data found</span><br><span style="color:#B05020">✗ JEPI: no dividend data found</span><br><span style="color:#B05020">✗ BTO: no dividend data found</span><br><span style="color:#B05020">✗ UTG: no dividend data found</span><br><span style="color:#B05020">✗ BCX: no dividend data found</span><br><span style="color:#B05020">✗ PDI: no dividend data found</span><br><span style="color:#B05020">✗ GHY: no dividend data found</span><br><span style="color:#B05020">✗ JEPQ: no dividend data found</span><br><span style="color:#B05020">✗ EPD: no dividend data found</span><br><span style="color:#B05020">✗ ORCL: no dividend data found</span><br><span style="color:#B05020">✗ TPL: no dividend data found</span><br><br><strong style="color:var(--teal)">Done. Click Apply to recalculate dashboard with updated dividend rates.</strong></div>
   </div>
@@ -2648,7 +2648,7 @@ body {
     <button class="update-btn" onclick="applyUpdates()">↻ Apply Updates &amp; Recalculate</button>
     <button class="update-btn" style="background:var(--navy)" onclick="saveDashboard()">💾 Save Dashboard</button>
     <button class="update-btn" style="background:transparent;color:var(--navy);padding:8px 10px;font-size:0.85rem" onclick="updateGitHubToken()" title="Update GitHub token">⚙️</button>
-    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 8:47:52 AM</span>
+    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 12:52:03 PM</span>
   </div>
 </div>
 </div>
@@ -4513,4 +4513,4 @@ renderDashboard();
 
 <div id="syno-notification-is-installed"></div><div id="syno-notification-is-installed"></div>
 <div id="syno-notification-is-installed"></div>
-</body></html>
+</div></body></html>
