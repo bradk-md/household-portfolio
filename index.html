@@ -491,7 +491,7 @@ body {
       A self-directed three-pillar retirement strategy spanning 7 accounts and over 60 holdings. The three pillars are not separate accounts — they are virtual designations applied across our existing Schwab and Fidelity accounts, with each position permanently assigned to a pillar and managed accordingly.<br><br><strong>Pillar 1 — Income</strong> generates passive dividend income across 6 accounts — no principal sold, dividends redeployed until retirement.<br><strong>Pillar 2 — Growth</strong> is Brad's and Lisa's 401k accounts compounding untouched until RMDs begin in 2035.<br><strong>Pillar 3 — Health/LTC</strong> is a self-funded reserve held virtually inside the IRAs, fully replacing traditional LTC insurance and providing a dedicated pool for future healthcare and miscellaneous medical expenses.
     </p>
     
-    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of June 17, 2026 &nbsp;12:02 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
+    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of June 17, 2026 &nbsp;12:04 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
     
   </div>
   <!-- SUMMARY CARDS -->
@@ -1694,7 +1694,7 @@ body {
   <div id="dataEditor"><div class="data-section">
     <div class="data-section-title">⚙️ Portfolio Settings</div>
     <table class="data-tbl"><thead><tr><th>Setting</th><th>Value</th><th>Notes</th></tr></thead><tbody>
-      <tr><td>As of date</td><td><input id="set_asOf" value="June 16, 2026" readonly="" style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
+      <tr><td>As of date</td><td><input id="set_asOf" value="June 17, 2026" readonly="" style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
       <tr><td>Capital One balance</td><td><input id="set_capBal" type="number" value="60000"></td><td>Sacred principal — never touched</td></tr>
       <tr><td>Capital One APY</td><td><input id="set_capApy" type="number" step="0.001" value="0.032"></td><td>e.g. 0.032 for 3.20%</td></tr>
       <tr><td>Crypto value (approx)</td><td><input id="set_crypto" type="number" value="26909"></td><td>Approximate market value</td></tr>
@@ -2797,22 +2797,6 @@ body {
               <button onclick="deletePosition(58)" title="Delete EPD" style="background:none;border:1px solid #DDD;border-radius:4px;padding:2px 7px;cursor:pointer;font-size:0.8rem;color:#999;transition:all 0.15s" onmouseover="this.style.background='#FDECEA';this.style.color='#C0392B';this.style.borderColor='#C0392B'" onmouseout="this.style.background='none';this.style.color='#999';this.style.borderColor='#DDD'">🗑</button>
             </td>
           </tr><tr>
-            <td><input value="TPL" onchange="DATA.holdings[60].ticker=this.value"></td>
-            <td><input value="Texas Pacific Land" onchange="DATA.holdings[60].name=this.value"></td>
-            <td><select onchange="DATA.holdings[60].pillar=parseInt(this.value)">
-              <option value="1" selected="">1</option><option value="2">2</option><option value="3">3</option>
-            </select></td>
-            <td><input type="number" step="0.0001" value="10" onchange="DATA.holdings[60].shares=parseFloat(this.value)||0"></td>
-            <td><input type="number" step="0.01" value="355.7395" onchange="DATA.holdings[60].price=parseFloat(this.value)||0"></td><td><input type="number" step="0.01" value="405.8" placeholder="0.00" onchange="DATA.holdings[60].costBasis=parseFloat(this.value)||0"></td>
-            <td><input type="number" step="0.0001" value="2.4" onchange="DATA.holdings[60].div=parseFloat(this.value)||0"></td>
-            <td><select onchange="DATA.holdings[60].freq=this.value">
-              <option>M</option><option selected="">Q</option><option>SA</option><option>A</option><option>-</option>
-            </select></td>
-            <td><input value="$0.60/qtr" onchange="DATA.holdings[60].notes=this.value"></td>
-            <td style="text-align:center">
-              <button onclick="deletePosition(60)" title="Delete TPL" style="background:none;border:1px solid #DDD;border-radius:4px;padding:2px 7px;cursor:pointer;font-size:0.8rem;color:#999;transition:all 0.15s" onmouseover="this.style.background='#FDECEA';this.style.color='#C0392B';this.style.borderColor='#C0392B'" onmouseout="this.style.background='none';this.style.color='#999';this.style.borderColor='#DDD'">🗑</button>
-            </td>
-          </tr><tr>
             <td><input value="Cash" onchange="DATA.holdings[61].ticker=this.value"></td>
             <td><input value="Cash" onchange="DATA.holdings[61].name=this.value"></td>
             <td><select onchange="DATA.holdings[61].pillar=parseInt(this.value)">
@@ -2855,6 +2839,22 @@ body {
             <td><input value="$0.50/qtr" onchange="DATA.holdings[59].notes=this.value"></td>
             <td style="text-align:center">
               <button onclick="deletePosition(59)" title="Delete ORCL" style="background:none;border:1px solid #DDD;border-radius:4px;padding:2px 7px;cursor:pointer;font-size:0.8rem;color:#999;transition:all 0.15s" onmouseover="this.style.background='#FDECEA';this.style.color='#C0392B';this.style.borderColor='#C0392B'" onmouseout="this.style.background='none';this.style.color='#999';this.style.borderColor='#DDD'">🗑</button>
+            </td>
+          </tr><tr>
+            <td><input value="TPL" onchange="DATA.holdings[60].ticker=this.value"></td>
+            <td><input value="Texas Pacific Land" onchange="DATA.holdings[60].name=this.value"></td>
+            <td><select onchange="DATA.holdings[60].pillar=parseInt(this.value)">
+              <option value="1">1</option><option value="2" selected="">2</option><option value="3">3</option>
+            </select></td>
+            <td><input type="number" step="0.0001" value="10" onchange="DATA.holdings[60].shares=parseFloat(this.value)||0"></td>
+            <td><input type="number" step="0.01" value="355.7395" onchange="DATA.holdings[60].price=parseFloat(this.value)||0"></td><td><input type="number" step="0.01" value="405.8" placeholder="0.00" onchange="DATA.holdings[60].costBasis=parseFloat(this.value)||0"></td>
+            <td><input type="number" step="0.0001" value="2.4" onchange="DATA.holdings[60].div=parseFloat(this.value)||0"></td>
+            <td><select onchange="DATA.holdings[60].freq=this.value">
+              <option>M</option><option selected="">Q</option><option>SA</option><option>A</option><option>-</option>
+            </select></td>
+            <td><input value="$0.60/qtr" onchange="DATA.holdings[60].notes=this.value"></td>
+            <td style="text-align:center">
+              <button onclick="deletePosition(60)" title="Delete TPL" style="background:none;border:1px solid #DDD;border-radius:4px;padding:2px 7px;cursor:pointer;font-size:0.8rem;color:#999;transition:all 0.15s" onmouseover="this.style.background='#FDECEA';this.style.color='#C0392B';this.style.borderColor='#C0392B'" onmouseout="this.style.background='none';this.style.color='#999';this.style.borderColor='#DDD'">🗑</button>
             </td>
           </tr><tr>
             <td><input value="SPCX" onchange="DATA.holdings[71].ticker=this.value"></td>
@@ -3106,7 +3106,7 @@ body {
     <button class="update-btn" onclick="applyUpdates()">↻ Apply Updates &amp; Recalculate</button>
     <button class="update-btn" style="background:var(--navy)" onclick="saveDashboard()">💾 Save Dashboard</button>
     <button class="update-btn" style="background:transparent;color:var(--navy);padding:8px 10px;font-size:0.85rem" onclick="updateGitHubToken()" title="Update GitHub token">⚙️</button>
-    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 12:02:55 AM</span>
+    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 12:04:08 AM</span>
   </div>
 </div>
 </div>
