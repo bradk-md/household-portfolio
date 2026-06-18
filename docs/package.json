@@ -1,0 +1,14 @@
+{
+  "name": "kitchen-docs-builder",
+  "version": "1.0.0",
+  "description": "Rebuild Kitchen portfolio docs from live dashboard data",
+  "scripts": {
+    "build-summary": "node build_summary.js",
+    "build-condensed": "node build_condensed.js",
+    "build-detail": "node build_detail.js",
+    "build-all": "node build_summary.js && node build_condensed.js && node build_detail.js"
+  },
+  "dependencies": {
+    "docx": "^9.6.1"
+  }
+}
