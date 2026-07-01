@@ -2,9 +2,13 @@ const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, Alignm
         WidthType, ShadingType, BorderStyle, VerticalAlign } = require('docx');
 const fs = require('fs');
 const { loadData, computeSummary, fmtMoney, fmtShares, fmtPct, grow, posVal, posInc, posYield } = require('./lib.js');
+const { computeAllInIncome } = require('./lib.js');
 
 const data = loadData();
 const s = computeSummary(data);
+const ai = computeAllInIncome(data);
+const allInInc = s.combinedInc + ai.p2p3Inc;
+const allInMo = allInInc / 12;
 
 const NAVY = '1F3864', TEAL = '0D6B52', PURPLE = '534AB7', BLUE = '185FA5', GRAY = '5A5E6B', LIGHT = 'F5F5F3';
 const border = { style: BorderStyle.SINGLE, size: 1, color: 'CCCCCC' };
@@ -86,10 +90,13 @@ const totRows = [
   headerRow(['INCOME TOTAL', 'Annual', 'Monthly', '% of Target / Notes'], totWidths),
   dataRow(['Portfolio income (all accounts)', `${fmtMoney(s.p1Inc)}/yr`, `${fmtMoney(s.p1Inc/12)}/mo`, `${fmtPct(s.p1Inc/84000*100)} of $84K target`], totWidths),
   dataRow(['Capital One interest (3.20%)', `${fmtMoney(s.capOneInc)}/yr`, `${fmtMoney(s.capOneInc/12)}/mo`, 'Sacred principal · interest reinvested in joint'], totWidths),
-  dataRow(['COMBINED INCOME', `${fmtMoney(s.combinedInc)}/yr`, `${fmtMoney(s.combinedMo)}/mo`, `${fmtPct(s.combinedInc/84000*100)} of $84K target`], totWidths, [{bold:true,fill:'E6F4EF',color:TEAL},{bold:true,fill:'E6F4EF'},{bold:true,fill:'E6F4EF'},{fill:'E6F4EF'}]),
+  dataRow(['Combined Income (P1 + Cap One)', `${fmtMoney(s.combinedInc)}/yr`, `${fmtMoney(s.combinedMo)}/mo`, `${fmtPct(s.combinedInc/84000*100)} of $84K target`], totWidths),
+  dataRow(['P2/P3 dividends (redirected to income)', `+${fmtMoney(ai.p2p3Inc)}/yr`, `+${fmtMoney(ai.p2p3Inc/12)}/mo`, 'Harvested to cash · redeployed into Pillar 1 positions'], totWidths),
+  dataRow(['TOTAL ALL-IN INCOME', `${fmtMoney(allInInc)}/yr`, `${fmtMoney(allInMo)}/mo`, 'All household investment income · P1+P2+P3+CapOne'], totWidths, [{bold:true,fill:'E6F4EF',color:TEAL},{bold:true,fill:'E6F4EF'},{bold:true,fill:'E6F4EF'},{fill:'E6F4EF'}]),
 ];
 children.push(table(totWidths, totRows));
 
+children.push(new Paragraph({ children: [new TextRun({ text: `Income note: "Combined Income" = Pillar 1 + Capital One. "Total All-In Income" (${fmtMoney(allInInc)}/yr · ${fmtMoney(allInMo)}/mo) adds ~${fmtMoney(ai.p2p3Inc)}/yr in Pillar 2/3 dividends harvested to cash and redeployed into Pillar 1. Pillar 3 projections use total return rates but actual compounding tracks closer to below-average (6.6%) since dividends are redirected out by design.`, size: 15, color: GRAY, italics: true, font: 'Calibri' })], spacing: { before: 80, after: 200 } }));
 children.push(h1('Pillar 2 Growth — 401k', PURPLE));
 children.push(new Paragraph({ children: [new TextRun({ text: `Brad 401k · Fidelity · pure growth · no distributions · ${fmtMoney(s.p2Val)}`, size: 17, color: GRAY, font: 'Calibri' })], spacing: { after: 100 } }));
 children.push(new Paragraph({ children: [new TextRun({ text: `Total Value `, bold:true, size:18, font:'Calibri' }), new TextRun({ text: fmtMoney(s.p2Val), bold:true, size:22, color:PURPLE, font:'Calibri' })], spacing: { after: 120 } }));
