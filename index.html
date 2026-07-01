@@ -108,6 +108,21 @@ body {
   gap: 12px;
   margin-bottom: 2rem;
 }
+.summary-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.summary-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.summary-section {
+  margin-bottom: 2rem;
+}
 .sum-card {
   background: white;
   border-radius: 12px;
@@ -495,37 +510,52 @@ body {
     
   </div>
   <!-- SUMMARY CARDS -->
-  <div class="summary-grid" id="summaryCards">
-    <div class="sum-card navy">
-      <div class="sum-label">Investment Portfolio</div>
-      <div class="sum-value">$2,086,478</div>
-      <div class="sum-note">incl. reserves &amp; crypto · Portfolio YOC 4.6%</div>
+  <div class="summary-section" id="summaryCards">
+    <!-- Row 1: Investment Portfolio (full width) -->
+    <div class="summary-grid-1" id="summaryRow1">
+      <div class="sum-card navy">
+        <div class="sum-label">Investment Portfolio</div>
+        <div class="sum-value">$2,086,478</div>
+        <div class="sum-note">incl. reserves &amp; crypto · Portfolio YOC 4.6%</div>
+      </div>
     </div>
-    <div class="sum-card teal">
-      <div class="sum-label">Monthly Income</div>
-      <div class="sum-value">$6,852/mo</div>
-      <div class="sum-note">$82,224/yr combined · Pillar 1 + Cap One</div>
+    <!-- Row 2: Three Pillars -->
+    <div class="summary-grid-3" id="summaryRow2">
+      <div class="sum-card teal">
+        <div class="sum-label">Pillar 1 — Income</div>
+        <div class="sum-value">$1,205,321</div>
+        <div class="sum-note">60.3% of portfolio · YOC 7.4%</div>
+      </div>
+      <div class="sum-card purple">
+        <div class="sum-label">Pillar 2 — Growth</div>
+        <div class="sum-value">$392,961</div>
+        <div class="sum-note">19.7% of portfolio · Brad 401k</div>
+      </div>
+      <div class="sum-card blue">
+        <div class="sum-label">Pillar 3 — Health/LTC</div>
+        <div class="sum-value">$401,240</div>
+        <div class="sum-note">20.1% of portfolio · 8 positions</div>
+      </div>
     </div>
-    <div class="sum-card teal">
-      <div class="sum-label">Annual Income</div>
-      <div class="sum-value">$82,224/yr</div>
-      <div class="sum-note">Income Portfolio only · 6.7% blended yield</div>
+    <!-- Row 3: Income tiles -->
+    <div class="summary-grid-3" id="summaryRow3">
+      <div class="sum-card teal">
+        <div class="sum-label">Monthly Income</div>
+        <div class="sum-value">$6,852/mo</div>
+        <div class="sum-note">$82,224/yr combined · Pillar 1 + Cap One</div>
+      </div>
+      <div class="sum-card teal">
+        <div class="sum-label">Annual Income</div>
+        <div class="sum-value">$82,224/yr</div>
+        <div class="sum-note">Income Portfolio only · 6.7% blended yield</div>
+      </div>
+      <div class="sum-card teal">
+        <div class="sum-label">Total All-In Income</div>
+        <div class="sum-value">$91,971/yr</div>
+        <div class="sum-note">$7,664/mo · +$9,830/yr P2/P3 divs → redeployed to P1</div>
+      </div>
     </div>
-    <div class="sum-card teal">
-      <div class="sum-label">Pillar 1 — Income</div>
-      <div class="sum-value">$1,205,321</div>
-      <div class="sum-note">60.3% of portfolio · YOC 7.4%</div>
-    </div>
-    <div class="sum-card purple">
-      <div class="sum-label">Pillar 2 — Growth</div>
-      <div class="sum-value">$392,961</div>
-      <div class="sum-note">19.7% of portfolio · Brad 401k</div>
-    </div>
-    <div class="sum-card blue">
-      <div class="sum-label">Pillar 3 — Health/LTC</div>
-      <div class="sum-value">$401,240</div>
-      <div class="sum-note">20.1% of portfolio · 8 positions</div>
-    </div></div>
+  </div>
 
   <!-- PORTFOLIO PROJECTIONS -->
   <div class="proj-section">
@@ -4034,22 +4064,47 @@ function renderDashboard() {
   // Date block
   document.getElementById('dateBlock').innerHTML = `As of ${DATA.asOf} &nbsp;${new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})} &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified`;
 
-  // Summary cards
-  const cards = [
-    { label:'Investment Portfolio', val:fmt(C.grandTotal), note:`incl. reserves & crypto · Portfolio YOC ${fmtPct(C.portYOC)}`, cls:'navy' },
-    { label:'Monthly Income', val:fmt(C.combinedInc/12)+'/mo', note:`${fmt(C.combinedInc)}/yr combined · Pillar 1 + Cap One`, cls:'teal' },
-    { label:'Annual Income', val:fmt(C.combinedInc)+'/yr', note:`Income Portfolio only · ${fmtPct(C.p1Inc/C.p1Val)} blended yield`, cls:'teal' },
-    { label:'Total All-In Income', val:fmt(C.allInInc)+'/yr', note:`${fmt(C.allInInc/12)}/mo · +${fmt(C.p2Inc+C.p3Inc)}/yr P2/P3 divs → redeployed to P1`, cls:'teal' },
-    { label:'Pillar 1 — Income', val:fmt(C.p1Val), note:`${fmtPct(C.p1Val/C.investTotal)} of portfolio · YOC ${fmtPct(C.p1YOC)}`, cls:'teal' },
-    { label:'Pillar 2 — Growth', val:fmt(C.p2Val), note:`${fmtPct(C.p2Val/C.investTotal)} of portfolio · Brad 401k`, cls:'purple' },
-    { label:'Pillar 3 — Health/LTC', val:fmt(C.p3Val), note:`${fmtPct(C.p3Val/C.investTotal)} of portfolio · 8 positions`, cls:'blue' },
-  ];
-  document.getElementById('summaryCards').innerHTML = cards.map(c => `
-    <div class="sum-card ${c.cls}">
-      <div class="sum-label">${c.label}</div>
-      <div class="sum-value">${c.val}</div>
-      <div class="sum-note">${c.note}</div>
-    </div>`).join('');
+  // Summary cards — three rows
+  document.getElementById('summaryRow1').innerHTML = `
+    <div class="sum-card navy">
+      <div class="sum-label">Investment Portfolio</div>
+      <div class="sum-value">${fmt(C.grandTotal)}</div>
+      <div class="sum-note">incl. reserves & crypto · Portfolio YOC ${fmtPct(C.portYOC)}</div>
+    </div>`;
+
+  document.getElementById('summaryRow2').innerHTML = `
+    <div class="sum-card teal">
+      <div class="sum-label">Pillar 1 — Income</div>
+      <div class="sum-value">${fmt(C.p1Val)}</div>
+      <div class="sum-note">${fmtPct(C.p1Val/C.investTotal)} of portfolio · YOC ${fmtPct(C.p1YOC)}</div>
+    </div>
+    <div class="sum-card purple">
+      <div class="sum-label">Pillar 2 — Growth</div>
+      <div class="sum-value">${fmt(C.p2Val)}</div>
+      <div class="sum-note">${fmtPct(C.p2Val/C.investTotal)} of portfolio · Brad 401k</div>
+    </div>
+    <div class="sum-card blue">
+      <div class="sum-label">Pillar 3 — Health/LTC</div>
+      <div class="sum-value">${fmt(C.p3Val)}</div>
+      <div class="sum-note">${fmtPct(C.p3Val/C.investTotal)} of portfolio · 8 positions</div>
+    </div>`;
+
+  document.getElementById('summaryRow3').innerHTML = `
+    <div class="sum-card teal">
+      <div class="sum-label">Monthly Income</div>
+      <div class="sum-value">${fmt(C.combinedInc/12)}/mo</div>
+      <div class="sum-note">${fmt(C.combinedInc)}/yr combined · Pillar 1 + Cap One</div>
+    </div>
+    <div class="sum-card teal">
+      <div class="sum-label">Annual Income</div>
+      <div class="sum-value">${fmt(C.combinedInc)}/yr</div>
+      <div class="sum-note">Income Portfolio only · ${fmtPct(C.p1Inc/C.p1Val)} blended yield</div>
+    </div>
+    <div class="sum-card teal">
+      <div class="sum-label">Total All-In Income</div>
+      <div class="sum-value">${fmt(C.allInInc)}/yr</div>
+      <div class="sum-note">${fmt(C.allInInc/12)}/mo · +${fmt(C.p2Inc+C.p3Inc)}/yr P2/P3 divs → redeployed to P1</div>
+    </div>`;
 
   // Portfolio projections
   const yr3  = C.p1Inc*Math.pow(1.03,3);
