@@ -120,9 +120,7 @@ body {
   gap: 12px;
   margin-bottom: 12px;
 }
-.summary-section {
-  margin-bottom: 2rem;
-}
+.summary-section { margin-bottom: 2rem; }
 .sum-card {
   background: white;
   border-radius: 12px;
@@ -511,15 +509,13 @@ body {
   </div>
   <!-- SUMMARY CARDS -->
   <div class="summary-section" id="summaryCards">
-    <!-- Row 1: Investment Portfolio (full width) -->
     <div class="summary-grid-1" id="summaryRow1">
-      <div class="sum-card navy">
+      <div class="sum-card navy" style="text-align:center">
         <div class="sum-label">Investment Portfolio</div>
         <div class="sum-value">$2,086,478</div>
         <div class="sum-note">incl. reserves &amp; crypto · Portfolio YOC 4.6%</div>
       </div>
     </div>
-    <!-- Row 2: Three Pillars -->
     <div class="summary-grid-3" id="summaryRow2">
       <div class="sum-card teal">
         <div class="sum-label">Pillar 1 — Income</div>
@@ -537,17 +533,16 @@ body {
         <div class="sum-note">20.1% of portfolio · 8 positions</div>
       </div>
     </div>
-    <!-- Row 3: Income tiles -->
     <div class="summary-grid-3" id="summaryRow3">
       <div class="sum-card teal">
         <div class="sum-label">Monthly Income</div>
-        <div class="sum-value">$6,852/mo</div>
-        <div class="sum-note">$82,224/yr combined · Pillar 1 + Cap One</div>
+        <div class="sum-value">$6,845/mo</div>
+        <div class="sum-note">$82,141/yr combined · Pillar 1 + Cap One</div>
       </div>
       <div class="sum-card teal">
         <div class="sum-label">Annual Income</div>
-        <div class="sum-value">$82,224/yr</div>
-        <div class="sum-note">Income Portfolio only · 6.7% blended yield</div>
+        <div class="sum-value">$82,141/yr</div>
+        <div class="sum-note">Income Portfolio only · 6.6% blended yield</div>
       </div>
       <div class="sum-card teal">
         <div class="sum-label">Total All-In Income</div>
@@ -4066,7 +4061,7 @@ function renderDashboard() {
 
   // Summary cards — three rows
   document.getElementById('summaryRow1').innerHTML = `
-    <div class="sum-card navy">
+    <div class="sum-card navy" style="text-align:center">
       <div class="sum-label">Investment Portfolio</div>
       <div class="sum-value">${fmt(C.grandTotal)}</div>
       <div class="sum-note">incl. reserves & crypto · Portfolio YOC ${fmtPct(C.portYOC)}</div>
