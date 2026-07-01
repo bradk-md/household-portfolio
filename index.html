@@ -4007,8 +4007,18 @@ function calc() {
   const investTotal = p1Val + p2Val + p3Val;
   const grandTotal  = investTotal + DATA.capOne.balance + DATA.crypto;
 
+  const skipDiv = new Set(['GPool','VGIntl','BREQI1','WTSCER','Cash','SWVXX','FDRXX']);
+  let p2Inc = 0, p3Inc = 0;
+  h.forEach(pos => {
+    if (skipDiv.has(pos.ticker)) return;
+    const inc = pos.shares * pos.div;
+    if (pos.pillar === 2) p2Inc += inc;
+    if (pos.pillar === 3) p3Inc += inc;
+  });
+  const allInInc = p1Inc + p2Inc + p3Inc + capOneInc;
+
   return { p1Val, p1Inc, p2Val, p3Val, investTotal, grandTotal, capOneInc,
-           combinedInc: p1Inc + capOneInc, p1YOC, portYOC };
+           combinedInc: p1Inc + capOneInc, p2Inc, p3Inc, allInInc, p1YOC, portYOC };
 }
 
 // ════════════════════════════════════════════════════
@@ -4029,6 +4039,7 @@ function renderDashboard() {
     { label:'Investment Portfolio', val:fmt(C.grandTotal), note:`incl. reserves & crypto · Portfolio YOC ${fmtPct(C.portYOC)}`, cls:'navy' },
     { label:'Monthly Income', val:fmt(C.combinedInc/12)+'/mo', note:`${fmt(C.combinedInc)}/yr combined · Pillar 1 + Cap One`, cls:'teal' },
     { label:'Annual Income', val:fmt(C.combinedInc)+'/yr', note:`Income Portfolio only · ${fmtPct(C.p1Inc/C.p1Val)} blended yield`, cls:'teal' },
+    { label:'Total All-In Income', val:fmt(C.allInInc)+'/yr', note:`${fmt(C.allInInc/12)}/mo · +${fmt(C.p2Inc+C.p3Inc)}/yr P2/P3 divs → redeployed to P1`, cls:'teal' },
     { label:'Pillar 1 — Income', val:fmt(C.p1Val), note:`${fmtPct(C.p1Val/C.investTotal)} of portfolio · YOC ${fmtPct(C.p1YOC)}`, cls:'teal' },
     { label:'Pillar 2 — Growth', val:fmt(C.p2Val), note:`${fmtPct(C.p2Val/C.investTotal)} of portfolio · Brad 401k`, cls:'purple' },
     { label:'Pillar 3 — Health/LTC', val:fmt(C.p3Val), note:`${fmtPct(C.p3Val/C.investTotal)} of portfolio · 8 positions`, cls:'blue' },
