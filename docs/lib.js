@@ -76,3 +76,17 @@ function posInc(p) { return p.shares * p.div; }
 function posYield(p) { const v = posVal(p); return v ? (posInc(p) / v * 100) : 0; }
 
 module.exports = { loadData, fmtMoney, fmtShares, fmtPct, grow, computeSummary, getHoldingsByAcct, posVal, posInc, posYield };
+
+// All-in income helper (P1 + real P2/P3 divs + CapOne)
+function computeAllInIncome(data) {
+  const skip = new Set(['GPool','VGIntl','BREQI1','WTSCER','Cash','SWVXX','FDRXX']);
+  let p2Inc = 0, p3Inc = 0;
+  for (const pos of data.holdings) {
+    if (skip.has(pos.ticker)) continue;
+    const inc = pos.shares * pos.div;
+    if (pos.pillar === 2) p2Inc += inc;
+    if (pos.pillar === 3) p3Inc += inc;
+  }
+  return { p2Inc, p3Inc, p2p3Inc: p2Inc + p3Inc };
+}
+module.exports.computeAllInIncome = computeAllInIncome;
