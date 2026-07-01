@@ -2,9 +2,13 @@ const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, Alignm
         WidthType, ShadingType, BorderStyle, VerticalAlign } = require('docx');
 const fs = require('fs');
 const { loadData, computeSummary, fmtMoney, fmtShares, fmtPct, grow, posVal, posInc, posYield } = require('./lib.js');
+const { computeAllInIncome } = require('./lib.js');
 
 const data = loadData();
 const s = computeSummary(data);
+const ai = computeAllInIncome(data);
+const allInInc = s.combinedInc + ai.p2p3Inc;
+const allInMo = allInInc / 12;
 
 const NAVY = '1F3864', TEAL = '0D6B52', PURPLE = '534AB7', BLUE = '185FA5', GRAY = '5A5E6B', LIGHT = 'F5F5F3', GOLD='B8960C';
 const border = { style: BorderStyle.SINGLE, size: 1, color: 'CCCCCC' };
@@ -118,10 +122,21 @@ children.push(new Paragraph({
   children: [
     new TextRun({ text: `INCOME TOTAL  `, bold: true, size: 19, color: NAVY, font: 'Calibri' }),
     new TextRun({ text: `${totalP1Count} positions · ${fmtMoney(s.p1Inc)}/yr · ${fmtMoney(s.p1Inc/12)}/mo · ${fmtMoney(s.p1Val)} total assets · rates verified ${s.asOf}`, size: 17, font: 'Calibri' }),
-  ], spacing: { before: 80, after: 100 }
+  ], spacing: { before: 80, after: 60 }
 }));
 children.push(new Paragraph({
-  children: [new TextRun({ text: `Pending trades: SCHD +563sh remaining · SCHE 50% sell after Jun 24 ex-div → THW+HQH (+$2,136/yr) · SCHC 50% sell anytime`, size: 15, italics: true, color: GRAY, font: 'Calibri' })],
+  children: [
+    new TextRun({ text: `TOTAL ALL-IN INCOME  `, bold: true, size: 19, color: TEAL, font: 'Calibri' }),
+    new TextRun({ text: `${fmtMoney(allInInc)}/yr · ${fmtMoney(allInMo)}/mo`, bold: true, size: 19, color: TEAL, font: 'Calibri' }),
+    new TextRun({ text: `  (adds ~${fmtMoney(ai.p2p3Inc)}/yr P2/P3 dividends harvested → redeployed into Pillar 1)`, size: 15, color: GRAY, font: 'Calibri' }),
+  ], spacing: { after: 60 }
+}));
+children.push(new Paragraph({
+  children: [new TextRun({ text: `Pending trades: SCHD +425sh remaining · THW ~1,050sh (Lisa IRA) · BCX 250sh (Lisa IRA) · THQ (Lisa IRA — wait for premium to narrow)`, size: 15, italics: true, color: GRAY, font: 'Calibri' })],
+  spacing: { after: 60 }
+}));
+children.push(new Paragraph({
+  children: [new TextRun({ text: `Pillar 3 note: Growth projections use total return rates. Since P3 dividends (~${fmtMoney(ai.p3Inc)}/yr) are redirected to income rather than reinvested, actual compounding tracks closer to the below-average (6.6%) scenario by design.`, size: 15, italics: true, color: GRAY, font: 'Calibri' })],
   spacing: { after: 200 }
 }));
 
