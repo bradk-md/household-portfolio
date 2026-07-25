@@ -32,7 +32,7 @@ function grow(value, rate, years) {
 // Compute summary aggregates fresh from holdings (single source of truth)
 function computeSummary(data) {
   const h = data.holdings;
-  const capOne = { balance: 60000, apy: 0.032 };
+  const capOne = { balance: data.summary.capOneBalance || 60000, apy: data.summary.capOneAPY || 0.03 };
   const crypto = data.summary.crypto;
   const capOneInc = capOne.balance * capOne.apy;
 
