@@ -4931,7 +4931,7 @@ function parseXLSXRows(rows, filename) {
   const msg = document.getElementById('importMsg');
   msg.style.display = 'block';
 
-  let updated = 0, notFound = [];
+  let updated = 0, notFound = [], autoAdded = 0;
   let symCol=-1, qtyCol=-1, prxCol=-1, costCol=-1, divCol=-1, acctCol=-1, acctNumCol=-1, estAnnCol=-1, valCol=-1, mktValColIdx=-1;
   const FIDELITY_EXCLUDE = ['250209168','Z25678403','258632434'];
 
@@ -5152,7 +5152,24 @@ function parseXLSXRows(rows, filename) {
         found = true;
       }
     });
-    if (!found) notFound.push(ticker);
+    if (!found) {
+      notFound.push(ticker);
+      // Auto-add genuinely new position — only with a resolved account + valid price.
+      // Defaults to Pillar 1 and flags for review (pillar/name/div need human confirmation).
+      if (dashAcct && price && price > 0) {
+        let annDiv = 0;
+        const estAnnNew = estAnnCol >= 0 ? clean(row[estAnnCol]) : null;
+        if (estAnnNew && estAnnNew > 0 && shares > 0) annDiv = parseFloat((estAnnNew / shares).toFixed(4));
+        else if (lastDiv && lastDiv > 0 && lastDiv < 50) annDiv = parseFloat((lastDiv * 4).toFixed(4));
+        DATA.holdings.push({
+          ticker, name: ticker, acct: dashAcct, pillar: 1,
+          shares, price, costBasis: (cost && cost > 0 ? cost : price),
+          div: annDiv, freq: 'Q',
+          notes: '\u26A0 AUTO-ADDED \u2014 review pillar/name/div'
+        });
+        autoAdded++;
+      }
+    }
   }
 
   // Apply accumulated MDXBX total to MDXBX in Joint
@@ -5169,7 +5186,8 @@ function parseXLSXRows(rows, filename) {
 
   DATA.asOf = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
 
-  let resultText = `✓ Import complete — ${updated} positions updated from ${filename}.`;
+  let resultText = `\u2713 Import complete \u2014 ${updated} positions updated from ${filename}.`;
+  if (autoAdded > 0) resultText += ` ${autoAdded} auto-added (\u26A0 review pillar/name/div).`;
   const filtered = notFound.filter(t => !['FDRXX','SPAXX','SWVXX','','Account Number'].includes(t));
   if (filtered.length > 0)
     resultText += ` Not matched: ${filtered.slice(0,10).join(', ')}`;
