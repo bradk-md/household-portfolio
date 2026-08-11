@@ -504,7 +504,7 @@ body {
       A self-directed three-pillar retirement strategy spanning 7 accounts and over 60 holdings. The three pillars are not separate accounts — they are virtual designations applied across our existing Schwab and Fidelity accounts, with each position permanently assigned to a pillar and managed accordingly.<br><br><strong>Pillar 1 — Income</strong> generates passive dividend income across 6 accounts — no principal sold, dividends redeployed until retirement.<br><strong>Pillar 2 — Growth</strong> is Brad's and Lisa's 401k accounts compounding untouched until RMDs begin in 2035.<br><strong>Pillar 3 — Health/LTC</strong> is a self-funded reserve held virtually inside the IRAs, fully replacing traditional LTC insurance and providing a dedicated pool for future healthcare and miscellaneous medical expenses.
     </p>
     
-    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of August 11, 2026 &nbsp;10:19 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
+    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of August 11, 2026 &nbsp;10:42 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
     
   </div>
   <!-- SUMMARY CARDS -->
@@ -3180,7 +3180,7 @@ body {
     <button class="update-btn" onclick="applyUpdates()">↻ Apply Updates &amp; Recalculate</button>
     <button class="update-btn" style="background:var(--navy)" onclick="saveDashboard()">💾 Save Dashboard</button>
     <button class="update-btn" style="background:transparent;color:var(--navy);padding:8px 10px;font-size:0.85rem" onclick="updateGitHubToken()" title="Update GitHub token">⚙️</button>
-    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 10:19:50 AM</span>
+    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 10:42:29 AM</span>
   </div>
 </div>
 </div>
@@ -5172,34 +5172,19 @@ function parseXLSXRows(rows, filename) {
         DATA.holdings[idx].shares = shares;
         if (price  && price > 0) DATA.holdings[idx].price     = price;
         if (cost   && cost  > 0) DATA.holdings[idx].costBasis = cost;
-        // Dividend derivation: prefer per-payment amount (Last Div / Amount per share)
-        // times frequency. Frequency is INFERRED from the data (Est. Annual Income /
-        // per-share, rounded to 12/4/2/1) so we don't trust a possibly-stale stored freq.
-        // The trailing Est. Annual figure is volatile (can annualize an 11-month window,
-        // x 11/12) so it is NOT used as the dividend value — only to detect the schedule.
-        // Est. annual / shares is a last-resort fallback if no per-share amount is present.
+        // Only update dividend if it looks like a reasonable per-payment amount
+        // (must be less than $50/payment to avoid confusing gain/loss with dividends)
+        // Prefer Est. annual income / shares (already annualized by Fidelity — no freq guessing)
         const estAnn = estAnnCol >= 0 ? clean(row[estAnnCol]) : null;
-        if (lastDiv && lastDiv > 0 && lastDiv < 50) {
-          // Infer frequency from (annual estimate per share / per-payment amount).
-          // Rounding to the nearest standard schedule makes the 11/12 drift wash out.
-          let mult;
-          if (estAnn && estAnn > 0 && shares > 0) {
-            const ratio = (estAnn / shares) / lastDiv;
-            if (ratio >= 9)      mult = 12;   // monthly (~12, tolerant of 11/12 drift)
-            else if (ratio >= 3) mult = 4;    // quarterly
-            else if (ratio >= 1.5) mult = 2;  // semiannual
-            else                 mult = 1;    // annual
-          } else {
-            // No estimate to infer from — fall back to stored freq label.
-            const freq = h.freq || 'Q';
-            mult = freq==='M'?12 : freq==='Q'?4 : freq==='SA'?2 : 1;
-          }
-          const ann = parseFloat((lastDiv * mult).toFixed(4));
-          if (Math.abs(h.div - ann) / (h.div || 1) > 0.001) DATA.holdings[idx].div = ann;
-        } else if (estAnn && estAnn > 0 && shares > 0) {
-          // Last resort: no per-share amount available, use the annual estimate directly.
+        if (estAnn && estAnn > 0 && shares > 0) {
           const annDivPerSh = parseFloat((estAnn / shares).toFixed(4));
           if (Math.abs(h.div - annDivPerSh) / (h.div || 1) > 0.001) DATA.holdings[idx].div = annDivPerSh;
+        } else if (lastDiv && lastDiv > 0 && lastDiv < 50) {
+          // Fall back to Last Div × frequency for Schwab files
+          const freq = h.freq || 'Q';
+          const mult = freq==='M'?12 : freq==='Q'?4 : freq==='SA'?2 : 1;
+          const ann  = parseFloat((lastDiv * mult).toFixed(4));
+          if (Math.abs(h.div - ann) / (h.div || 1) > 0.001) DATA.holdings[idx].div = ann;
         }
         updated++;
         found = true;
@@ -5210,26 +5195,14 @@ function parseXLSXRows(rows, filename) {
       // Auto-add genuinely new position — only with a resolved account + valid price.
       // Defaults to Pillar 1 and flags for review (pillar/name/div need human confirmation).
       if (dashAcct && price && price > 0) {
-        let annDiv = 0, inferredFreq = 'Q';
+        let annDiv = 0;
         const estAnnNew = estAnnCol >= 0 ? clean(row[estAnnCol]) : null;
-        if (lastDiv && lastDiv > 0 && lastDiv < 50) {
-          // Prefer per-payment amount x inferred frequency (same logic as updates).
-          let mult = 4;
-          if (estAnnNew && estAnnNew > 0 && shares > 0) {
-            const ratio = (estAnnNew / shares) / lastDiv;
-            if (ratio >= 9)      { mult = 12; inferredFreq = 'M'; }
-            else if (ratio >= 3) { mult = 4;  inferredFreq = 'Q'; }
-            else if (ratio >= 1.5) { mult = 2; inferredFreq = 'SA'; }
-            else                 { mult = 1;  inferredFreq = 'A'; }
-          }
-          annDiv = parseFloat((lastDiv * mult).toFixed(4));
-        } else if (estAnnNew && estAnnNew > 0 && shares > 0) {
-          annDiv = parseFloat((estAnnNew / shares).toFixed(4));
-        }
+        if (estAnnNew && estAnnNew > 0 && shares > 0) annDiv = parseFloat((estAnnNew / shares).toFixed(4));
+        else if (lastDiv && lastDiv > 0 && lastDiv < 50) annDiv = parseFloat((lastDiv * 4).toFixed(4));
         DATA.holdings.push({
           ticker, name: ticker, acct: dashAcct, pillar: 1,
           shares, price, costBasis: (cost && cost > 0 ? cost : price),
-          div: annDiv, freq: inferredFreq,
+          div: annDiv, freq: 'Q',
           notes: '\u26A0 AUTO-ADDED \u2014 review pillar/name/div'
         });
         autoAdded++;
