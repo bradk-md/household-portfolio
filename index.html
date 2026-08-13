@@ -535,12 +535,12 @@ body {
     <div class="sum-card teal">
       <div class="sum-label">Monthly Income</div>
       <div class="sum-value">$6,943/mo</div>
-      <div class="sum-note">$83,322/yr combined · Pillar 1 + Cap One</div>
+      <div class="sum-note">Pillar 1 $6,793/mo + Cap One $150/mo</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Annual Income</div>
       <div class="sum-value">$83,322/yr</div>
-      <div class="sum-note">Income Portfolio only · 6.6% blended yield</div>
+      <div class="sum-note">Pillar 1 + Cap One · 6.4% blended yield</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Total All-In Income</div>
@@ -4161,12 +4161,12 @@ function renderDashboard() {
     <div class="sum-card teal">
       <div class="sum-label">Monthly Income</div>
       <div class="sum-value">${fmt(C.combinedInc/12)}/mo</div>
-      <div class="sum-note">${fmt(C.combinedInc)}/yr combined · Pillar 1 + Cap One</div>
+      <div class="sum-note">Pillar 1 ${fmt(C.p1Inc/12)}/mo + Cap One ${fmt(C.capOneInc/12)}/mo</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Annual Income</div>
       <div class="sum-value">${fmt(C.combinedInc)}/yr</div>
-      <div class="sum-note">Income Portfolio only · ${fmtPct(C.p1Inc/C.p1Val)} blended yield</div>
+      <div class="sum-note">Pillar 1 + Cap One · ${fmtPct(C.combinedInc/(C.p1Val+DATA.capOne.balance))} blended yield</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Total All-In Income</div>
