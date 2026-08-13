@@ -4969,7 +4969,7 @@ function parseXLSXRows(rows, filename) {
   const msg = document.getElementById('importMsg');
   msg.style.display = 'block';
 
-  let updated = 0, notFound = [], autoAdded = 0;
+  let updated = 0, notFound = [], autoAdded = 0, paymentFlags = [];
   let symCol=-1, qtyCol=-1, prxCol=-1, costCol=-1, divCol=-1, acctCol=-1, acctNumCol=-1, estAnnCol=-1, valCol=-1, mktValColIdx=-1;
   const FIDELITY_EXCLUDE = ['250209168','Z25678403','258632434'];
 
@@ -5172,19 +5172,30 @@ function parseXLSXRows(rows, filename) {
         DATA.holdings[idx].shares = shares;
         if (price  && price > 0) DATA.holdings[idx].price     = price;
         if (cost   && cost  > 0) DATA.holdings[idx].costBasis = cost;
-        // Only update dividend if it looks like a reasonable per-payment amount
-        // (must be less than $50/payment to avoid confusing gain/loss with dividends)
-        // Prefer Est. annual income / shares (already annualized by Fidelity — no freq guessing)
+        // Payment-change detection (Aug 2026): the file's per-share amount (lastDiv) is the
+        // exact per-payment. Compare it to the last recorded per-payment (stored annual div
+        // ÷ frequency). If it MATCHES (within 2%), the fund paid its normal amount → use
+        // lastDiv × frequency (exact, no estimate; immune to the 11/12 annualization glitch).
+        // If it DIFFERS, something changed (cut, raise, or one-off supplemental) → DO NOT change
+        // the stored value; just FLAG it for Brad to confirm real-change vs supplemental.
         const estAnn = estAnnCol >= 0 ? clean(row[estAnnCol]) : null;
-        if (estAnn && estAnn > 0 && shares > 0) {
+        const freq = h.freq || '';
+        const mult = freq==='M'?12 : freq==='Q'?4 : freq==='SA'?2 : freq==='A'?1 : 0;
+        if (lastDiv && lastDiv > 0 && lastDiv < 50 && mult > 0) {
+          const lastPerPmt = h.div / mult;                 // last recorded per-payment
+          const pctDiff = Math.abs(lastDiv - lastPerPmt) / (lastPerPmt || 1);
+          if (pctDiff <= 0.02) {
+            // Same payment as last time → exact per-payment × frequency
+            const ann = parseFloat((lastDiv * mult).toFixed(4));
+            if (Math.abs(h.div - ann) / (h.div || 1) > 0.001) DATA.holdings[idx].div = ann;
+          } else {
+            // Payment changed → keep the stored value UNCHANGED, flag for Brad to confirm
+            paymentFlags.push(`${h.ticker} (${h.acct}): per-payment $${lastPerPmt.toFixed(4)} \u2192 $${lastDiv.toFixed(4)}`);
+          }
+        } else if (estAnn && estAnn > 0 && shares > 0) {
+          // No usable per-payment or no frequency label (e.g. FDGRX/VUG/VTV) → Est. Annual Income fallback
           const annDivPerSh = parseFloat((estAnn / shares).toFixed(4));
           if (Math.abs(h.div - annDivPerSh) / (h.div || 1) > 0.001) DATA.holdings[idx].div = annDivPerSh;
-        } else if (lastDiv && lastDiv > 0 && lastDiv < 50) {
-          // Fall back to Last Div × frequency for Schwab files
-          const freq = h.freq || 'Q';
-          const mult = freq==='M'?12 : freq==='Q'?4 : freq==='SA'?2 : 1;
-          const ann  = parseFloat((lastDiv * mult).toFixed(4));
-          if (Math.abs(h.div - ann) / (h.div || 1) > 0.001) DATA.holdings[idx].div = ann;
         }
         updated++;
         found = true;
@@ -5195,6 +5206,8 @@ function parseXLSXRows(rows, filename) {
       // Auto-add genuinely new position — only with a resolved account + valid price.
       // Defaults to Pillar 1 and flags for review (pillar/name/div need human confirmation).
       if (dashAcct && price && price > 0) {
+        // New position: no prior per-payment to compare against, so use Est. Annual Income
+        // (safe default for an unknown fund). Freq defaults to Q and is flagged for review.
         let annDiv = 0;
         const estAnnNew = estAnnCol >= 0 ? clean(row[estAnnCol]) : null;
         if (estAnnNew && estAnnNew > 0 && shares > 0) annDiv = parseFloat((estAnnNew / shares).toFixed(4));
@@ -5203,7 +5216,7 @@ function parseXLSXRows(rows, filename) {
           ticker, name: ticker, acct: dashAcct, pillar: 1,
           shares, price, costBasis: (cost && cost > 0 ? cost : price),
           div: annDiv, freq: 'Q',
-          notes: '\u26A0 AUTO-ADDED \u2014 review pillar/name/div'
+          notes: '\u26A0 AUTO-ADDED \u2014 review pillar/name/div/freq'
         });
         autoAdded++;
       }
@@ -5226,6 +5239,7 @@ function parseXLSXRows(rows, filename) {
 
   let resultText = `\u2713 Import complete \u2014 ${updated} positions updated from ${filename}.`;
   if (autoAdded > 0) resultText += ` ${autoAdded} auto-added (\u26A0 review pillar/name/div).`;
+  if (paymentFlags.length > 0) resultText += ` \u26A0 ${paymentFlags.length} payment change${paymentFlags.length!==1?'s':''} need review (value left unchanged): ${paymentFlags.slice(0,10).join('; ')}.`;
   const filtered = notFound.filter(t => !['FDRXX','SPAXX','SWVXX','','Account Number'].includes(t));
   if (filtered.length > 0)
     resultText += ` Not matched: ${filtered.slice(0,10).join(', ')}`;
