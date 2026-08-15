@@ -546,12 +546,12 @@
       "pillar": 1,
       "shares": 1530,
       "price": 13.37,
-      "div": 1.5236,
+      "div": 0.9564,
       "freq": "Q",
       "notes": "BDC basket ETF",
       "costBasis": 14.43,
       "value": 20456.1,
-      "income": 2331.108,
+      "income": 1463.2920000000001,
       "costTotal": 22077.899999999998
     },
     {
@@ -636,12 +636,12 @@
       "pillar": 1,
       "shares": 925,
       "price": 31.48,
-      "div": 2.4142,
+      "div": 1.95,
       "freq": "M",
       "notes": "Science & tech CEF",
       "costBasis": 17.17,
       "value": 29119.0,
-      "income": 2233.135,
+      "income": 1803.75,
       "costTotal": 15882.250000000002
     },
     {
@@ -681,12 +681,12 @@
       "pillar": 1,
       "shares": 1250,
       "price": 5.09,
-      "div": 0.94,
+      "div": 0.68,
       "freq": "Q",
       "notes": "Commercial mortgage REIT",
       "costBasis": 13.6,
       "value": 6362.5,
-      "income": 1175.0,
+      "income": 850.0000000000001,
       "costTotal": 17000.0
     },
     {
@@ -696,12 +696,12 @@
       "pillar": 1,
       "shares": 295,
       "price": 58.02,
-      "div": 4.5802,
+      "div": 4.3992,
       "freq": "M",
       "notes": "Covered call income ETF",
       "costBasis": 55.9,
       "value": 17115.9,
-      "income": 1351.1589999999999,
+      "income": 1297.7640000000001,
       "costTotal": 16490.5
     },
     {
@@ -801,12 +801,12 @@
       "pillar": 1,
       "shares": 227,
       "price": 60.53,
-      "div": 6.5232,
+      "div": 8.46,
       "freq": "M",
       "notes": "Covered call Nasdaq ETF",
       "costBasis": 58.92,
       "value": 13740.31,
-      "income": 1480.7664,
+      "income": 1920.4200000000003,
       "costTotal": 13374.84
     },
     {
@@ -1108,7 +1108,7 @@
     "grandTotal": 2141449.103297984,
     "investTotal": 2053369.3932979845,
     "p1Val": 1240960.51536,
-    "p1Inc": 81525.75607763205,
+    "p1Inc": 80289.81367763205,
     "p1Cost": 1096982.9116800001,
     "p2Val": 403811.72768498433,
     "p2Inc": 26.4,
@@ -1118,10 +1118,10 @@
     "capOneAPY": 0.03,
     "capOneInc": 1800.0,
     "crypto": 28079.71,
-    "combinedInc": 83325.75607763205,
-    "combinedMo": 6943.813006469337,
-    "allInInc": 93157.71072211204,
-    "allInMo": 7763.142560176003,
+    "combinedInc": 82089.81367763205,
+    "combinedMo": 6840.8178064693375,
+    "allInInc": 91921.76832211204,
+    "allInMo": 7660.1473601760035,
     "portYOC": 0.04533789457731291,
     "accts": {
       "Brad IRA": {
@@ -1134,11 +1134,11 @@
       },
       "Brad Roth IRA": {
         "val": 283151.92,
-        "inc": 28347.638511401314
+        "inc": 26672.042511401316
       },
       "Lisa HSA": {
         "val": 47396.38999999999,
-        "inc": 5981.51639820544
+        "inc": 6421.16999820544
       },
       "Brad HSA": {
         "val": 5465.81,
