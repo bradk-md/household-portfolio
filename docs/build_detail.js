@@ -89,7 +89,7 @@ const totWidths = [3000, 1700, 1700, 3960];
 const totRows = [
   headerRow(['INCOME TOTAL', 'Annual', 'Monthly', '% of Target / Notes'], totWidths),
   dataRow(['Portfolio income (all accounts)', `${fmtMoney(s.p1Inc)}/yr`, `${fmtMoney(s.p1Inc/12)}/mo`, `${fmtPct(s.p1Inc/84000*100)} of $84K target`], totWidths),
-  dataRow(['Capital One interest (3.20%)', `${fmtMoney(s.capOneInc)}/yr`, `${fmtMoney(s.capOneInc/12)}/mo`, 'Sacred principal · interest reinvested in joint'], totWidths),
+  dataRow(['Capital One interest (' + fmtPct(s.capOne.apy*100) + ')', `${fmtMoney(s.capOneInc)}/yr`, `${fmtMoney(s.capOneInc/12)}/mo`, 'Sacred principal · interest reinvested in joint'], totWidths),
   dataRow(['Combined Income (P1 + Cap One)', `${fmtMoney(s.combinedInc)}/yr`, `${fmtMoney(s.combinedMo)}/mo`, `${fmtPct(s.combinedInc/84000*100)} of $84K target`], totWidths),
   dataRow(['P2/P3 dividends (redirected to income)', `+${fmtMoney(ai.p2p3Inc)}/yr`, `+${fmtMoney(ai.p2p3Inc/12)}/mo`, 'Harvested to cash · redeployed into Pillar 1 positions'], totWidths),
   dataRow(['TOTAL ALL-IN INCOME', `${fmtMoney(allInInc)}/yr`, `${fmtMoney(allInMo)}/mo`, 'All household investment income · P1+P2+P3+CapOne'], totWidths, [{bold:true,fill:'E6F4EF',color:TEAL},{bold:true,fill:'E6F4EF'},{bold:true,fill:'E6F4EF'},{fill:'E6F4EF'}]),
