@@ -4175,9 +4175,12 @@ function renderDashboard() {
     </div>`;
 
   // Portfolio projections
-  const yr3  = C.p1Inc*Math.pow(1.03,3);
-  const yr5  = C.p1Inc*Math.pow(1.03,5);
-  const yr10 = C.p1Inc*Math.pow(1.03,10);
+  // Pillar 1 income compounds at 3%/yr (dividend growth); Cap One interest is a flat-rate
+  // savings yield and does NOT compound — it's added back flat each year, once.
+  const yr3  = C.p1Inc*Math.pow(1.03,3)  + C.capOneInc;
+  const yr5  = C.p1Inc*Math.pow(1.03,5)  + C.capOneInc;
+  const yr10 = C.p1Inc*Math.pow(1.03,10) + C.capOneInc;
+  const yr15 = C.p1Inc*Math.pow(1.03,15) + C.capOneInc;
   const k5a  = C.p2Val*Math.pow(1.07,5);
   const k10a = C.p2Val*Math.pow(1.07,10);
   const k5b  = C.p2Val*Math.pow(1.09,5);
@@ -4193,7 +4196,7 @@ function renderDashboard() {
       <div class="proj-row"><span class="yr">Year 3</span><span class="val">${fmt(yr3)}/yr</span></div>
       <div class="proj-row"><span class="yr">Year 5</span><span class="val">${fmt(yr5)}/yr</span></div>
       <div class="proj-row"><span class="yr">Year 10</span><span class="val">${fmt(yr10)}/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 15</span><span class="val">${fmt(Math.round(C.combinedInc*Math.pow(1.03,15)))}/yr</span></div>
+      <div class="proj-row"><span class="yr">Year 15</span><span class="val">${fmt(yr15)}/yr</span></div>
     </div>
     <div class="proj-block">
       <div class="proj-block-hdr purple-hdr">Pillar 2 — Growth</div>
@@ -4347,24 +4350,26 @@ function renderPillarBody(pillarNum, C, color, hdrCls) {
 
   // Inner projections
   if (pillarNum===1) {
-    const y3=C.combinedInc*Math.pow(1.03,3), y5=C.combinedInc*Math.pow(1.03,5), y10=C.combinedInc*Math.pow(1.03,10);
+    // Dividends compound at 3%/yr. Cap One interest is a flat savings yield — added once,
+    // never compounded, never double-counted.
+    const y3=C.p1Inc*Math.pow(1.03,3), y5=C.p1Inc*Math.pow(1.03,5), y10=C.p1Inc*Math.pow(1.03,10);
     html += `<div class="inner-proj"><div class="inner-proj-title">Income Trajectory — 3% Natural Dividend Growth</div>
     <div class="inner-proj-grid">
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Annual Income</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">${fmt(C.combinedInc)}/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">${fmt(C.p1Inc)}/yr</span></div>
         <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">${fmt(y3)}/yr</span></div>
         <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">${fmt(y5)}/yr</span></div>
         <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">${fmt(y10)}/yr</span></div>
       </div>
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Monthly Income</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">${fmt(C.combinedInc/12)}/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">${fmt(C.p1Inc/12)}/mo</span></div>
         <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">${fmt(y3/12)}/mo</span></div>
         <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">${fmt(y5/12)}/mo</span></div>
         <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">${fmt(y10/12)}/mo</span></div>
       </div>
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Combined (+ Cap One)</div>
         <div class="inner-proj-row"><span class="yr">Now</span><span class="val">${fmt(C.combinedInc)}/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">${fmt(y3)}/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">${fmt(y3+C.capOneInc)}/yr</span></div>
         <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">${fmt(y5+C.capOneInc)}/yr</span></div>
         <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">${fmt(y10+C.capOneInc)}/yr</span></div>
       </div>
