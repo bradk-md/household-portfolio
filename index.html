@@ -4188,6 +4188,16 @@ function renderDashboard() {
   const l5a  = C.p3Val*Math.pow(1.085,5);
   const l10a = C.p3Val*Math.pow(1.085,10);
   const l10c = C.p3Val*Math.pow(1.066,10);
+  // Pillar 3 PRICE-ONLY projection: dividends are swept out to Pillar 1, so P3's own
+  // growth is price appreciation only = total-return rate minus P3's dividend yield.
+  // Computed dynamically so it self-adjusts as P3 composition/yield changes.
+  const p3DivYield = C.p3Val > 0 ? (C.p3Inc / C.p3Val) : 0;
+  const p3AvgPO  = Math.max(0, 0.085 - p3DivYield);   // avg price-only rate
+  const p3ConsPO = Math.max(0, 0.066 - p3DivYield);   // conservative price-only rate
+  const m5a  = C.p3Val*Math.pow(1+p3AvgPO,5);
+  const m10a = C.p3Val*Math.pow(1+p3AvgPO,10);
+  const m5c  = C.p3Val*Math.pow(1+p3ConsPO,5);
+  const m10c = C.p3Val*Math.pow(1+p3ConsPO,10);
 
   document.getElementById('portfolioProj').innerHTML = `
     <div class="proj-block">
@@ -4207,12 +4217,13 @@ function renderDashboard() {
       <div class="proj-row"><span class="yr">Year 10 · avg (7%)</span><span class="val">${fmt(k10a)}</span></div>
     </div>
     <div class="proj-block">
-      <div class="proj-block-hdr blue-hdr">Pillar 3 — Health/LTC</div>
+      <div class="proj-block-hdr blue-hdr">Pillar 3 — Health/LTC (price-only · divs swept to P1)</div>
       <div class="proj-row"><span class="yr">Now</span><span class="val">${fmt(C.p3Val)}</span></div>
-      <div class="proj-row"><span class="yr">Year 5 · conservative (6.6%)</span><span class="val">${fmt(Math.round(C.p3Val*Math.pow(1.066,5)))}</span></div>
-      <div class="proj-row"><span class="yr">Year 5 · avg (8.5%)</span><span class="val">${fmt(l5a)}</span></div>
-      <div class="proj-row"><span class="yr">Year 10 · conservative (6.6%)</span><span class="val">${fmt(l10c)}</span></div>
-      <div class="proj-row"><span class="yr">Year 10 · avg (8.5%)</span><span class="val">${fmt(l10a)}</span></div>
+      <div class="proj-row"><span class="yr">Year 5 · conservative (${fmtPct(p3ConsPO)})</span><span class="val">${fmt(Math.round(m5c))}</span></div>
+      <div class="proj-row"><span class="yr">Year 5 · avg (${fmtPct(p3AvgPO)})</span><span class="val">${fmt(Math.round(m5a))}</span></div>
+      <div class="proj-row"><span class="yr">Year 10 · conservative (${fmtPct(p3ConsPO)})</span><span class="val">${fmt(Math.round(m10c))}</span></div>
+      <div class="proj-row"><span class="yr">Year 10 · avg (${fmtPct(p3AvgPO)})</span><span class="val">${fmt(Math.round(m10a))}</span></div>
+      <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Note: rates are price-only (total return &minus; P3 yield ${fmtPct(p3DivYield)}). Electing to reinvest P3 dividends would add ~${fmtPct(p3DivYield)}/yr back toward total-return (8.5% / 6.6%).</span></div>
     </div>`;
 
   // Pillar accordions
