@@ -190,6 +190,6 @@ renderNarrative(children);
 
 const doc = new Document({ sections:[{ properties:{ page:{ margin:{ top:720,bottom:720,left:720,right:720 } } }, children }] });
 Packer.toBuffer(doc).then(buf => {
-  fs.writeFileSync('/home/claude/rebuild2/Kitchen Complete Reference.docx', buf);
+  fs.writeFileSync('Kitchen Complete Reference.docx', buf);
   console.log('✓ Combined Complete Reference written');
 });
