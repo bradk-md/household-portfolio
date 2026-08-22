@@ -77,6 +77,6 @@ for (const sec of A.sections) {
 
 const doc = new Document({ sections:[{ properties:{ page:{ margin:{ top:720,bottom:720,left:720,right:720 } } }, children }] });
 Packer.toBuffer(doc).then(buf => {
-  fs.writeFileSync('Kitchen_Action_Items.docx', buf);
+  fs.writeFileSync('Kitchen Action Items.docx', buf);
   console.log('✓ Action Items written');
 });
