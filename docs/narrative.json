@@ -1,0 +1,128 @@
+{
+  "_comment": "NARRATIVE SOURCE for Kitchen Complete Reference. Hand-maintained. Data sections are generated separately from the dashboard. Blocks: {type:'h1'|'h2'|'p'|'table', ...}. [VERIFY: $X?] markers are corrupted figures from the old doc needing Brad's confirmation. Published IRMAA/Medicare numbers have been restored to correct 2026 values.",
+  "lastReviewed": "narrative content pending Brad's figure verification — Aug 22 2026",
+  "blocks": [
+    { "type": "h1", "text": "Tax Strategy, IRMAA & RMD Planning" },
+    { "type": "p", "text": "This section documents our confirmed tax strategy and Medicare/RMD planning decisions." },
+
+    { "type": "h2", "text": "Confirmed Strategy — Three Decisions" },
+    { "type": "table", "widths": [1800, 4200, 4000], "header": ["Decision", "What We Do", "Why"], "rows": [
+      ["401k contributions", "Stay Traditional pre-tax — maximize including super catch-up ($4,750/yr while Brad age 60-63)", "Reduces current MAGI · preserves bracket room for Roth conversions · deduction too valuable to give up in final 2 working years"],
+      ["Roth conversions", "Convert maximum each Q4 within 24% bracket — Lisa IRA to Lisa Roth IRA · invest in SCHG+VTI+VXUS only", "Permanently removes dollars from future RMDs · grows tax-free forever · no RMDs on Roth accounts · best asset to pass to children"],
+      ["IRMAA", "File SSA Form SSA-44 on retirement day — converts 2027 premium to retirement-year MAGI", "One form · 15 minutes · saves $2,968 in year one · IRMAA never an issue after that"]
+    ]},
+
+    { "type": "h2", "text": "IRMAA — What It Is and When It Applies" },
+    { "type": "p", "text": "IRMAA (Income-Related Monthly Adjustment Amount) is a Medicare surcharge added to standard Part B and Part D premiums when household MAGI exceeds certain thresholds. It uses a two-year lookback — 2027 Medicare premiums are based on 2025 income. Both Brad and Lisa enroll in Medicare in 2027 (both turn 65 that year — Brad in June, Lisa in November)." },
+
+    { "type": "h2", "text": "IRMAA Thresholds (2026 — MFJ)" },
+    { "type": "table", "widths": [3600, 2000, 2200, 2200], "header": ["MAGI (Married Filing Jointly)", "Part B/mo each", "Surcharge vs standard", "Household extra/yr"], "rows": [
+      ["Up to $212,000", "$185/mo", "—", "$0 — no surcharge"],
+      ["$212,001 – $266,000 (Tier 1)", "$259/mo", "+$74/mo each", "$1,776/yr"],
+      ["$266,001 – $334,000 (Tier 2)", "$370/mo", "+$185/mo each", "$4,440/yr + Part D"],
+      ["$334,001 – $400,000 (Tier 3)", "$480/mo", "+$295/mo each", "$7,080/yr + Part D"],
+      ["$400,001 – $750,000 (Tier 4)", "$591/mo", "+$406/mo each", "$9,744/yr + Part D"]
+    ]},
+    { "type": "p", "text": "Total household surcharge in Tier 2 (our working years) is approximately $2,968/yr including Part D. Thresholds adjust annually with inflation. [VERIFY: 2035 top-of-no-surcharge threshold projected to ~$253,000? original said ~53,000 — likely $253,000]" },
+
+    { "type": "h2", "text": "Our Complete IRMAA Timeline" },
+    { "type": "table", "widths": [2400, 1800, 1600, 2200, 3400], "header": ["Year", "MAGI Est.", "IRMAA Tier", "Household Surcharge", "Action / Notes"], "rows": [
+      ["2025 (working)", "[VERIFY: $180,866?]", "Tier 2", "~$2,968/yr", "Not yet enrolled in Medicare — N/A"],
+      ["2026 (working)", "[VERIFY: $180,866?]", "Tier 2", "~$2,968/yr", "Not yet enrolled in Medicare — N/A"],
+      ["2027 at enrollment", "[VERIFY: $180,866?]", "Tier 2", "~$2,968/yr", "FILE SSA-44 immediately on retirement day"],
+      ["2027 after SSA-44", "[VERIFY: $156,018?]", "NONE", "$0", "Appeal uses 2027 retirement-year income — succeeds automatically"],
+      ["2028–2034 (retired)", "[VERIFY: ~$45,079?]", "NONE", "$0", "Roth+HSA shield keeps MAGI very low"],
+      ["2035+ (RMDs begin)", "[VERIFY: ~$54,590?]", "NONE", "$0", "RMDs + Pillar 1 still well below IRMAA threshold"]
+    ]},
+
+    { "type": "h2", "text": "Why MAGI Is So Low in Retirement" },
+    { "type": "table", "widths": [3400, 1800, 1800, 3600], "header": ["Income Source", "Annual", "Counts in MAGI?", "Why"], "rows": [
+      ["IRA withdrawals (living expenses)", "[VERIFY: ~$42,243?]", "YES", "Traditional IRA — taxable on withdrawal"],
+      ["Capital One interest", "$1,920", "YES", "Ordinary interest income"],
+      ["Joint brokerage taxable divs", "[VERIFY: $?16]", "YES", "Qualified dividends"],
+      ["T.Rowe MD Tax-Free Bond", "[VERIFY: $1,445?]", "NO", "Municipal bond — federally tax-exempt"],
+      ["Brad Roth IRA income", "[VERIFY: $28,102?]", "NO", "Roth — tax-free forever · never in MAGI"],
+      ["HSA income (medical use)", "[VERIFY: $7,534?]", "NO", "Triple tax-free — invisible to IRS"],
+      ["Estimated retirement MAGI", "[VERIFY: ~$45,079?]", "", "Well below $212K IRMAA threshold — no surcharge ever"]
+    ]},
+
+    { "type": "h2", "text": "RMDs — Required Minimum Distributions" },
+    { "type": "p", "text": "RMDs begin at age 73 (2035 for both Brad and Lisa). The IRS requires minimum annual withdrawals from Traditional IRAs and 401ks. Roth IRAs have NO RMDs. HSAs have NO RMDs. The withdrawal amount equals account balance divided by an IRS life expectancy factor (26.5 at age 73)." },
+    { "type": "h2", "text": "Projected RMDs — 2035 (conservative estimates)" },
+    { "type": "table", "widths": [2600, 2400, 1600, 2200, 3200], "header": ["Account", "Est. 2035 Balance", "IRS Factor", "First Year RMD", "Notes"], "rows": [
+      ["Brad Traditional IRA", "[VERIFY: ~$450,000?]", "÷ 26.5", "[VERIFY: ~$16,981?]", "Pillar 1 income positions"],
+      ["Brad 401k (Pillar 2)", "[VERIFY: ~$700,000?]", "÷ 26.5", "[VERIFY: ~$26,415?]", "Conservative — no contributions after retirement"],
+      ["Lisa Traditional IRA", "[VERIFY: ~$480,000?]", "÷ 26.5", "[VERIFY: ~$18,113?]", "Reduced by annual Roth conversions"],
+      ["Total RMDs", "[VERIFY: ~$1,630,000?]", "", "[VERIFY: ~$61,509?]", "Factor decreases annually — RMDs grow each year"]
+    ]},
+    { "type": "p", "text": "RMDs largely replace IRA withdrawals already planned for living expenses (~$42K/yr). The additional ~$19K forced above living needs flows into the joint brokerage for reinvestment. Total 2035 MAGI [VERIFY: ~$54,590?] — well below IRMAA threshold." },
+
+    { "type": "h2", "text": "Roth Conversion Strategy" },
+    { "type": "table", "widths": [2600, 7400], "header": ["Element", "Detail"], "rows": [
+      ["Source account", "Lisa Traditional IRA (Schwab)"],
+      ["Target account", "Lisa Roth IRA (Schwab) — currently [VERIFY: $104?], building annually"],
+      ["Invest in", "SCHG · VTI · VXUS — pure growth only, never income positions"],
+      ["Timing", "Every Q4 — evaluate bracket room in October/November"],
+      ["Amount per year", "[VERIFY: ~$20-30K?] — stays within 24% bracket, manageable tax cost"],
+      ["Bracket ceiling", "24% bracket tops at [VERIFY: $383,900?] MFJ — [VERIFY: ~$33K?] room above current income"],
+      ["Stop when", "Brad retires — earned income drops, bracket math changes"],
+      ["Purpose", "Remove dollars from future RMD calculation permanently"],
+      ["10-yr projection", "[VERIFY: ~$141,000?] in Lisa Roth by Year 10 at $15-20K/yr conversions"]
+    ]},
+
+    { "type": "h2", "text": "2027 RSU — Action Required Before Retiring" },
+    { "type": "p", "text": "Brad has an RSU vest scheduled for September 2027. If Brad retires in June 2027, this vest may be forfeited depending on Oracle policy. At [VERIFY: ~$50,000?] this is worth one phone call to Oracle HR or the stock plan administrator BEFORE setting a firm retirement date." },
+    { "type": "table", "widths": [4400, 3000, 2600], "header": ["Action", "When", "Contact"], "rows": [
+      ["Call Oracle HR — confirm RSU vesting policy on retirement", "Before setting retirement date", "Oracle HR / stock plan administrator"],
+      ["File SSA Form SSA-44 (IRMAA appeal)", "Same day as retirement", "Social Security Administration — SSA.gov"],
+      ["Port Oracle MetLife life insurance", "Within 31 days of last day", "MetLife — time-critical, no exceptions"],
+      ["Enroll in Medicare Part B", "At retirement (or within 8-month SEP)", "Medicare.gov / Social Security office"]
+    ]},
+
+    { "type": "h1", "text": "Action Plan & Emergency Reference" },
+    { "type": "p", "text": "LISA — IF READING THIS AFTER BRAD IS GONE: Do not make any immediate financial decisions. Call the financial advisor and Schwab/Fidelity first. The portfolio generates income automatically (see the current figure in the data section above) — you have time to plan carefully.", "bold": true },
+
+    { "type": "h2", "text": "Pending trades — complete in order" },
+    { "type": "table", "widths": [1400, 3000, 2000, 1800, 1800], "header": ["Priority", "Trade", "Account", "Income Added", "Timing"], "rows": [
+      ["URGENT", "Zero-interest card — PAID", "Personal cash", "Completed Aug 21, 2026", "Done"],
+      ["PLANNED", "Oracle MetLife — port coverage", "Oracle benefit", "Preserves life cover", "Within 31 days of Oracle departure · ~2 years out · mark calendar on actual departure"],
+      ["NOW", "Complete SCHD +563sh remaining", "Lisa IRA", "+$707/yr", "MM has funds ready"],
+      ["NOW", "Request Trustmark illustration", "Insurance", "Step toward +$3,787/yr", "Call this week"],
+      ["NOW", "Cancel term life policy", "Insurance", "+$3,788/yr", "No surrender penalty — call insurer"],
+      ["JUN 24", "Sell SCHE 50% (525sh) to income", "Lisa IRA", "+$493/yr", "AFTER June 24 ex-div — collect distribution first"],
+      ["Q4 2026", "Parent Plus #1 payoff", "Brad IRA dist.", "Saves $1,400/yr", "Oct–Dec 2026 — coordinate with tax bracket"],
+      ["Q4 2026", "BIP to joint brokerage", "Brad IRA → Joint", "Tax character", "Small ~$4K distribution — K-1 cleanup"],
+      ["Q4 2026", "Lisa Roth first conversion", "Lisa IRA → Lisa Roth", "+LTC supplement", "$15-20K · use remaining bracket room"],
+      ["ANNUAL", "Repeat Roth conversion each Q4", "Lisa IRA → Lisa Roth", "Building LTC", "Every Q4 indefinitely"]
+    ]},
+
+    { "type": "h2", "text": "Phase 2 — when Phase 1 complete (more conservative)" },
+    { "type": "p", "text": "Once all pending trades execute, the portfolio shifts to Phase 2 — layering in defensive quality without dismantling the income engine:" },
+    { "type": "table", "widths": [3000, 2200, 3200, 1800], "header": ["Phase 2 Move", "Account", "Purpose", "Timing"], "rows": [
+      ["XLU or VPU — utility ETF (passive)", "Brad IRA", "Defensive ballast · AI electricity demand tailwind", "When ready"],
+      ["BTO — consider adding more", "Brad Roth", "Financial sector diversifier · 15yr div growth", "When ready"],
+      ["ET to joint brokerage", "Brad IRA → Joint", "K-1 cleanup · replace with OKE in IRA", "Q4 2026 or 2027"],
+      ["Lisa 401k — confirm in-service rollover", "Lisa 401k", "Better investment options · increase above 6%", "Within 60 days"]
+    ]},
+
+    { "type": "h2", "text": "Key contacts" },
+    { "type": "table", "widths": [2600, 2400, 2400, 2800], "header": ["Institution", "Phone", "Website", "Account Type"], "rows": [
+      ["Schwab", "1-800-435-4000", "schwab.com", "Brad IRA · Lisa IRA · Lisa Roth IRA · Joint Brokerage"],
+      ["Fidelity", "1-800-343-3548", "fidelity.com", "Brad Roth IRA · Brad 401k · Brad HSA · Lisa HSA"],
+      ["Capital One", "1-877-383-4802", "capitalone.com", "Emergency savings accounts"],
+      ["iTrust Capital", "—", "itrustcapital.com", "Lisa crypto IRA"],
+      ["Crypto.com", "—", "crypto.com", "Joint crypto holdings"],
+      ["Oracle HR (benefits)", "—", "oracle.com/benefits", "401k · MetLife port — time-sensitive on departure"]
+    ]},
+
+    { "type": "h2", "text": "Trust & legal documents" },
+    { "type": "p", "text": "A trust structure is in place. All accounts should be held in trust or have trust named as beneficiary. Verify account titling with Schwab and Fidelity — confirm Brad and Lisa are named beneficiaries on all retirement accounts." },
+
+    { "type": "h2", "text": "Important notes for Lisa" },
+    { "type": "p", "text": "The portfolio is designed to run on autopilot. No action is needed immediately." },
+    { "type": "p", "text": "Cash accumulates in each account as dividends are paid. It does not get reinvested automatically — Brad manually redeploys dividends periodically. Contact Schwab and Fidelity to understand how to manage this going forward." },
+    { "type": "p", "text": "The Capital One savings principal ($60,000) should never be touched. Only the interest — approximately $1,800/yr — transfers to the joint brokerage account for reinvestment." },
+    { "type": "p", "text": "RMDs (Required Minimum Distributions) begin from both IRAs when each person turns 73 (2035 for both). Consult a tax advisor before those dates." },
+    { "type": "p", "text": "The three pillars are: Pillar 1 (Income — all the dividend-paying accounts), Pillar 2 (Growth — Brad's 401k), Pillar 3 (Health/LTC — the self-insurance fund). Pillar 1 income arrives as cash in the accounts." }
+  ]
+}
