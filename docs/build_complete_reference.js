@@ -45,7 +45,7 @@ const notesMap = {
   'BSTZ':'Sci/tech CEF — monthly','JPC':'Preferred CEF','JRI':'Real asset CEF','ABR':'Commercial mortgage REIT','JEPI':'Covered call ETF',
   'BTO':'Financial CEF','UTG':'Utility CEF — monthly','BCX':'Resources CEF','GHY':'Global high yield CEF','JEPQ':'Covered call Nasdaq ETF',
   'THQ':'Healthcare opportunities CEF','THW':'Global healthcare CEF — monthly',
-  'PDI':'PIMCO flagship — monthly','EPD':'Midstream MLP (K-1) — ROC distributions, tax-deferred','MDXBX':'MD muni bond — federally tax-exempt interest','ORCL':'Oracle — Brad employer','TPL':'Texas Pacific Land',
+  'PDI':'PIMCO flagship — monthly','EPD':'Midstream MLP (K-1) — ROC distributions, tax-deferred','MDXBX':'MD muni bond — federal AND Maryland state tax-exempt interest','ORCL':'Oracle — Brad employer','TPL':'Texas Pacific Land',
   'SPCX':'SPAC ETF','FDGRX':'Fidelity Growth','VUG':'Vanguard Growth','VTV':'Vanguard Value','SPDW':'Developed mkts','SCHM':'Mid-cap',
   'SCHA':'Small-cap','SCHE':'Emerging mkts','SCHC':'Intl small-cap','GPool':'401k stable value','VGIntl':'Vanguard Total Intl',
   'BREQI1':'401k real estate','WTSCER':'401k TIPS',
@@ -114,7 +114,7 @@ for (const [acct, taxlabel] of P1_ACCTS) {
   rows.push(row([`${acct} Total`,'','', '', fmtMoney(acctVal), fmtMoney(acctInc)], wA, [{bold:true,fill:LIGHT},{},{},{},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT}]));
   children.push(table(wA, rows));
   if (acct === 'Joint') {
-    children.push(new Paragraph({ children:[new TextRun({ text:'Tax note: though this is a taxable account, MDXBX pays federally tax-exempt municipal-bond interest, and EPD (a K-1 MLP) distributes largely return-of-capital that is tax-deferred until sale. Only the ORCL dividends are ordinary taxable income here. This is why the Joint account contributes little to MAGI — see the retirement tax section below.', size:15, italics:true, color:GRAY, font:'Calibri' })], spacing:{ before:40, after:120 } }));
+    children.push(new Paragraph({ children:[new TextRun({ text:'Tax note: though this is a taxable account, MDXBX pays municipal-bond interest exempt from both federal AND Maryland state tax (home-state muni), and EPD (a K-1 MLP) distributes largely return-of-capital that is tax-deferred until sale. Only the ORCL dividends are ordinary taxable income here. This is why the Joint account contributes little to MAGI — see the retirement tax section below.', size:15, italics:true, color:GRAY, font:'Calibri' })], spacing:{ before:40, after:120 } }));
   }
 }
 
