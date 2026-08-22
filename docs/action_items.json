@@ -1,0 +1,507 @@
+{
+ "_comment": "ACTION ITEMS source for Kitchen Action Items doc. Hand-maintained (like narrative.json). Income Summary + debt line pulled from live dashboard at build time. Edit items here; status emojis: ✅ Done, 🔴 Urgent, 🟡 Pending, 🟢 Planned, 🔵 Watch.",
+ "title": "Action Items — Completed & Outstanding",
+ "subtitle": "Three-Pillar Retirement Strategy",
+ "statusKey": "✅ Completed · 🔴 Urgent · 🟡 Pending (near term) · 🟢 Planned (future) · 🔵 Watch",
+ "sections": [
+  {
+   "header": "Outstanding — Urgent",
+   "items": [
+    {
+     "category": "Near Term — Income Portfolio Builds"
+    },
+    {
+     "status": "🟡 Pending",
+     "action": "Buy SCHD to complete target 3,520sh — {SCHD_REMAINING}sh remaining",
+     "notes": "Lisa IRA · buy in low $30s · income builds as completed",
+     "date": "Ongoing — no rush"
+    },
+    {
+     "status": "🟡 Pending",
+     "action": "Buy BCX ~250sh (commodities exposure)",
+     "notes": "Lisa IRA · +$209/yr · watch NAV discount ~-7%",
+     "date": "When discount favorable"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Sold SCHE 524.4678sh @ $35.88 = $18,817.90",
+     "notes": "Lisa IRA (LTC) · Q2 div collected first",
+     "date": "June 24, 2026"
+    },
+    {
+     "status": "🟡 Partial",
+     "action": "THW building: 500sh @ CB $13.19 — add on pullback (HQH dropped → THQ preferred)",
+     "notes": "Lisa IRA · +$700/yr so far · ~48% to 1,050sh target",
+     "date": "Ongoing"
+    }
+   ]
+  },
+  {
+   "header": "Outstanding — Planned",
+   "items": [
+    {
+     "category": "Insurance"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Review life insurance coverage needs",
+     "notes": "Reassess term life + employer coverage · may reduce based on work benefits · self-insured via portfolio",
+     "date": "Year-end 2026"
+    },
+    {
+     "category": "Retirement Planning"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Call Oracle HR — confirm 2027 RSU vest on retirement",
+     "notes": "Sep 2027 vest ~$30K may forfeit if retire Jun 2027",
+     "date": "Before setting date"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "File SSA Form SSA-44 (IRMAA life event appeal)",
+     "notes": "File same day as retirement · resets to $0 IRMAA",
+     "date": "Retirement day"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Port Oracle MetLife life insurance",
+     "notes": "Within 31 days of last day — time critical",
+     "date": "Within 31 days of retirement"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Enroll in Medicare Part B (both Brad & Lisa)",
+     "notes": "Both turn 65 in 2027 · use Special Enrollment Period",
+     "date": "2027"
+    },
+    {
+     "category": "Debt Payoff"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Pay off Parent Plus Loan #1 — $17,726.78 @ 7.90%",
+     "notes": "Brad IRA distribution Q4 2026 · highest rate",
+     "date": "Q4 2026"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Pay off Parent Plus Loans #2–4 (~$148,711)",
+     "notes": "Q4 2027–2028 · coordinate with bracket window",
+     "date": "Q4 2027–2028"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Anderson Windows — $36,500 @ 4.99%",
+     "notes": "Lowest rate · pay last · ~$400/mo",
+     "date": "Ongoing"
+    },
+    {
+     "category": "Portfolio Strategy"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Sold BIP · redeployed into PTY + O (K-1 eliminated)",
+     "notes": "Currently in Brad IRA · move at year end",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Lisa Roth IRA Q4 conversions — SCHG + VTI + VXUS only",
+     "notes": "Maximize 24% bracket · pure growth positions only",
+     "date": "Q4 2026"
+    },
+    {
+     "status": "🟢 Planned",
+     "action": "Continue 401k Traditional contributions — Brad",
+     "notes": "Super catch-up $34,750/yr while age 60-63 · cease at retirement",
+     "date": "Until retirement"
+    },
+    {
+     "category": "Watch List"
+    },
+    {
+     "status": "🔵 Watch",
+     "action": "MPLX — midstream MLP for Joint brokerage",
+     "notes": "Target entry $52–$55 · quarterly payer · K-1",
+     "date": "Watch $52–55"
+    },
+    {
+     "status": "🔵 Watch",
+     "action": "ABR dividend — reduced from $1.20 → $1.07/yr",
+     "notes": "Confirmed consistent $0.0697/mo — no cuts · $0.17/qtr confirmed",
+     "date": "Ongoing"
+    }
+   ]
+  },
+  {
+   "header": "Completed",
+   "items": [
+    {
+     "category": "Income Portfolio Builds"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Cancelled Trustmark LTC insurance policy",
+     "notes": "Self-insuring via Pillar 3 · saves ~$3,787/yr",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 5sh EPD → 385 → 390sh",
+     "notes": "Joint",
+     "date": "August 22, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 200sh PTY → 1,900 → 2,600sh",
+     "notes": "Brad IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 20sh SCHD → 3,170 → 3,190sh (Lisa IRA)",
+     "notes": "Brad IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 10sh EPD → 375 → 385sh (Joint)",
+     "notes": "Brad IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 13sh UTG → 410 → 423sh (Brad Roth, incl +1 Aug 21)",
+     "notes": "Brad IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 100sh DFP → 1,000 → 1,100sh",
+     "notes": "Lisa IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 10sh BTO → 425 → 435sh",
+     "notes": "Brad Roth IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 125sh JPC → 2,400 → 2,525sh",
+     "notes": "Brad Roth IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 10sh PDI → 850 → 890sh (Lisa HSA)",
+     "notes": "Lisa HSA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 300sh SCHD → 2,530 → 2,955sh total",
+     "notes": "Lisa IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 110sh O → 1,460 → 1,590sh total",
+     "notes": "Brad IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 100sh PTY → 2,000 → 2,100 → 2,600sh",
+     "notes": "Brad IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 14sh BTO → 435 → 467sh",
+     "notes": "Brad Roth IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 35sh SCHD → 2,920 → 2,955sh",
+     "notes": "Lisa IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 6sh BTO → 461 → 467sh",
+     "notes": "Brad Roth IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 16sh AGNC → 1,394 → 1,410sh",
+     "notes": "Brad Roth IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 10sh O → 1,590 → 1,600sh · CB $58.38",
+     "notes": "Brad IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 143sh JPC → 2,525 → 2,668sh · CB $7.88",
+     "notes": "Brad Roth IRA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added ~15.5sh EPD → 330 → 345.5sh · CB $30.13",
+     "notes": "Joint",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 10sh EPD → 345.5 → 355.5sh · CB $30.30",
+     "notes": "Joint",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 1sh TPL → 9 → 10sh · CB $405.80",
+     "notes": "Joint",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 30sh SCHD → 2,955 → 2,985sh · CB $26.40",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 35sh SCHD → 2,985 → 3,020sh · CB $26.46",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 50sh SCHD → 3,045 → 3,095sh · CB $26.59",
+     "notes": "Lisa IRA",
+     "date": "June 30, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 25sh SCHD → 3,095 → 3,120sh · CB $26.63",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 20sh AMLP → 490 → 510sh · CB $48.64",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 200sh THW → NEW → 200sh · CB $13.25",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 20sh AMLP → 510 → 530sh · CB $48.82",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 37sh JPC → 2,668 → 2,705sh · CB $7.88",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 20sh SCHD → 3,120 → 3,140sh · CB $26.67",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 200sh THW → 200 → 400sh · CB $13.18",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 100sh THW → 400 → 500sh · CB $13.19",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 35sh AGNC → 1,435 → 1,470sh · CB $11.90",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 17sh AGNC → 1,470 → 1,487sh · CB $11.89",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 30sh SCHD → 3,140 → 3,170sh · CB $26.74",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 5sh EPD → 370 → 375sh · CB $30.69",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 1sh TPL → 10 → 11sh · CB $399.82",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Sold 5sh ORCL → 100 → 95sh @ $153 (planned trim)",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 23sh BTO → 467 → 490sh · CB $37.10",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 9sh JEPQ → 218 → 227sh · CB $58.92",
+     "notes": "Lisa HSA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 5sh PDI → 342 → 347sh · CB $18.10",
+     "notes": "Brad HSA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 4.4sh EPD → 365.6 → 370sh · CB $30.59",
+     "notes": "Joint",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 10sh EPD → 355.6 → 365.6sh · CB $30.51",
+     "notes": "Joint",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 25sh AGNC → 1,410 → 1435sh · CB $11.93",
+     "notes": "Brad Roth IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Opened 75sh BCX (NEW) · CB $11.67 ⚠ auto-added",
+     "notes": "Lisa IRA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 30sh PDI → 890 → 920sh · CB $17.72",
+     "notes": "Lisa HSA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 5sh PDI → 337 → 342sh · CB $18.13",
+     "notes": "Brad HSA",
+     "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 5sh JEPQ → 213 → 218sh",
+     "notes": "Lisa HSA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 4sh PDI → 329 → 337sh (Brad HSA)",
+     "notes": "Brad HSA",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 10sh EPD → 320 → 330sh",
+     "notes": "Joint",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added 1sh TPL → 8 → 9sh",
+     "notes": "Joint",
+     "date": "June 17, 2026"
+    },
+    {
+     "category": "Debt Payoff"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Paid off zero-interest credit card — $9,500",
+     "notes": "Saved 17%+ interest rate reset in July 2026",
+     "date": "June 17, 2026"
+    },
+    {
+     "category": "Capital One"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Capital One principal reset to $60,000 (sacred)",
+     "notes": "Interest sweeps to Joint → buys MDXBX",
+     "date": "Ongoing"
+    },
+    {
+     "category": "Dashboard & Documentation"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Built household portfolio dashboard (GitHub Pages)",
+     "notes": "https://bradk-md.github.io/household-portfolio/",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added live price refresh (Finnhub API)",
+     "notes": "Dashboard Update Holdings tab",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Added dividend refresh (Alpha Vantage API)",
+     "notes": "Dashboard Update Holdings tab",
+     "date": "June 17, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Schwab + Fidelity XLSX/CSV drop zone working",
+     "notes": "All accounts + LTC virtual accounts updating",
+     "date": "June 17, 2026"
+    }
+   ]
+  }
+ ],
+ "debtLine": "Remaining debt: $202,937.76  ·  Next priority: Parent Plus #1 ($17,726 @ 7.90%) — Q4 2026",
+ "_dynamic": {
+  "SCHD_target": 3520
+ }
+}
