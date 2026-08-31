@@ -45,7 +45,7 @@ const notesMap = {
   'BSTZ':'Sci/tech CEF — monthly','JPC':'Preferred CEF','JRI':'Real asset CEF','ABR':'Commercial mortgage REIT','JEPI':'Covered call ETF',
   'BTO':'Financial CEF','UTG':'Utility CEF — monthly','BCX':'Resources CEF','GHY':'Global high yield CEF','JEPQ':'Covered call Nasdaq ETF',
   'THQ':'Healthcare opportunities CEF','THW':'Global healthcare CEF — monthly',
-  'PDI':'PIMCO flagship — monthly','EPD':'Midstream MLP (K-1) — ROC distributions, tax-deferred','MDXBX':'MD muni bond — federal AND Maryland state tax-exempt interest','ORCL':'Oracle — Brad employer','TPL':'Texas Pacific Land',
+  'PDI':'PIMCO flagship — monthly','EPD':'Midstream MLP (K-1) — ROC distributions, tax-deferred','WES':'Midstream MLP (K-1) — ROC distributions, tax-deferred (hold-to-death)','MDXBX':'MD muni bond — federal AND Maryland state tax-exempt interest','ORCL':'Oracle — Brad employer','TPL':'Texas Pacific Land',
   'SPCX':'SPAC ETF','FDGRX':'Fidelity Growth','VUG':'Vanguard Growth','VTV':'Vanguard Value','SPDW':'Developed mkts','SCHM':'Mid-cap',
   'SCHA':'Small-cap','SCHE':'Emerging mkts','SCHC':'Intl small-cap','GPool':'401k stable value','VGIntl':'Vanguard Total Intl',
   'BREQI1':'401k real estate','WTSCER':'401k TIPS',
