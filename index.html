@@ -5155,6 +5155,38 @@ function parseXLSXRows(rows, filename) {
 
     const rawTicker = row[symCol].replace(/\*\*/g,'').trim();
 
+    // Determine which dashboard account this row belongs to — MUST be resolved BEFORE any
+    // ticker matching (Schwab cash, CUSIP 401k funds, FDRXX/SPAXX, general handler), and an
+    // account that can't be resolved to a mapped dashboard account is SKIPPED entirely rather
+    // than left as null. Leaving it null previously caused the account-match check further
+    // down to default to "match everything," which is what let an unmapped Fidelity account
+    // (e.g. the once-a-year RSU brokerage, X85392053) broadcast its ORCL and SPAXX cash into
+    // every other account holding those tickers. See refresh-runbook DEFERRED TASK — CSV
+    // PARSER BUGS (Bug A) for the full incident writeup.
+    let dashAcct = null;
+    if (acctNumCol >= 0 && row[acctNumCol]) {
+      if (normAcct(row[acctNumCol]) in Object.fromEntries(Object.entries(FIDELITY_ACCT_MAP))) {
+        dashAcct = FIDELITY_ACCT_MAP[normAcct(row[acctNumCol])];
+        if (dashAcct === null || dashAcct === undefined) continue; // explicitly excluded account
+      } else {
+        // Unmapped Fidelity account — not tracked in the dashboard. Ignore it entirely
+        // rather than letting it fall through and clobber a same-ticker holding elsewhere.
+        continue;
+      }
+    } else if (acctCol >= 0 && row[acctCol]) {
+      dashAcct = row[acctCol];
+    } else if (currentSchAccount) {
+      // Match Schwab account name fragment
+      for (const [frag, name] of Object.entries(SCHWAB_ACCT_MAP)) {
+        if (currentSchAccount.includes(frag)) { dashAcct = name; break; }
+      }
+      // If account not mapped, skip this row entirely (e.g. kids' accounts)
+      if (!dashAcct) continue;
+    } else {
+      // No account info resolvable at all — cannot safely scope this row, skip it.
+      continue;
+    }
+
     // Schwab "Cash & Cash Investments" row — maps to Cash ticker in current account
     if (rawTicker.toLowerCase().startsWith('cash & cash') || rawTicker.toLowerCase() === 'cash and cash') {
       // Schwab Cash row — Mkt Val is always col 8. Use it directly as cash balance (can be negative).
@@ -5169,18 +5201,14 @@ function parseXLSXRows(rows, filename) {
         }
       }
       if (!isNaN(cashVal)) {
-        // Map raw Schwab account string to dashboard account name (same as dashAcct for regular tickers)
-        let mappedAcct = null;
-        for (const [frag, name] of Object.entries(SCHWAB_ACCT_MAP)) {
-          if (currentSchAccount && currentSchAccount.includes(frag)) { mappedAcct = name; break; }
-        }
-        const cashIdx = DATA.holdings.findIndex(h => h.ticker === 'Cash' && h.acct === mappedAcct);
+        const cashIdx = DATA.holdings.findIndex(h => h.ticker === 'Cash' && h.acct === dashAcct);
         if (cashIdx >= 0) { DATA.holdings[cashIdx].shares = cashVal; DATA.holdings[cashIdx].price = 1.0; }
       }
       continue;
     }
 
-    // Map CUSIP codes to dashboard tickers (401k institutional funds)
+    // Map CUSIP codes to dashboard tickers (401k institutional funds) — scoped to dashAcct
+    // (same account-aware pattern as the Schwab cash handler above).
     if (CUSIP_MAP[rawTicker]) {
       const dashTicker = CUSIP_MAP[rawTicker];
       const clean = v => { const n = parseFloat(String(v).replace(/[$,%]/g,'').replace(/,/g,'').trim()); return isNaN(n) ? null : n; };
@@ -5188,7 +5216,7 @@ function parseXLSXRows(rows, filename) {
       const price  = prxCol >= 0 ? clean(row[prxCol]) : null;
       if (shares && shares > 0) {
         DATA.holdings.forEach((h, idx) => {
-          if (h.ticker === dashTicker) {
+          if (h.ticker === dashTicker && h.acct === dashAcct) {
             DATA.holdings[idx].shares = shares;
             if (price && price > 0) DATA.holdings[idx].price = price;
             updated++;
@@ -5216,27 +5244,6 @@ function parseXLSXRows(rows, filename) {
     }
     if (!shares || shares <= 0) continue;
 
-    // Determine which dashboard account this row belongs to
-    let dashAcct = null;
-    if (acctNumCol >= 0 && row[acctNumCol]) {
-      // If account number is in FIDELITY_ACCT_MAP but maps to null — explicitly excluded, skip row
-      if (normAcct(row[acctNumCol]) in Object.fromEntries(Object.entries(FIDELITY_ACCT_MAP))) {
-        dashAcct = FIDELITY_ACCT_MAP[normAcct(row[acctNumCol])];
-        if (dashAcct === null || dashAcct === undefined) continue; // excluded account — skip entirely
-      } else {
-        dashAcct = null;
-      }
-    } else if (acctCol >= 0 && row[acctCol]) {
-      dashAcct = row[acctCol];
-    } else if (currentSchAccount) {
-      // Match Schwab account name fragment
-      for (const [frag, name] of Object.entries(SCHWAB_ACCT_MAP)) {
-        if (currentSchAccount.includes(frag)) { dashAcct = name; break; }
-      }
-      // If account not mapped, skip this row entirely (e.g. kids' accounts)
-      if (!dashAcct) continue;
-    }
-
     // MDXBX — accumulate across multiple rows, apply at end
     if (ticker === 'MDXBX') {
       mdxbxTotal.shares += shares;
@@ -5252,18 +5259,21 @@ function parseXLSXRows(rows, filename) {
       const tickerMatch =
         h.ticker === ticker ||
         (ticker === 'SWVXX' && h.ticker === 'SWVXX') ||
-        (ticker === 'SWVXX' && h.ticker === 'MM' && (!dashAcct || dashAcct === h.acct)) ||
+        (ticker === 'SWVXX' && h.ticker === 'MM' && dashAcct === h.acct) ||
         (ticker === 'FDRXX' && h.ticker === 'FDRXX') ||
         (ticker === 'SPAXX' && h.ticker === 'Cash');
 
-      // Account match — also try LTC virtual accounts that share the same Schwab IRA
+      // Account match — also try LTC virtual accounts that share the same Schwab IRA.
+      // dashAcct is always resolved by this point (unmapped/unresolved accounts are
+      // skipped earlier), so this is a strict per-account match — no "match everything"
+      // fallback.
       let altAcct = null;
       if (currentSchAccount) {
         for (const [frag, name] of Object.entries(SCHWAB_ACCT_ALSO || {})) {
           if (currentSchAccount.includes(frag)) { altAcct = name; break; }
         }
       }
-      const acctMatch = dashAcct ? (h.acct === dashAcct || (altAcct && h.acct === altAcct)) : !currentSchAccount;
+      const acctMatch = h.acct === dashAcct || (altAcct && h.acct === altAcct);
 
       if (tickerMatch && acctMatch) {
         DATA.holdings[idx].shares = shares;
