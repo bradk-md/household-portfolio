@@ -1760,7 +1760,7 @@ body {
       <tr><td>As of date</td><td><input id="set_asOf" value="September 21, 2026" readonly="" style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
       <tr><td>Capital One balance</td><td><input id="set_capBal" type="number" value="60000"></td><td>Sacred principal — never touched</td></tr>
       <tr><td>Capital One APY</td><td><input id="set_capApy" type="number" step="0.001" value="0.03"></td><td>e.g. 0.032 for 3.20%</td></tr>
-      <tr><td>Crypto value (approx)</td><td><input id="set_crypto" type="number" value="36376.32"></td><td>Approximate market value</td></tr>
+      <tr><td>Crypto value (auto)</td><td>$36,376.32</td><td>Computed live from the crypto accounts below</td></tr>
     </tbody></table>
   </div><div class="data-section">
       <div class="data-section-title">
@@ -3249,6 +3249,12 @@ body {
     "apy": 0.03
   },
   "crypto": 36376.32,
+  "cryptoAccounts": [
+    { "name": "iTrust Capital (Lisa's IRA)", "coins": { "ADA": 2201.5633, "BTC": 0.3164, "ETH": 2.3467, "DOT": 22.2755, "SOL": 19.6103 } },
+    { "name": "Crypto.com", "coins": { "ETH": 0.31848107, "BTC": 0.00847665, "SOL": 1.6679, "CRO": 1216.25, "DOT": 14.3257 } }
+  ],
+  "cryptoPrices": { "BTC": 0, "ETH": 0, "ADA": 0, "DOT": 0, "SOL": 0, "CRO": 0 },
+  "cryptoSubtotals": {},
   "holdings": [
     {
       "ticker": "O",
@@ -4184,7 +4190,8 @@ function calc() {
   const portYOC = allCost > 0 ? p1Inc / allCost  : 0;
 
   const investTotal = p1Val + p2Val + p3Val;
-  const grandTotal  = investTotal + DATA.capOne.balance + DATA.crypto;
+  computeCryptoTotal();
+   const grandTotal  = investTotal + DATA.capOne.balance + DATA.crypto;
 
   const skipDiv = new Set(['GPool','VGIntl','BREQI1','WTSCER','Cash','SWVXX','FDRXX']);
   let p2Inc = 0, p3Inc = 0;
@@ -4219,6 +4226,7 @@ function renderDashboard() {
       <div class="sum-label">Investment Portfolio</div>
       <div class="sum-value">${fmt(C.grandTotal)}</div>
       <div class="sum-note">incl. reserves & crypto · Portfolio YOC ${fmtPct(C.portYOC)}</div>
+      ${cryptoBreakdownHtml()}
     </div>`;
 
   document.getElementById('summaryRow2').innerHTML = `
@@ -4522,6 +4530,22 @@ function renderPillarBody(pillarNum, C, color, hdrCls) {
 // ════════════════════════════════════════════════════
 // DATA EDITOR TAB
 // ════════════════════════════════════════════════════
+function cryptoEditorHtml() {
+  let h = `<div class="data-section"><div class="data-section-title">₿ Crypto Accounts (edit quantities · auto-priced)</div>`;
+  (DATA.cryptoAccounts || []).forEach((acct, ai) => {
+    const sub = (DATA.cryptoSubtotals && DATA.cryptoSubtotals[acct.name]) || 0;
+    h += `<table class="data-tbl"><thead><tr><th>${acct.name}</th><th>Quantity</th><th>Value</th></tr></thead><tbody>`;
+    Object.keys(acct.coins || {}).forEach(sym => {
+      const qty = acct.coins[sym];
+      const px = (DATA.cryptoPrices && DATA.cryptoPrices[sym]) || 0;
+      h += `<tr><td>${sym}</td><td><input type="number" step="any" value="${qty}" onchange="DATA.cryptoAccounts[${ai}].coins['${sym}']=parseFloat(this.value)||0"></td><td>${px > 0 ? fmt(qty * px) : '—'}</td></tr>`;
+    });
+    h += `<tr><td><strong>Subtotal</strong></td><td></td><td><strong>${sub > 0 ? fmt(sub) : '—'}</strong></td></tr></tbody></table>`;
+  });
+  h += `<p style="font-size:0.75rem;color:var(--gray);margin:6px 0 0">Prices refresh when you click Refresh All Prices. Edit a quantity when your holdings change, then click Apply — the combined total flows into your Investment Portfolio automatically.</p></div>`;
+  return h;
+}
+
 function renderDataEditor() {
   let html = '';
 
@@ -4532,9 +4556,9 @@ function renderDataEditor() {
       <tr><td>As of date</td><td><input id="set_asOf" value="${DATA.asOf}" readonly style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
       <tr><td>Capital One balance</td><td><input id="set_capBal" type="number" value="${DATA.capOne.balance}"></td><td>Sacred principal — never touched</td></tr>
       <tr><td>Capital One APY</td><td><input id="set_capApy" type="number" step="0.001" value="${DATA.capOne.apy}"></td><td>e.g. 0.032 for 3.20%</td></tr>
-      <tr><td>Crypto value (approx)</td><td><input id="set_crypto" type="number" value="${DATA.crypto}"></td><td>Approximate market value</td></tr>
+      <tr><td>Crypto value (auto)</td><td>${fmt(DATA.crypto)}</td><td>Computed live from the crypto accounts below</td></tr>
     </tbody></table>
-  </div>`;
+  </div>` + cryptoEditorHtml();
 
   // Group by account + pillar, ordered by account first then pillar
   const groups = [];
@@ -4599,7 +4623,7 @@ function applyUpdates() {
   document.getElementById('set_asOf').value = DATA.asOf;
   DATA.capOne.balance = parseFloat(document.getElementById('set_capBal').value)||62574;
   DATA.capOne.apy = parseFloat(document.getElementById('set_capApy').value)||0.032;
-  DATA.crypto = parseFloat(document.getElementById('set_crypto').value)||0;
+   // crypto total is now auto-computed by computeCryptoTotal() — no manual overwrite
   renderDashboard();
   document.getElementById('updateMsg').textContent = '✓ Dashboard updated — ' + new Date().toLocaleTimeString();
   setTimeout(()=>document.getElementById('updateMsg').textContent='',4000);
@@ -4858,6 +4882,42 @@ async function refreshDividends() {
   renderDataEditor();
 }
 
+// ===== CRYPTO: live prices via CoinGecko (free, no key). Walled off — only feeds grandTotal. =====
+const CRYPTO_ID_MAP = { BTC:"bitcoin", ETH:"ethereum", ADA:"cardano", DOT:"polkadot", SOL:"solana", CRO:"crypto-com-chain" };
+async function fetchCryptoPrices() {
+  try {
+    const ids = Object.values(CRYPTO_ID_MAP).join(",");
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) return 0;
+    const data = await res.json();
+    let got = 0;
+    for (const [sym, id] of Object.entries(CRYPTO_ID_MAP)) {
+      if (data[id] && typeof data[id].usd === "number") { DATA.cryptoPrices[sym] = data[id].usd; got++; }
+    }
+    return got;
+  } catch (e) { return 0; }
+}
+function computeCryptoTotal() {
+  let total = 0; const subs = {};
+  for (const acct of (DATA.cryptoAccounts || [])) {
+    let sub = 0;
+    for (const [sym, qty] of Object.entries(acct.coins || {})) sub += (qty || 0) * (DATA.cryptoPrices[sym] || 0);
+    subs[acct.name] = sub; total += sub;
+  }
+  DATA.cryptoSubtotals = subs;
+  if (total > 0) DATA.crypto = total;  // only overwrite the saved total when we have real prices (safe on fetch failure)
+  return total;
+}
+function cryptoBreakdownHtml() {
+  const subs = DATA.cryptoSubtotals || {};
+  const names = Object.keys(subs);
+  const sum = names.reduce((t,n)=>t+(subs[n]||0),0);
+  if (!names.length || sum <= 0) return "";
+  const parts = names.map(n => `${n} ${fmt(subs[n])}`).join(" &middot; ");
+  return `<div class="sum-note" style="font-size:0.72rem;opacity:0.85">Crypto ${fmt(DATA.crypto)} &mdash; ${parts}</div>`;
+}
+
 async function refreshPrices() {
   const btn = event.target;
   const apiKey = getApiKey();
@@ -4910,6 +4970,13 @@ async function refreshPrices() {
     // ~1 second between calls — well within 60/min free limit
     await new Promise(r => setTimeout(r, 1100));
   }
+
+  // Crypto prices (CoinGecko) — part of the same refresh
+  prog.innerHTML += `<br>Fetching crypto prices…`;
+  const cryptoGot = await fetchCryptoPrices();
+  computeCryptoTotal();
+  if (cryptoGot > 0) prog.innerHTML += ` <span style="color:var(--teal)">✓ ${cryptoGot} crypto prices</span>`;
+  else prog.innerHTML += ` <span style="color:var(--gray)">(crypto prices unavailable — kept last value)</span>`;
 
   // Stamp today's date
   DATA.asOf = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
