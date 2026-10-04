@@ -1,7 +1,7 @@
 // Programmatic Action Items: renders hand-maintained action_items.json +
 // pulls the live Income Summary from the dashboard data (data_clean.json via lib.js).
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, AlignmentType,
-        WidthType, ShadingType, BorderStyle, VerticalAlign } = require('docx');
+        WidthType, ShadingType, BorderStyle, VerticalAlign, HeadingLevel } = require('docx');
 const fs = require('fs');
 const { loadData, computeSummary, computeAllInIncome, fmtMoney } = require('./lib.js');
 
@@ -12,10 +12,16 @@ const A = JSON.parse(fs.readFileSync('./action_items.json','utf8'));
 
 // Dynamic placeholders computed from live holdings (e.g. shares remaining to a target)
 function sharesOf(ticker) { return data.holdings.filter(p=>p.ticker===ticker).reduce((t,p)=>t+p.shares,0); }
+function sharesOfAcct(ticker, acct) { return data.holdings.filter(p=>p.ticker===ticker && p.acct===acct).reduce((t,p)=>t+p.shares,0); }
 const dyn = A._dynamic || {};
 const SCHD_REMAINING = dyn.SCHD_target ? Math.max(0, dyn.SCHD_target - sharesOf('SCHD')) : 0;
+const BCX_REMAINING = dyn.BCX_target ? Math.max(0, dyn.BCX_target - sharesOfAcct('BCX', dyn.BCX_target_acct || 'Lisa IRA')) : 0;
+const THW_REMAINING = dyn.THW_target ? Math.max(0, dyn.THW_target - sharesOf('THW')) : 0;
 function subst(text) {
-  return String(text).replace('{SCHD_REMAINING}', SCHD_REMAINING.toLocaleString());
+  return String(text)
+    .replace('{SCHD_REMAINING}', SCHD_REMAINING.toLocaleString())
+    .replace('{BCX_REMAINING}', BCX_REMAINING.toLocaleString())
+    .replace('{THW_REMAINING}', THW_REMAINING.toLocaleString());
 }
 
 const NAVY='1F3864', TEAL='0D6B52', GRAY='5A5E6B', LIGHT='F5F5F3', CAT='E8ECF3';
@@ -38,6 +44,11 @@ function cell(text, opts = {}) {
 function table(widths, rows) { return new Table({ width:{size:widths.reduce((a,b)=>a+b,0),type:WidthType.DXA}, columnWidths:widths, rows }); }
 function h1(text,color=NAVY){ return new Paragraph({children:[new TextRun({text,bold:true,size:28,color,font:'Calibri'})],spacing:{before:220,after:100}}); }
 function h2(text,color=NAVY){ return new Paragraph({children:[new TextRun({text,bold:true,size:22,color,font:'Calibri'})],spacing:{before:180,after:80}}); }
+// Same look as h2, but carries Word's built-in Heading1 style so the paragraph has an
+// outline level — required for Word's collapse-heading feature. A post-processing pass
+// (below) then marks this specific paragraph collapsed-by-default via the w15:collapsed
+// extension, since the docx library has no API for it.
+function collapsibleH2(text,color=NAVY){ return new Paragraph({heading:HeadingLevel.HEADING_1, children:[new TextRun({text,bold:true,size:22,color,font:'Calibri'})],spacing:{before:180,after:80}}); }
 function para(text,opts={}){ return new Paragraph({children:[new TextRun({text,size:opts.size||17,color:opts.color||'000000',bold:opts.bold||false,italics:opts.italics||false,font:'Calibri'})],spacing:{after:opts.after||100}}); }
 
 const children = [];
@@ -63,7 +74,7 @@ children.push(para(A.debtLine, {color:GRAY, size:15, italics:true, after:40}));
 // ---- Action item sections ----
 const wT = [1300, 4200, 3200, 1800];
 for (const sec of A.sections) {
-  children.push(h2(sec.header, NAVY));
+  children.push(sec.header === 'Completed' ? collapsibleH2(sec.header, NAVY) : h2(sec.header, NAVY));
   const rows = [ hdr(['Status','Action Item','Account / Notes','Target Date'], wT) ];
   for (const it of sec.items) {
     if (it.category) {
@@ -76,7 +87,38 @@ for (const sec of A.sections) {
 }
 
 const doc = new Document({ sections:[{ properties:{ page:{ margin:{ top:720,bottom:720,left:720,right:720 } } }, children }] });
-Packer.toBuffer(doc).then(buf => {
-  fs.writeFileSync('Kitchen Action Items.docx', buf);
+Packer.toBuffer(doc).then(async buf => {
+  const outPath = 'Kitchen Action Items.docx';
+  fs.writeFileSync(outPath, buf);
+  await markCompletedCollapsed(outPath);
   console.log('✓ Action Items written');
 });
+
+// Post-process the generated .docx: mark the "Completed" Heading1 paragraph collapsed-by-
+// default (Word's w15:collapsed extension — not exposed by the docx library). Word desktop
+// (2013+) honors this; other viewers (Google Docs, Word Online, LibreOffice) typically just
+// show the section expanded and ignore the hint, which is a safe fallback.
+async function markCompletedCollapsed(path) {
+  const JSZip = require('jszip');
+  const buf = fs.readFileSync(path);
+  const zip = await JSZip.loadAsync(buf);
+  const docXmlPath = 'word/document.xml';
+  let xml = await zip.file(docXmlPath).async('string');
+  // Find the Heading1 paragraph whose text is exactly "Completed" and inject
+  // <w:outlineLvl w:val="0"/> (direct formatting — makes Word treat this specific
+  // paragraph as an outline-level-0 heading even though the generated Heading1 style
+  // itself doesn't define one) plus <w15:collapsed w15:val="1"/>, appended at the end
+  // of its <w:pPr> (CT_PPr requires outlineLvl after spacing/ind/jc etc.; the w15
+  // extension element goes after that, before </w:pPr>).
+  const re = /(<w:p\b[^>]*>\s*<w:pPr>\s*<w:pStyle w:val="Heading1"\s*\/>.*?)(<\/w:pPr>)(.*?Completed.*?<\/w:p>)/s;
+  const match = xml.match(re);
+  if (!match) {
+    console.warn('⚠ Could not find Completed Heading1 paragraph to mark collapsed — section will open expanded.');
+    return;
+  }
+  const patched = match[1] + '<w:outlineLvl w:val="0"/><w15:collapsed w15:val="1"/>' + match[2] + match[3];
+  xml = xml.slice(0, match.index) + patched + xml.slice(match.index + match[0].length);
+  zip.file(docXmlPath, xml);
+  const newBuf = await zip.generateAsync({ type: 'nodebuffer' });
+  fs.writeFileSync(path, newBuf);
+}

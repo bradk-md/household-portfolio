@@ -1,11 +1,11 @@
 {
- "_comment": "ACTION ITEMS source for Kitchen Action Items doc. Hand-maintained (like narrative.json). Income Summary + debt line pulled from live dashboard at build time. Edit items here; status emojis: ✅ Done, 🔴 Urgent, 🟡 Pending, 🟢 Planned, 🔵 Watch.",
+ "_comment": "ACTION ITEMS source for Kitchen Action Items doc. Hand-maintained (like narrative.json). Income Summary + debt line pulled from live dashboard at build time. Edit items here; status emojis: ✅ Done, 🔴 Urgent, 🟡 Pending, 🟠 Planned, 🔵 Watch.",
  "title": "Action Items — Completed & Outstanding",
  "subtitle": "Three-Pillar Retirement Strategy",
- "statusKey": "✅ Completed · 🔴 Urgent · 🟡 Pending (near term) · 🟢 Planned (future) · 🔵 Watch",
+ "statusKey": "✅ Completed · 🔴 Urgent · 🟡 Pending (near term) · 🟠 Planned (future) · 🔵 Watch",
  "sections": [
   {
-   "header": "Outstanding — Urgent",
+   "header": "Outstanding — Ongoing",
    "items": [
     {
      "category": "Near Term — Income Portfolio Builds"
@@ -17,21 +17,15 @@
      "date": "Ongoing — no rush"
     },
     {
-     "status": "🟡 Pending",
-     "action": "Buy BCX ~250sh (commodities exposure)",
-     "notes": "Lisa IRA · +$209/yr · watch NAV discount ~-7%",
+     "status": "🟡 Partial",
+     "action": "Buy BCX to ~250sh target (commodities exposure) — {BCX_REMAINING}sh remaining",
+     "notes": "Lisa IRA · +$209/yr at full target · watch NAV discount ~-7%",
      "date": "When discount favorable"
     },
     {
-     "status": "✅ Done",
-     "action": "Sold SCHE 524.4678sh @ $35.88 = $18,817.90",
-     "notes": "Lisa IRA (LTC) · Q2 div collected first",
-     "date": "June 24, 2026"
-    },
-    {
      "status": "🟡 Partial",
-     "action": "THW building: 500sh @ CB $13.19 — add on pullback (HQH dropped → THQ preferred)",
-     "notes": "Lisa IRA · +$700/yr so far · ~48% to 1,050sh target",
+     "action": "Build THW toward 1,050sh target — {THW_REMAINING}sh remaining (HQH dropped → THQ preferred)",
+     "notes": "Lisa IRA · add on pullback",
      "date": "Ongoing"
     }
    ]
@@ -43,7 +37,7 @@
      "category": "Insurance"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Review life insurance coverage needs",
      "notes": "Reassess term life + employer coverage · may reduce based on work benefits · self-insured via portfolio",
      "date": "Year-end 2026"
@@ -52,25 +46,25 @@
      "category": "Retirement Planning"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Call Oracle HR — confirm 2027 RSU vest on retirement",
      "notes": "Sep 2027 vest ~$30K may forfeit if retire Jun 2027",
      "date": "Before setting date"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "File SSA Form SSA-44 (IRMAA life event appeal)",
      "notes": "File same day as retirement · resets to $0 IRMAA",
      "date": "Retirement day"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Port Oracle MetLife life insurance",
      "notes": "Within 31 days of last day — time critical",
      "date": "Within 31 days of retirement"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Enroll in Medicare Part B (both Brad & Lisa)",
      "notes": "Both turn 65 in 2027 · use Special Enrollment Period",
      "date": "2027"
@@ -79,19 +73,19 @@
      "category": "Debt Payoff"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Pay off Parent Plus Loan #1 — $17,726.78 @ 7.90%",
      "notes": "Brad IRA distribution Q4 2026 · highest rate",
      "date": "Q4 2026"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Pay off Parent Plus Loans #2–4 (~$148,711)",
      "notes": "Q4 2027–2028 · coordinate with bracket window",
      "date": "Q4 2027–2028"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Anderson Windows — $36,500 @ 4.99%",
      "notes": "Lowest rate · pay last · ~$400/mo",
      "date": "Ongoing"
@@ -106,13 +100,13 @@
      "date": "June 17, 2026"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Lisa Roth IRA Q4 conversions — SCHG + VTI + VXUS only",
      "notes": "Maximize 24% bracket · pure growth positions only",
      "date": "Q4 2026"
     },
     {
-     "status": "🟢 Planned",
+     "status": "🟠 Planned",
      "action": "Continue 401k Traditional contributions — Brad",
      "notes": "Super catch-up $34,750/yr while age 60-63 · cease at retirement",
      "date": "Until retirement"
@@ -145,6 +139,12 @@
      "action": "Cancelled Trustmark LTC insurance policy",
      "notes": "Self-insuring via Pillar 3 · saves ~$3,787/yr",
      "date": "August 21, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Sold SCHE 524.4678sh @ $35.88 = $18,817.90",
+     "notes": "Lisa IRA (LTC) · Q2 div collected first",
+     "date": "June 24, 2026"
     },
     {
      "status": "✅ Done",
@@ -502,6 +502,9 @@
  ],
  "debtLine": "Remaining debt: $202,937.76  ·  Next priority: Parent Plus #1 ($17,726 @ 7.90%) — Q4 2026",
  "_dynamic": {
-  "SCHD_target": 3520
+  "SCHD_target": 3520,
+  "BCX_target": 250,
+  "BCX_target_acct": "Lisa IRA",
+  "THW_target": 1050
  }
 }
