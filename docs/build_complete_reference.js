@@ -71,16 +71,16 @@ children.push(new Paragraph({ children:[new TextRun({text:'This document is rege
 // ---- Investment Portfolio Summary ----
 children.push(h1('Investment Portfolio Summary', NAVY));
 const grandTotal = s.grandTotal;
-const w1 = [3200, 2200, 2200, 1600];
+const w1 = [2800, 1900, 1900, 1900, 1400];
 children.push(table(w1, [
-  headerRow(['Pillar / Category','Value','Income/yr','% of total'], w1),
-  row(['Pillar 1 — Income', fmtMoney(s.p1Val), fmtMoney(s.p1Inc), fmtPct(s.p1Val/s.investTotal*100)], w1, [{bold:true,color:TEAL}]),
-  row(['Pillar 2 — Growth (401k)', fmtMoney(s.p2Val), '—', fmtPct(s.p2Val/s.investTotal*100)], w1, [{bold:true,color:PURPLE}]),
-  row(['Pillar 3 — Health/LTC', fmtMoney(s.p3Val), fmtMoney(ai.p3Inc)+' (swept→P1)', fmtPct(s.p3Val/s.investTotal*100)], w1, [{bold:true,color:BLUE}]),
-  row(['Three Pillars Subtotal', fmtMoney(s.investTotal), fmtMoney(s.p1Inc), '100%'], w1, [{bold:true}]),
-  row(['Cap One Savings', fmtMoney(s.capOne.balance), fmtMoney(s.capOneInc)+` (${fmtPct(s.capOne.apy*100)})`, '—'], w1),
-  row(['Crypto (speculative)', fmtMoney(s.crypto), '—', '—'], w1),
-  row(['Grand Total', fmtMoney(grandTotal), '', ''], w1, [{bold:true,fill:LIGHT,color:NAVY}]),
+  headerRow(['Pillar / Category','Value','Income/yr','Income/mo','% of total'], w1),
+  row(['Pillar 1 — Income', fmtMoney(s.p1Val), fmtMoney(s.p1Inc), fmtMoney(s.p1Inc/12), fmtPct(s.p1Val/s.investTotal*100)], w1, [{bold:true,color:TEAL}]),
+  row(['Pillar 2 — Growth (401k)', fmtMoney(s.p2Val), '—', '—', fmtPct(s.p2Val/s.investTotal*100)], w1, [{bold:true,color:PURPLE}]),
+  row(['Pillar 3 — Health/LTC', fmtMoney(s.p3Val), fmtMoney(ai.p3Inc)+' (swept→P1)', fmtMoney(ai.p3Inc/12), fmtPct(s.p3Val/s.investTotal*100)], w1, [{bold:true,color:BLUE}]),
+  row(['Three Pillars Subtotal', fmtMoney(s.investTotal), fmtMoney(s.p1Inc), fmtMoney(s.p1Inc/12), '100%'], w1, [{bold:true}]),
+  row(['Cap One Savings', fmtMoney(s.capOne.balance), fmtMoney(s.capOneInc)+` (${fmtPct(s.capOne.apy*100)})`, fmtMoney(s.capOneInc/12), '—'], w1),
+  row(['Crypto (speculative)', fmtMoney(s.crypto), '—', '—', '—'], w1),
+  row(['Grand Total', fmtMoney(grandTotal), '', '', ''], w1, [{bold:true,fill:LIGHT,color:NAVY}]),
 ]));
 
 // ---- Income Summary ----
@@ -98,20 +98,20 @@ children.push(table(w2, [
 
 // ---- Pillar 1 per-account holdings tables ----
 children.push(h1('Pillar 1 — Income Portfolio (by account)', TEAL));
-const wA = [1500, 3400, 900, 1100, 1300, 1000];
+const wA = [1300, 2900, 800, 1000, 1200, 900, 900];
 for (const [acct, taxlabel] of P1_ACCTS) {
   const holds = data.holdings.filter(p => p.acct === acct && p.pillar === 1)
                              .sort((a,b)=>posInc(b)-posInc(a));
   if (!holds.length) continue;
   const acctVal = holds.reduce((t,p)=>t+posVal(p),0);
   const acctInc = holds.reduce((t,p)=>t+posInc(p),0);
-  children.push(h2(`${acct} — ${fmtMoney(acctVal)} · ${fmtMoney(acctInc)}/yr`, NAVY));
+  children.push(h2(`${acct} — ${fmtMoney(acctVal)} · ${fmtMoney(acctInc)}/yr (${fmtMoney(acctInc/12)}/mo)`, NAVY));
   children.push(sub(taxlabel));
-  const rows = [ headerRow(['Ticker','Name / Note','Shares','Price','Value','Inc/yr'], wA) ];
+  const rows = [ headerRow(['Ticker','Name / Note','Shares','Price','Value','Inc/yr','Inc/mo'], wA) ];
   for (const p of holds) {
-    rows.push(row([p.ticker, notesMap[p.ticker]||p.name||'', fmtShares(p.shares), fmtMoney(p.price,2), fmtMoney(posVal(p)), fmtMoney(posInc(p))], wA));
+    rows.push(row([p.ticker, notesMap[p.ticker]||p.name||'', fmtShares(p.shares), fmtMoney(p.price,2), fmtMoney(posVal(p)), fmtMoney(posInc(p)), fmtMoney(posInc(p)/12)], wA));
   }
-  rows.push(row([`${acct} Total`,'','', '', fmtMoney(acctVal), fmtMoney(acctInc)], wA, [{bold:true,fill:LIGHT},{},{},{},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT}]));
+  rows.push(row([`${acct} Total`,'','', '', fmtMoney(acctVal), fmtMoney(acctInc), fmtMoney(acctInc/12)], wA, [{bold:true,fill:LIGHT},{},{},{},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT}]));
   children.push(table(wA, rows));
   if (acct === 'Joint') {
     children.push(new Paragraph({ children:[new TextRun({ text:'Tax note: though this is a taxable account, MDXBX pays municipal-bond interest exempt from both federal AND Maryland state tax (home-state muni), and EPD (a K-1 MLP) distributes largely return-of-capital that is tax-deferred until sale. Only the ORCL dividends are ordinary taxable income here. This is why the Joint account contributes little to MAGI — see the retirement tax section below.', size:15, italics:true, color:GRAY, font:'Calibri' })], spacing:{ before:40, after:120 } }));
@@ -131,10 +131,10 @@ children.push(table(wP2, p2rows));
 children.push(h1('Pillar 3 — Health / LTC Self-Insurance', BLUE));
 children.push(sub('Dividends are swept to Pillar 1 — projections use price-only growth.'));
 const p3 = data.holdings.filter(p=>p.pillar===3).sort((a,b)=>posVal(b)-posVal(a));
-const wP3 = [1500, 3200, 1000, 1200, 1300, 1100];
-const p3rows = [ headerRow(['Ticker','Name / Note','Shares','Price','Value','Div/yr'], wP3) ];
-for (const p of p3) p3rows.push(row([p.ticker, notesMap[p.ticker]||p.name||'', fmtShares(p.shares), fmtMoney(p.price,2), fmtMoney(posVal(p)), fmtMoney(posInc(p))], wP3));
-p3rows.push(row(['Pillar 3 Total','','','', fmtMoney(s.p3Val), fmtMoney(ai.p3Inc)], wP3, [{bold:true,fill:LIGHT},{},{},{},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT}]));
+const wP3 = [1300, 2700, 900, 1100, 1200, 900, 900];
+const p3rows = [ headerRow(['Ticker','Name / Note','Shares','Price','Value','Div/yr','Div/mo'], wP3) ];
+for (const p of p3) p3rows.push(row([p.ticker, notesMap[p.ticker]||p.name||'', fmtShares(p.shares), fmtMoney(p.price,2), fmtMoney(posVal(p)), fmtMoney(posInc(p)), fmtMoney(posInc(p)/12)], wP3));
+p3rows.push(row(['Pillar 3 Total','','','', fmtMoney(s.p3Val), fmtMoney(ai.p3Inc), fmtMoney(ai.p3Inc/12)], wP3, [{bold:true,fill:LIGHT},{},{},{},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT}]));
 children.push(table(wP3, p3rows));
 
 // ---- PIMCO Suite Summary (data-driven) ----
@@ -144,11 +144,11 @@ if (pimcoHoldings.length) {
   const pimcoInc = pimcoHoldings.reduce((t,p)=>t+posInc(p),0);
   const pimcoVal = pimcoHoldings.reduce((t,p)=>t+posVal(p),0);
   children.push(h1(`PIMCO Suite — ${fmtMoney(pimcoInc)}/yr (${fmtMoney(pimcoInc/12)}/mo)`, NAVY));
-  const wPi = [1400, 2600, 1400, 1600];
-  const pirows = [ headerRow(['Ticker','Account','Value','Inc/yr'], wPi) ];
+  const wPi = [1300, 2300, 1300, 1300, 1300];
+  const pirows = [ headerRow(['Ticker','Account','Value','Inc/yr','Inc/mo'], wPi) ];
   for (const p of pimcoHoldings.sort((a,b)=>posInc(b)-posInc(a)))
-    pirows.push(row([p.ticker, p.acct, fmtMoney(posVal(p)), fmtMoney(posInc(p))], wPi));
-  pirows.push(row(['PIMCO Total','', fmtMoney(pimcoVal), fmtMoney(pimcoInc)], wPi, [{bold:true,fill:LIGHT},{},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT}]));
+    pirows.push(row([p.ticker, p.acct, fmtMoney(posVal(p)), fmtMoney(posInc(p)), fmtMoney(posInc(p)/12)], wPi));
+  pirows.push(row(['PIMCO Total','', fmtMoney(pimcoVal), fmtMoney(pimcoInc), fmtMoney(pimcoInc/12)], wPi, [{bold:true,fill:LIGHT},{},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT},{bold:true,fill:LIGHT}]));
   children.push(table(wPi, pirows));
 }
 
