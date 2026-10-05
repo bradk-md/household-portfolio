@@ -86,6 +86,70 @@ for (const sec of A.sections) {
   children.push(table(wT, rows));
 }
 
+// ---- HTML version (same data; "Completed" is a native <details>, collapsed by default) ----
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function buildHtml() {
+  const secHtml = A.sections.map(sec => {
+    const collapsible = sec.header === 'Completed';
+    const count = sec.items.filter(i=>!i.category).length;
+    let rows = '';
+    for (const it of sec.items) {
+      if (it.category) rows += `<tr class="cat"><td colspan="4">${esc(it.category)}</td></tr>`;
+      else rows += `<tr><td class="st">${esc(it.status||'')}</td><td>${esc(subst(it.action||''))}</td><td class="nt">${esc(subst(it.notes||''))}</td><td class="dt">${esc(it.date||'')}</td></tr>`;
+    }
+    const table = `<div class="tw"><table><thead><tr><th>Status</th><th>Action Item</th><th>Account / Notes</th><th>Target Date</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    return collapsible
+      ? `<details class="sec"><summary><span class="chev"></span>${esc(sec.header)} <span class="cnt">${count} items — click to expand</span></summary>${table}</details>`
+      : `<section class="sec"><h2>${esc(sec.header)}</h2>${table}</section>`;
+  }).join('\n');
+  const html = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brad &amp; Lisa Kitchen — Action Items</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F3864;--teal:#0D6B52;--gray:#5A5E6B;--border:#E2E4E9;--light:#F5F5F3;--cat:#E8ECF3;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#FAFAF8;color:#1A1C23;padding:2rem 1rem;}
+.page{max-width:1000px;margin:0 auto;}
+.hdr{border-bottom:2px solid var(--navy);padding-bottom:1rem;margin-bottom:1.5rem;}
+.brand{font-family:'DM Serif Display',serif;font-size:1.9rem;color:var(--navy);}
+.title{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--navy);margin-top:.2rem;}
+.sub{font-size:.8rem;color:var(--gray);margin-top:.3rem;}
+.key{font-size:.75rem;color:var(--gray);font-style:italic;margin-top:.4rem;}
+h2{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy);margin:1.6rem 0 .6rem;}
+h2.teal{color:var(--teal);}
+.tw{overflow-x:auto;background:#fff;border:1px solid var(--border);border-radius:8px;}
+table{width:100%;border-collapse:collapse;font-size:.82rem;}
+th{background:#EEE;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;padding:7px 10px;}
+td{padding:7px 10px;border-top:1px solid var(--border);vertical-align:top;}
+td.st,td.dt{white-space:nowrap;}
+td.nt{color:var(--gray);}
+tr.cat td{background:var(--cat);font-weight:600;color:var(--navy);font-size:.78rem;}
+.inc td:nth-child(n+2){font-variant-numeric:tabular-nums;}
+.inc tr.hl td{font-weight:700;color:var(--teal);}
+.inc tr.tot td{font-weight:700;background:var(--light);}
+.debt{font-size:.78rem;color:var(--gray);font-style:italic;margin:.6rem 0 0;}
+details.sec{margin-top:1.6rem;}
+details.sec>summary{cursor:pointer;list-style:none;font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy);padding:.5rem 0;display:flex;align-items:baseline;gap:.5rem;}
+details.sec>summary::-webkit-details-marker{display:none;}
+.chev{display:inline-block;width:.55em;height:.55em;border-right:2px solid var(--navy);border-bottom:2px solid var(--navy);transform:rotate(-45deg);transition:transform .15s;margin-right:.2rem;}
+details[open]>summary .chev{transform:rotate(45deg);}
+.cnt{font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--gray);}
+details[open] .cnt{display:none;}
+</style></head><body><div class="page">
+<div class="hdr"><div class="brand">Brad &amp; Lisa Kitchen</div><div class="title">${esc(A.title)}</div>
+<div class="sub">As of ${esc(s.asOf)} · ${esc(A.subtitle)}</div><div class="key">Status Key: ${esc(A.statusKey)}</div></div>
+<section><h2 class="teal">Income Summary</h2><div class="tw"><table class="inc"><thead><tr><th>Income</th><th>Annual</th><th>Monthly</th><th>Status</th></tr></thead><tbody>
+<tr class="hl"><td>Current combined income (portfolio + Cap One)</td><td>${fmtMoney(s.combinedInc)}</td><td>${fmtMoney(s.combinedMo)}</td><td>Confirmed ✅</td></tr>
+<tr><td>Pillar 2/3 divs swept to Pillar 1</td><td>${fmtMoney(ai.p2p3Inc)}</td><td>${fmtMoney(ai.p2p3Inc/12)}</td><td>Reinvested</td></tr>
+<tr class="tot"><td>Total All-In Income</td><td>${fmtMoney(allInInc)}</td><td>${fmtMoney(allInInc/12)}</td><td></td></tr>
+</tbody></table></div><p class="debt">${esc(A.debtLine)}</p></section>
+${secHtml}
+</div></body></html>`;
+  fs.writeFileSync('Kitchen Action Items.html', html);
+}
+buildHtml();
+
 const doc = new Document({ sections:[{ properties:{ page:{ margin:{ top:720,bottom:720,left:720,right:720 } } }, children }] });
 Packer.toBuffer(doc).then(async buf => {
   const outPath = 'Kitchen Action Items.docx';
