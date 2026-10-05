@@ -56,27 +56,27 @@
     },
     {
      "status": "🟠 Planned",
-     "action": "Call Oracle HR — confirm 2027 RSU vest on retirement",
-     "notes": "Sep 2027 vest ~$30K may forfeit if retire Jun 2027",
+     "action": "Call Oracle HR — confirm RSU vesting rules on retirement",
+     "notes": "Unvested RSUs (e.g., Sep 2027 vest ~$30K) may forfeit if you leave before the vest date · matters more at a 66–67 retirement",
      "date": "Before setting date"
     },
     {
      "status": "🟠 Planned",
-     "action": "File SSA Form SSA-44 (IRMAA life event appeal)",
-     "notes": "File same day as retirement · resets to $0 IRMAA",
-     "date": "Retirement day"
+     "action": "Consider SSA-44 (IRMAA life-event appeal) if IRMAA applies",
+     "notes": "Filed once retired · SSA reviews it (not automatic) · only matters if Medicare premiums are surcharged from older, higher income",
+     "date": "When retirement date is set"
     },
     {
      "status": "🟠 Planned",
      "action": "Port Oracle MetLife life insurance",
      "notes": "Within 31 days of last day — time critical",
-     "date": "Within 31 days of retirement"
+     "date": "Within 31 days of last day"
     },
     {
      "status": "🟠 Planned",
-     "action": "Enroll in Medicare Part B (both Brad & Lisa)",
-     "notes": "Both turn 65 in 2027 · use Special Enrollment Period",
-     "date": "2027"
+     "action": "Medicare Part B — decide timing (Brad & Lisa)",
+     "notes": "Brad turns 65 Jun 2027 · Lisa Nov 2027 · Brad may delay Part B while on Oracle coverage, then enroll within 8-month SEP after it ends",
+     "date": "Brad 65: Jun 2027 · Lisa 65: Nov 2027"
     },
     {
      "category": "Debt Payoff"
@@ -112,7 +112,7 @@
      "status": "🟠 Planned",
      "action": "Lisa Roth IRA conversions — SCHG + VTI + VXUS only (on hold for 2026)",
      "notes": "No Roth conversions in 2026 to keep taxable income down for April 2027 tax bill · when resumed: maximize 24% bracket · pure growth positions only",
-     "date": "On hold 2026 — revisit 2027"
+     "date": "On hold 2026 — revisit when retirement date is set"
     },
     {
      "status": "🟠 Planned",
