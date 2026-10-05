@@ -90,7 +90,7 @@ for (const sec of A.sections) {
 function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function buildHtml() {
   const secHtml = A.sections.map(sec => {
-    const collapsible = sec.header === 'Completed';
+    const openByDefault = sec.header.startsWith('Outstanding — Ongoing');  // Ongoing open; Planned + Completed collapsed
     const count = sec.items.filter(i=>!i.category).length;
     let rows = '';
     for (const it of sec.items) {
@@ -98,9 +98,7 @@ function buildHtml() {
       else rows += `<tr><td class="st">${esc(it.status||'')}</td><td>${esc(subst(it.action||''))}</td><td class="nt">${esc(subst(it.notes||''))}</td><td class="dt">${esc(it.date||'')}</td></tr>`;
     }
     const table = `<div class="tw"><table><thead><tr><th>Status</th><th>Action Item</th><th>Account / Notes</th><th>Target Date</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-    return collapsible
-      ? `<details class="sec"><summary><span class="chev"></span>${esc(sec.header)} <span class="cnt">${count} items — click to expand</span></summary>${table}</details>`
-      : `<section class="sec"><h2>${esc(sec.header)}</h2>${table}</section>`;
+    return `<details class="sec"${openByDefault ? ' open' : ''}><summary><span class="chev"></span>${esc(sec.header)} <span class="cnt">${count} items — click to expand</span></summary>${table}</details>`;
   }).join('\n');
   const html = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
