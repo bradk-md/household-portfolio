@@ -8,25 +8,34 @@
    "header": "Outstanding — Ongoing",
    "items": [
     {
+     "category": "Cash Reserve — April 2027 Taxes & May 2027 Foundation Finance"
+    },
+    {
+     "status": "🟡 Partial",
+     "action": "Build cash reserve for April 2027 tax bill + May 2027 Foundation Finance payoff ($14,565)",
+     "notes": "Slowing position adds · 401k contributions reduced to lift monthly cash flow (may reduce a bit more) · no more Traditional IRA withdrawals in 2026 to ease April tax bill",
+     "date": "Through Apr–May 2027"
+    },
+    {
      "category": "Near Term — Income Portfolio Builds"
     },
     {
      "status": "🟡 Pending",
      "action": "Buy SCHD to complete target 3,520sh — {SCHD_REMAINING}sh remaining",
      "notes": "Lisa IRA · buy in low $30s · income builds as completed",
-     "date": "Ongoing — no rush"
+     "date": "Slowed — cash reserve first"
     },
     {
      "status": "🟡 Partial",
      "action": "Buy BCX to ~250sh target (commodities exposure) — {BCX_REMAINING}sh remaining",
      "notes": "Lisa IRA · +$209/yr at full target · watch NAV discount ~-7%",
-     "date": "When discount favorable"
+     "date": "Slowed — cash reserve first"
     },
     {
      "status": "🟡 Partial",
      "action": "Build THW toward 1,050sh target — {THW_REMAINING}sh remaining (HQH dropped → THQ preferred)",
      "notes": "Lisa IRA · add on pullback",
-     "date": "Ongoing"
+     "date": "Slowed — cash reserve first"
     }
    ]
   },
@@ -73,10 +82,16 @@
      "category": "Debt Payoff"
     },
     {
+     "status": "🔴 Urgent",
+     "action": "Pay off Foundation Finance loan — $14,565.00 @ 0%",
+     "notes": "Priority #1 · 0% interest · must be paid in full by 05/27 · funded from cash reserve, not IRA withdrawals",
+     "date": "May 2027 (due 05/27)"
+    },
+    {
      "status": "🟠 Planned",
      "action": "Pay off Parent Plus Loan #1 — $17,726.78 @ 7.90%",
-     "notes": "Brad IRA distribution Q4 2026 · highest rate",
-     "date": "Q4 2026"
+     "notes": "Next after Foundation Finance · highest rate · no Brad IRA distribution in 2026 (keeps 2026 taxable income down for April)",
+     "date": "After Foundation Finance — TBD"
     },
     {
      "status": "🟠 Planned",
@@ -94,21 +109,15 @@
      "category": "Portfolio Strategy"
     },
     {
-     "status": "✅ Done",
-     "action": "Sold BIP · redeployed into PTY + O (K-1 eliminated)",
-     "notes": "Currently in Brad IRA · move at year end",
-     "date": "June 17, 2026"
-    },
-    {
      "status": "🟠 Planned",
-     "action": "Lisa Roth IRA Q4 conversions — SCHG + VTI + VXUS only",
-     "notes": "Maximize 24% bracket · pure growth positions only",
-     "date": "Q4 2026"
+     "action": "Lisa Roth IRA conversions — SCHG + VTI + VXUS only (on hold for 2026)",
+     "notes": "No Roth conversions in 2026 to keep taxable income down for April 2027 tax bill · when resumed: maximize 24% bracket · pure growth positions only",
+     "date": "On hold 2026 — revisit 2027"
     },
     {
      "status": "🟠 Planned",
      "action": "Continue 401k Traditional contributions — Brad",
-     "notes": "Super catch-up $34,750/yr while age 60-63 · cease at retirement",
+     "notes": "Reduced to free up monthly cash flow (may reduce a bit more) · super catch-up limit $34,750/yr while age 60-63 · cease at retirement",
      "date": "Until retirement"
     },
     {
@@ -145,6 +154,12 @@
      "action": "Sold SCHE 524.4678sh @ $35.88 = $18,817.90",
      "notes": "Lisa IRA (LTC) · Q2 div collected first",
      "date": "June 24, 2026"
+    },
+    {
+     "status": "✅ Done",
+     "action": "Sold BIP · redeployed into PTY + O (K-1 eliminated)",
+     "notes": "Currently in Brad IRA · move at year end",
+     "date": "June 17, 2026"
     },
     {
      "status": "✅ Done",
@@ -500,7 +515,7 @@
    ]
   }
  ],
- "debtLine": "Remaining debt: $202,937.76  ·  Next priority: Parent Plus #1 ($17,726 @ 7.90%) — Q4 2026",
+ "debtLine": "Remaining debt: $217,502.76  ·  Next priority: Foundation Finance ($14,565 @ 0%) — due in full May 2027",
  "_dynamic": {
   "SCHD_target": 3520,
   "BCX_target": 250,
