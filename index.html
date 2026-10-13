@@ -4320,6 +4320,7 @@ body {
     }
   ]
 };/*DATA_END*/
+try{ window.DATA = DATA; }catch(e){}
 
 // ════════════════════════════════════════════════════
 // CALCULATIONS
@@ -4814,7 +4815,7 @@ function switchTab(tab) {
     if(b.getAttribute('onclick').includes(tab)) b.classList.add('active');
   });
   if(tab==='data') { renderDataEditor(); setTimeout(loadSavedKey, 50); }
-  if(tab==='divcal') { renderDivCal(); }
+  if(tab==='divcal' && window.renderDivCal) { window.renderDivCal(); }
 }
 
 // ════════════════════════════════════════════════════
@@ -5861,107 +5862,109 @@ This cannot be undone unless you cancel without saving.`)) return;
 
 // ── INIT ──────────────────────────────────────────
 renderDashboard();
-
-// ════════════════════════════════════════════════════
-// DIVIDEND CALENDAR (read-only · additive · no writes to DATA)
-// ════════════════════════════════════════════════════
-const DC_PPY = {M:12,Q:4,SA:2,A:1};
-const DC_KNOWN_DAY = {PDI:1,PDO:1,PTY:1,PDX:1,GOF:1,JEPI:2,JEPQ:2,O:15,MAIN:15};
-const DC_SPREAD = [3,8,12,17,22,26];
-// Per-ticker pay-month overrides (1-12). Extend as Brad confirms real schedules.
-const DC_MONTHS_OVERRIDE = { 'SPDW':[6,12] };
-let dcMode = 'p1';
-let dcBase = (function(){ const n=new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })();
-const DC_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const dcFmt  = n => '$' + Math.round(n).toLocaleString('en-US');
-const dcFmt2 = n => '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-function dcDay(t){ if(DC_KNOWN_DAY[t]!=null) return DC_KNOWN_DAY[t]; let s=0; for(const c of t) s+=c.charCodeAt(0); return DC_SPREAD[s%DC_SPREAD.length]; }
-function dcPayMonths(h){
-  if(DC_MONTHS_OVERRIDE[h.ticker]) return DC_MONTHS_OVERRIDE[h.ticker];
-  if(h.freq==='M') return [1,2,3,4,5,6,7,8,9,10,11,12];
-  if(h.freq==='Q') return [3,6,9,12];
-  if(h.freq==='SA') return [6,12];
-  if(h.freq==='A') return [12];
-  return [];
-}
-function dcPerPayment(h){
-  if(h.pmts && h.pmts.length) return h.pmts[0]*h.shares;
-  const ppy = DC_PPY[h.freq]||0;
-  return ppy ? (h.div/ppy)*h.shares : 0;
-}
-function dcEventsFor(y, m){
-  const out = {}; const dim = new Date(y, m+1, 0).getDate();
-  (DATA.holdings||[]).forEach(h=>{
-    if(!h.freq || h.freq==='-' || !(h.div>0)) return;
-    if(dcMode==='p1' && h.pillar!==1) return;
-    const amt = dcPerPayment(h);
-    if(!(amt>0)) return;
-    if(dcPayMonths(h).indexOf(m+1) < 0) return;
-    const day = Math.min(dcDay(h.ticker), dim);
-    (out[day]=out[day]||[]).push({t:h.ticker,a:h.acct,p:h.pillar||1,amt:amt});
-  });
-  // Capital One interest — last day of month (part of combined income)
-  if(DATA.capOne){
-    const capMo = (DATA.capOne.balance||0)*(DATA.capOne.apy||0)/12;
-    if(capMo>0) (out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo});
-  }
-  return out;
-}
-function dcMonthTotal(ev){ let t=0; for(const dd in ev) for(const r of ev[dd]) t+=r.amt; return t; }
-function dcBuildCal(y, m){
-  const ev = dcEventsFor(y, m); const startDow = new Date(y,m,1).getDay(); const dim = new Date(y,m+1,0).getDate();
-  const now = new Date();
-  let cells='';
-  for(let i=0;i<startDow;i++) cells += '<div class="dc-cell empty"></div>';
-  for(let dd=1; dd<=dim; dd++){
-    const recs = ev[dd];
-    const isT = (y===now.getFullYear() && m===now.getMonth() && dd===now.getDate());
-    const tc = isT ? ' today' : '';
-    if(recs && recs.length){
-      const tot = recs.reduce((s,r)=>s+r.amt,0);
-      const pil = [...new Set(recs.map(r=>r.p))].sort();
-      const dots = pil.map(p=>`<span class="dc-dot dc-p${p}"></span>`).join('');
-      cells += `<div class="dc-cell pay${tc}" data-y="${y}" data-m="${m}" data-d="${dd}"><div class="dc-dnum">${dd}</div><div class="dc-ptot">${dcFmt(tot)}</div><div class="dc-dots">${dots}</div></div>`;
-    } else cells += `<div class="dc-cell${tc}"><div class="dc-dnum">${dd}</div></div>`;
-  }
-  const dow = ['S','M','T','W','T','F','S'].map(x=>`<div class="dc-dow">${x}</div>`).join('');
-  return {html:`<div class="dc-cal"><h2>${DC_MONTHS[m]} ${y} <span class="mt">${dcFmt(dcMonthTotal(ev))}</span></h2><div class="dc-grid">${dow}${cells}</div></div>`, total:dcMonthTotal(ev)};
-}
-function renderDivCal(){
-  const y0=dcBase.getFullYear(), m0=dcBase.getMonth();
-  const d2=new Date(y0,m0+1,1), y1=d2.getFullYear(), m1=d2.getMonth();
-  const c0=dcBuildCal(y0,m0), c1=dcBuildCal(y1,m1);
-  const cals=document.getElementById('dcCals'); if(!cals) return;
-  cals.innerHTML = c0.html + c1.html;
-  const lab = dcMode==='p1' ? 'Pillar 1 + Cap One' : 'all pillars + Cap One';
-  document.getElementById('dcTotals').innerHTML =
-    `<div class="dc-tcard"><div class="lbl">${DC_MONTHS[m0]} ${y0}</div><div class="val">${dcFmt(c0.total)}</div><div class="meta">${lab} · estimated</div></div>`+
-    `<div class="dc-tcard"><div class="lbl">${DC_MONTHS[m1]} ${y1}</div><div class="val">${dcFmt(c1.total)}</div><div class="meta">${lab} · estimated</div></div>`;
-}
-function dcShowTip(cx, cy, y, m, dd){
-  const tip=document.getElementById('dcTip'); if(!tip) return;
-  const ev=dcEventsFor(y,m); const recs=(ev[dd]||[]).slice().sort((a,b)=>b.amt-a.amt);
-  if(!recs.length){ tip.style.display='none'; return; }
-  const tot=recs.reduce((s,r)=>s+r.amt,0);
-  tip.innerHTML = `<div class="th"><span>${DC_MONTHS[m]} ${dd}</span><span>${dcFmt2(tot)}</span></div>` +
-    recs.map(r=>`<div class="row"><span><span class="tk">${r.t}</span> <span class="ac">${r.a}</span></span><span class="am">${dcFmt2(r.amt)}</span></div>`).join('');
-  tip.style.display='block';
-  const pad=12,w=tip.offsetWidth,h=tip.offsetHeight; let x=cx+14,yy=cy+14;
-  if(x+w+pad>innerWidth) x=cx-w-14; if(yy+h+pad>innerHeight) yy=innerHeight-h-pad;
-  tip.style.left=x+'px'; tip.style.top=yy+'px';
-}
-document.addEventListener('DOMContentLoaded', function(){
-  const bind=(id,fn)=>{ const el=document.getElementById(id); if(el) el.onclick=fn; };
-  bind('dcPrev', ()=>{ dcBase=new Date(dcBase.getFullYear(), dcBase.getMonth()-1, 1); renderDivCal(); });
-  bind('dcNext', ()=>{ dcBase=new Date(dcBase.getFullYear(), dcBase.getMonth()+1, 1); renderDivCal(); });
-  bind('dcToday',()=>{ const n=new Date(); dcBase=new Date(n.getFullYear(), n.getMonth(), 1); renderDivCal(); });
-  bind('dcBtnP1',()=>{ dcMode='p1'; dcBtnP1.classList.add('on'); dcBtnAll.classList.remove('on'); renderDivCal(); });
-  bind('dcBtnAll',()=>{ dcMode='all'; dcBtnAll.classList.add('on'); dcBtnP1.classList.remove('on'); renderDivCal(); });
-  document.addEventListener('mousemove', e=>{ const c=e.target.closest('#divcal .dc-cell.pay'); const tip=document.getElementById('dcTip'); if(c) dcShowTip(e.clientX,e.clientY,+c.dataset.y,+c.dataset.m,+c.dataset.d); else if(tip) tip.style.display='none'; });
-  document.addEventListener('click', e=>{ const c=e.target.closest('#divcal .dc-cell.pay'); if(c) dcShowTip(innerWidth/2-130,110,+c.dataset.y,+c.dataset.m,+c.dataset.d); });
-});
-
 </script>
+<script>
+/* Dividend Calendar — independent module (read-only; isolated from the main dashboard script) */
+(function(){
+  try {
+    var PPY = {M:12,Q:4,SA:2,A:1};
+    var KNOWN_DAY = {PDI:1,PDO:1,PTY:1,PDX:1,GOF:1,JEPI:2,JEPQ:2,O:15,MAIN:15};
+    var SPREAD = [3,8,12,17,22,26];
+    var MONTHS_OVERRIDE = { 'SPDW':[6,12] };   // per-ticker pay-month overrides (1-12); extend as confirmed
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var mode = 'p1';
+    var base = (function(){ var n=new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })();
+    function D(){ return (window.DATA || {holdings:[], capOne:{balance:0,apy:0}}); }
+    function fmt(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
+    function fmt2(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+    function day(t){ if(KNOWN_DAY[t]!=null) return KNOWN_DAY[t]; var s=0; for(var k=0;k<t.length;k++) s+=t.charCodeAt(k); return SPREAD[s % SPREAD.length]; }
+    function payMonths(h){
+      if(MONTHS_OVERRIDE[h.ticker]) return MONTHS_OVERRIDE[h.ticker];
+      if(h.freq==='M') return [1,2,3,4,5,6,7,8,9,10,11,12];
+      if(h.freq==='Q') return [3,6,9,12];
+      if(h.freq==='SA') return [6,12];
+      if(h.freq==='A') return [12];
+      return [];
+    }
+    function perPayment(h){
+      if(h.pmts && h.pmts.length) return h.pmts[0]*h.shares;
+      var ppy = PPY[h.freq]||0; return ppy ? (h.div/ppy)*h.shares : 0;
+    }
+    function eventsFor(y, m){
+      var out={}, dim=new Date(y, m+1, 0).getDate();
+      var holds=(D().holdings)||[];
+      for(var i=0;i<holds.length;i++){
+        var h=holds[i];
+        if(!h.freq || h.freq==='-' || !(h.div>0)) continue;
+        if(mode==='p1' && h.pillar!==1) continue;
+        var amt=perPayment(h); if(!(amt>0)) continue;
+        if(payMonths(h).indexOf(m+1) < 0) continue;
+        var d=Math.min(day(h.ticker), dim);
+        (out[d]=out[d]||[]).push({t:h.ticker,a:h.acct,p:h.pillar||1,amt:amt});
+      }
+      var cap=D().capOne;
+      if(cap){ var capMo=(cap.balance||0)*(cap.apy||0)/12; if(capMo>0) (out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo}); }
+      return out;
+    }
+    function monthTotal(ev){ var t=0; for(var dd in ev){ for(var k=0;k<ev[dd].length;k++) t+=ev[dd][k].amt; } return t; }
+    function buildCal(y, m){
+      var ev=eventsFor(y,m), startDow=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), now=new Date();
+      var cells='';
+      for(var i=0;i<startDow;i++) cells+='<div class="dc-cell empty"></div>';
+      for(var dd=1; dd<=dim; dd++){
+        var recs=ev[dd];
+        var isT=(y===now.getFullYear() && m===now.getMonth() && dd===now.getDate());
+        var tc=isT?' today':'';
+        if(recs && recs.length){
+          var tot=0; for(var r=0;r<recs.length;r++) tot+=recs[r].amt;
+          var seen={}, dots='';
+          recs.slice().sort(function(a,b){return a.p-b.p;}).forEach(function(x){ if(!seen[x.p]){ seen[x.p]=1; dots+='<span class="dc-dot dc-p'+x.p+'"></span>'; } });
+          cells+='<div class="dc-cell pay'+tc+'" data-y="'+y+'" data-m="'+m+'" data-d="'+dd+'"><div class="dc-dnum">'+dd+'</div><div class="dc-ptot">'+fmt(tot)+'</div><div class="dc-dots">'+dots+'</div></div>';
+        } else cells+='<div class="dc-cell'+tc+'"><div class="dc-dnum">'+dd+'</div></div>';
+      }
+      var dow=['S','M','T','W','T','F','S'].map(function(x){return '<div class="dc-dow">'+x+'</div>';}).join('');
+      return {html:'<div class="dc-cal"><h2>'+MONTHS[m]+' '+y+' <span class="mt">'+fmt(monthTotal(ev))+'</span></h2><div class="dc-grid">'+dow+cells+'</div></div>', total:monthTotal(ev)};
+    }
+    function render(){
+      var y0=base.getFullYear(), m0=base.getMonth();
+      var d2=new Date(y0,m0+1,1), y1=d2.getFullYear(), m1=d2.getMonth();
+      var c0=buildCal(y0,m0), c1=buildCal(y1,m1);
+      var cals=document.getElementById('dcCals'); if(!cals) return;
+      cals.innerHTML=c0.html+c1.html;
+      var lab=(mode==='p1')?'Pillar 1 + Cap One':'all pillars + Cap One';
+      var tot=document.getElementById('dcTotals');
+      if(tot) tot.innerHTML=
+        '<div class="dc-tcard"><div class="lbl">'+MONTHS[m0]+' '+y0+'</div><div class="val">'+fmt(c0.total)+'</div><div class="meta">'+lab+' · estimated</div></div>'+
+        '<div class="dc-tcard"><div class="lbl">'+MONTHS[m1]+' '+y1+'</div><div class="val">'+fmt(c1.total)+'</div><div class="meta">'+lab+' · estimated</div></div>';
+    }
+    window.renderDivCal = render;   // called by switchTab
+    function showTip(cx, cy, y, m, dd){
+      var tip=document.getElementById('dcTip'); if(!tip) return;
+      var ev=eventsFor(y,m); var recs=(ev[dd]||[]).slice().sort(function(a,b){return b.amt-a.amt;});
+      if(!recs.length){ tip.style.display='none'; return; }
+      var tot=0; for(var i=0;i<recs.length;i++) tot+=recs[i].amt;
+      tip.innerHTML='<div class="th"><span>'+MONTHS[m]+' '+dd+'</span><span>'+fmt2(tot)+'</span></div>'+
+        recs.map(function(r){return '<div class="row"><span><span class="tk">'+r.t+'</span> <span class="ac">'+r.a+'</span></span><span class="am">'+fmt2(r.amt)+'</span></div>';}).join('');
+      tip.style.display='block';
+      var pad=12,w=tip.offsetWidth,h=tip.offsetHeight,x=cx+14,yy=cy+14;
+      if(x+w+pad>innerWidth) x=cx-w-14; if(yy+h+pad>innerHeight) yy=innerHeight-h-pad;
+      tip.style.left=x+'px'; tip.style.top=yy+'px';
+    }
+    function bind(){
+      var g=function(id){return document.getElementById(id);};
+      if(g('dcPrev')) g('dcPrev').onclick=function(){ base=new Date(base.getFullYear(),base.getMonth()-1,1); render(); };
+      if(g('dcNext')) g('dcNext').onclick=function(){ base=new Date(base.getFullYear(),base.getMonth()+1,1); render(); };
+      if(g('dcToday')) g('dcToday').onclick=function(){ var n=new Date(); base=new Date(n.getFullYear(),n.getMonth(),1); render(); };
+      if(g('dcBtnP1')) g('dcBtnP1').onclick=function(){ mode='p1'; g('dcBtnP1').classList.add('on'); g('dcBtnAll').classList.remove('on'); render(); };
+      if(g('dcBtnAll')) g('dcBtnAll').onclick=function(){ mode='all'; g('dcBtnAll').classList.add('on'); g('dcBtnP1').classList.remove('on'); render(); };
+      document.addEventListener('mousemove', function(e){ var c=e.target.closest('#divcal .dc-cell.pay'); var tip=document.getElementById('dcTip'); if(c) showTip(e.clientX,e.clientY,+c.dataset.y,+c.dataset.m,+c.dataset.d); else if(tip) tip.style.display='none'; });
+      document.addEventListener('click', function(e){ var c=e.target.closest('#divcal .dc-cell.pay'); if(c) showTip(innerWidth/2-130,110,+c.dataset.y,+c.dataset.m,+c.dataset.d); });
+    }
+    bind();
+  } catch(err){ try{ console.error('DivCal init error:', err); }catch(e){} }
+})();
+</script>
+
 
 </div>
 
