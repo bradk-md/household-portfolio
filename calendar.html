@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dividend Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#0D6B52;--teal-lt:#E6F4EF;--purple:#4A42A8;--purple-lt:#EEEDFE;--blue:#1557A0;--blue-lt:#E4EEF9;
+    --navy:#141E35;--gold:#B8960C;--gold-lt:#FEF8E4;--gray:#5A5E6B;--lgray:#F4F4F2;--border:#E2E4E9;--white:#fff;--text:#1A1C23;--bg:#F0F1EE}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+  .tabs{display:flex;background:var(--navy);padding:0 2rem;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+  .tab-btn{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:1rem 1.1rem;color:rgba(255,255,255,.5);text-decoration:none;cursor:pointer;background:none;border:none}
+  .tab-btn.active{color:#fff;box-shadow:inset 0 -3px 0 var(--gold)}
+  .tab-btn:hover{color:#fff}
+  .wrap{max-width:1040px;margin:0 auto;padding:22px 20px}
+  h1{font-family:'DM Serif Display',serif;font-size:1.7rem;margin:0 0 2px;color:var(--navy);font-weight:400}
+  .sub{color:var(--gray);font-size:0.86rem;margin:0 0 16px}
+  .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .nav{display:flex;align-items:center;gap:6px}
+  .bar button{font-family:'DM Sans',sans-serif;font-size:0.82rem;background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 12px;cursor:pointer;color:var(--text)}
+  .bar button:hover{background:var(--lgray)}
+  .seg{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff}
+  .seg button{border:none;border-radius:0;border-right:1px solid var(--border);font-size:0.78rem}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--navy);color:#fff}
+  .spacer{flex:1}
+  .totals{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .tcard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 18px;min-width:180px}
+  .tcard .lbl{font-size:0.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--gray)}
+  .tcard .val{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--navy)}
+  .tcard .meta{font-size:0.72rem;color:var(--gray)}
+  .cals{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.cals{grid-template-columns:1fr}}
+  .cal{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
+  .cal h2{font-size:1rem;margin:0 0 12px;color:var(--navy);display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
+  .cal h2 .mt{font-family:'DM Mono',monospace;font-size:0.84rem;color:var(--teal);font-weight:500}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .dow{font-size:0.6rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray);text-align:center;padding:2px 0}
+  .cell{min-height:50px;border:1px solid var(--border);border-radius:7px;padding:3px 4px;position:relative;background:#fff}
+  .cell.empty{background:#FaFaF9;border-color:#EFEFEC}
+  .cell.pay{cursor:pointer}
+  .cell.pay:hover{border-color:var(--navy);box-shadow:0 0 0 2px rgba(20,30,53,.08)}
+  .cell.today{box-shadow:0 0 0 2px var(--teal)}
+  .dnum{font-size:0.64rem;color:var(--gray)}
+  .cell.pay .dnum{color:var(--text);font-weight:600}
+  .cell.today .dnum{color:var(--teal);font-weight:700}
+  .ptot{font-family:'DM Mono',monospace;font-size:0.72rem;font-weight:500;color:var(--navy);margin-top:2px;line-height:1.1}
+  .dots{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap}
+  .dot{width:7px;height:7px;border-radius:50%}
+  .p1{background:var(--teal)}.p2{background:var(--purple)}.p3{background:var(--blue)}.p0{background:var(--gold)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0 4px;font-size:0.76rem;color:var(--gray);align-items:center}
+  .legend .li{display:flex;align-items:center;gap:5px}
+  .note{font-size:0.75rem;color:var(--gray);background:var(--gold-lt);border:1px solid #EAD89A;border-radius:8px;padding:9px 13px;margin-top:10px}
+  #tip{position:fixed;z-index:200;background:#fff;border:1px solid var(--navy);border-radius:9px;box-shadow:0 6px 24px rgba(0,0,0,.16);padding:10px 12px;font-size:0.78rem;max-width:290px;display:none;pointer-events:none}
+  #tip .th{font-weight:600;color:var(--navy);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:5px;display:flex;justify-content:space-between;gap:12px}
+  #tip .row{display:flex;justify-content:space-between;gap:12px;padding:1px 0}
+  #tip .tk{font-weight:600}#tip .ac{color:var(--gray);font-size:0.68rem}#tip .am{font-family:'DM Mono',monospace}
+  #status{padding:40px 20px;text-align:center;color:var(--gray)}
+</style></head>
+<body>
+<div class="tabs">
+  <a class="tab-btn" href="index.html">&#128202; Dashboard</a>
+  <a class="tab-btn active" href="calendar.html">&#128197; Dividend Calendar</a>
+  <a class="tab-btn" href="index.html">&#9881;&#65039; Update Holdings</a>
+</div>
+<div class="wrap">
+  <h1>Dividend Calendar</h1>
+  <p class="sub">Estimated pay dates &middot; for planning, not exact &middot; hover a day (tap on mobile) to see what pays</p>
+  <div class="bar">
+    <div class="nav"><button id="prev" title="Earlier">&larr;</button><button id="today">Today</button><button id="next" title="Later">&rarr;</button></div>
+    <div class="spacer"></div>
+    <span style="font-size:0.76rem;color:var(--gray)">Show:</span>
+    <div class="seg"><button id="btnP1" class="on">Pillar 1 income</button><button id="btnAll">All pillars</button></div>
+  </div>
+  <div id="status">Loading your live holdings&hellip;</div>
+  <div class="totals" id="totals"></div>
+  <div class="cals" id="cals"></div>
+  <div class="legend">
+    <span class="li"><span class="dot p1"></span> Pillar 1 &mdash; Income</span>
+    <span class="li"><span class="dot p0"></span> Capital One interest</span>
+    <span class="li"><span class="dot p2"></span> Pillar 2 &mdash; Growth</span>
+    <span class="li"><span class="dot p3"></span> Pillar 3 &mdash; Health/LTC</span>
+  </div>
+  <div class="note"><strong>Estimated dates.</strong> Amounts are live from your dashboard holdings &amp; Cap One; pay days are estimated by frequency &mdash; quarterly default Mar/Jun/Sep/Dec, semi-annual Jun/Dec, annual Dec, with per-ticker overrides as we confirm them. &ldquo;Pillar 1 income&rdquo; = P1 dividends + Capital One interest; &ldquo;All pillars&rdquo; adds swept P2/P3 dividend cash.</div>
+</div>
+<div id="tip"></div>
+<script>
+var DATA = null;
+var PPY={M:12,Q:4,SA:2,A:1};
+var KNOWN_DAY={PDI:1,PDO:1,PTY:1,PDX:1,GOF:1,JEPI:2,JEPQ:2,O:15,MAIN:15};
+var SPREAD=[3,8,12,17,22,26];
+var MONTHS_OVERRIDE={ 'SPDW':[6,12] };
+var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var mode='p1';
+var base=(function(){var n=new Date();return new Date(n.getFullYear(),n.getMonth(),1);})();
+function fmt(n){return '$'+Math.round(n).toLocaleString('en-US');}
+function fmt2(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function day(t){if(KNOWN_DAY[t]!=null)return KNOWN_DAY[t];var s=0;for(var k=0;k<t.length;k++)s+=t.charCodeAt(k);return SPREAD[s%SPREAD.length];}
+function payMonths(h){if(MONTHS_OVERRIDE[h.ticker])return MONTHS_OVERRIDE[h.ticker];if(h.freq==='M')return [1,2,3,4,5,6,7,8,9,10,11,12];if(h.freq==='Q')return [3,6,9,12];if(h.freq==='SA')return [6,12];if(h.freq==='A')return [12];return [];}
+function perPayment(h){if(h.pmts&&h.pmts.length)return h.pmts[0]*h.shares;var ppy=PPY[h.freq]||0;return ppy?(h.div/ppy)*h.shares:0;}
+function eventsFor(y,m){
+  var out={},dim=new Date(y,m+1,0).getDate();
+  var holds=(DATA&&DATA.holdings)||[];
+  for(var i=0;i<holds.length;i++){var h=holds[i];
+    if(!h.freq||h.freq==='-'||!(h.div>0))continue;
+    if(mode==='p1'&&h.pillar!==1)continue;
+    var amt=perPayment(h);if(!(amt>0))continue;
+    if(payMonths(h).indexOf(m+1)<0)continue;
+    var d=Math.min(day(h.ticker),dim);
+    (out[d]=out[d]||[]).push({t:h.ticker,a:h.acct,p:h.pillar||1,amt:amt});
+  }
+  var cap=DATA&&DATA.capOne;
+  if(cap){var capMo=(cap.balance||0)*(cap.apy||0)/12;if(capMo>0)(out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo});}
+  return out;
+}
+function monthTotal(ev){var t=0;for(var dd in ev){for(var k=0;k<ev[dd].length;k++)t+=ev[dd][k].amt;}return t;}
+function buildCal(y,m){
+  var ev=eventsFor(y,m),startDow=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),now=new Date();
+  var cells='';for(var i=0;i<startDow;i++)cells+='<div class="cell empty"></div>';
+  for(var dd=1;dd<=dim;dd++){var recs=ev[dd];
+    var isT=(y===now.getFullYear()&&m===now.getMonth()&&dd===now.getDate());var tc=isT?' today':'';
+    if(recs&&recs.length){var tot=0;for(var r=0;r<recs.length;r++)tot+=recs[r].amt;
+      var seen={},dots='';recs.slice().sort(function(a,b){return a.p-b.p;}).forEach(function(x){if(!seen[x.p]){seen[x.p]=1;dots+='<span class="dot p'+x.p+'"></span>';}});
+      cells+='<div class="cell pay'+tc+'" data-y="'+y+'" data-m="'+m+'" data-d="'+dd+'"><div class="dnum">'+dd+'</div><div class="ptot">'+fmt(tot)+'</div><div class="dots">'+dots+'</div></div>';
+    }else cells+='<div class="cell'+tc+'"><div class="dnum">'+dd+'</div></div>';
+  }
+  var dow=['S','M','T','W','T','F','S'].map(function(x){return '<div class="dow">'+x+'</div>';}).join('');
+  return {html:'<div class="cal"><h2>'+MONTHS[m]+' '+y+' <span class="mt">'+fmt(monthTotal(ev))+'</span></h2><div class="grid">'+dow+cells+'</div></div>',total:monthTotal(ev)};
+}
+function render(){
+  if(!DATA)return;
+  var y0=base.getFullYear(),m0=base.getMonth();
+  var d2=new Date(y0,m0+1,1),y1=d2.getFullYear(),m1=d2.getMonth();
+  var c0=buildCal(y0,m0),c1=buildCal(y1,m1);
+  document.getElementById('cals').innerHTML=c0.html+c1.html;
+  var lab=(mode==='p1')?'Pillar 1 + Cap One':'all pillars + Cap One';
+  document.getElementById('totals').innerHTML=
+    '<div class="tcard"><div class="lbl">'+MONTHS[m0]+' '+y0+'</div><div class="val">'+fmt(c0.total)+'</div><div class="meta">'+lab+' &middot; estimated</div></div>'+
+    '<div class="tcard"><div class="lbl">'+MONTHS[m1]+' '+y1+'</div><div class="val">'+fmt(c1.total)+'</div><div class="meta">'+lab+' &middot; estimated</div></div>';
+}
+function showTip(cx,cy,y,m,dd){
+  var tip=document.getElementById('tip');var ev=eventsFor(y,m);var recs=(ev[dd]||[]).slice().sort(function(a,b){return b.amt-a.amt;});
+  if(!recs.length){tip.style.display='none';return;}
+  var tot=0;for(var i=0;i<recs.length;i++)tot+=recs[i].amt;
+  tip.innerHTML='<div class="th"><span>'+MONTHS[m]+' '+dd+'</span><span>'+fmt2(tot)+'</span></div>'+
+    recs.map(function(r){return '<div class="row"><span><span class="tk">'+r.t+'</span> <span class="ac">'+r.a+'</span></span><span class="am">'+fmt2(r.amt)+'</span></div>';}).join('');
+  tip.style.display='block';
+  var pad=12,w=tip.offsetWidth,h=tip.offsetHeight,x=cx+14,yy=cy+14;
+  if(x+w+pad>innerWidth)x=cx-w-14;if(yy+h+pad>innerHeight)yy=innerHeight-h-pad;
+  tip.style.left=x+'px';tip.style.top=yy+'px';
+}
+document.getElementById('prev').onclick=function(){base=new Date(base.getFullYear(),base.getMonth()-1,1);render();};
+document.getElementById('next').onclick=function(){base=new Date(base.getFullYear(),base.getMonth()+1,1);render();};
+document.getElementById('today').onclick=function(){var n=new Date();base=new Date(n.getFullYear(),n.getMonth(),1);render();};
+document.getElementById('btnP1').onclick=function(){mode='p1';btnP1.classList.add('on');btnAll.classList.remove('on');render();};
+document.getElementById('btnAll').onclick=function(){mode='all';btnAll.classList.add('on');btnP1.classList.remove('on');render();};
+document.addEventListener('mousemove',function(e){var c=e.target.closest('.cell.pay');var tip=document.getElementById('tip');if(c)showTip(e.clientX,e.clientY,+c.dataset.y,+c.dataset.m,+c.dataset.d);else if(tip)tip.style.display='none';});
+document.addEventListener('click',function(e){var c=e.target.closest('.cell.pay');if(c)showTip(innerWidth/2-130,110,+c.dataset.y,+c.dataset.m,+c.dataset.d);});
+
+// ---- load live DATA from the dashboard (same-origin) ----
+function extractDATA(html){
+  var s=html.indexOf('/*DATA_START*/'); var e=html.indexOf('/*DATA_END*/');
+  var seg = (s>=0&&e>=0)? html.slice(s,e) : html;
+  var ci=seg.indexOf('const DATA'); var bi=seg.indexOf('{',ci);
+  var depth=0,i=bi;
+  for(;i<seg.length;i++){var ch=seg[i];if(ch==='{')depth++;else if(ch==='}'){depth--;if(depth===0)break;}}
+  var objText=seg.slice(bi,i+1);
+  return (new Function('return ('+objText+')'))();
+}
+(function load(){
+  fetch('index.html?nc='+Date.now()).then(function(r){return r.text();}).then(function(html){
+    DATA=extractDATA(html);
+    document.getElementById('status').style.display='none';
+    render();
+  }).catch(function(err){
+    document.getElementById('status').innerHTML='Could not load live holdings ('+err.message+'). Open this page from your dashboard site so it can read index.html.';
+  });
+})();
+</script></body></html>
