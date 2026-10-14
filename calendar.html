@@ -89,13 +89,34 @@ var DATA = null;
 var PPY={M:12,Q:4,SA:2,A:1};
 var KNOWN_DAY={PDI:1,PDO:1,PTY:1,PDX:1,GOF:1,JEPI:2,JEPQ:2,O:15,MAIN:15};
 var SPREAD=[3,8,12,17,22,26];
-var MONTHS_OVERRIDE={ 'SPDW':[6,12] };
+/* Pay MONTHS per ticker (1-12), verified against real dividend history Oct 2026. */
+var MONTHS_OVERRIDE={
+  /* Cycle A: Jan/Apr/Jul/Oct */
+  'IRM':[1,4,7,10],'LADR':[1,4,7,10],'IIPR':[1,4,7,10],'WPC':[1,4,7,10],'VICI':[1,4,7,10],'ORCL':[1,4,7,10],
+  'STAG':[1,4,7,10],'BIZD':[1,4,7,10],
+  /* Cycle B: Feb/May/Aug/Nov */
+  'ET':[2,5,8,11],'OKE':[2,5,8,11],'AMLP':[2,5,8,11],'EPD':[2,5,8,11],'WES':[2,5,8,11],'ABR':[2,5,8,11],
+  /* Cycle C: Mar/Jun/Sep/Dec */
+  'ARCC':[3,6,9,12],'SPG':[3,6,9,12],'DLR':[3,6,9,12],'SCHD':[3,6,9,12],'PLD':[3,6,9,12],
+  'BTO':[3,6,9,12],'TPL':[3,6,9,12],'PBA':[3,6,9,12],
+  'SCHM':[3,6,9,12],'VUG':[3,6,9,12],'VTV':[3,6,9,12],'SCHA':[3,6,9,12],
+  /* Semi-annual / annual */
+  'DIS':[1,7],'SPDW':[6,12],'SCHE':[6,12],'SCHC':[6,12],'BLOK':[12],'FDGRX':[12]
+};
+/* Representative pay DAY per ticker (verified). Missing tickers fall back to KNOWN_DAY/SPREAD. */
+var DAY_OVERRIDE={
+  'IRM':3,'LADR':15,'IIPR':15,'WPC':15,'VICI':8,'ORCL':23,'STAG':15,'BIZD':7,
+  'ET':19,'OKE':14,'AMLP':17,'EPD':14,'WES':14,'ABR':26,
+  'ARCC':30,'SPG':30,'DLR':30,'SCHD':28,'PLD':30,'BTO':30,'TPL':15,'PBA':29,
+  'DIS':15,'SPDW':24,'BLOK':31,
+  'SCHM':28,'VUG':28,'VTV':28,'SCHA':28,'SCHE':16,'SCHC':16,'FDGRX':28
+};
 var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 var mode='p1';
 var base=(function(){var n=new Date();return new Date(n.getFullYear(),n.getMonth(),1);})();
 function fmt(n){return '$'+Math.round(n).toLocaleString('en-US');}
 function fmt2(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function day(t){if(KNOWN_DAY[t]!=null)return KNOWN_DAY[t];var s=0;for(var k=0;k<t.length;k++)s+=t.charCodeAt(k);return SPREAD[s%SPREAD.length];}
+function day(t){if(DAY_OVERRIDE[t]!=null)return DAY_OVERRIDE[t];if(KNOWN_DAY[t]!=null)return KNOWN_DAY[t];var s=0;for(var k=0;k<t.length;k++)s+=t.charCodeAt(k);return SPREAD[s%SPREAD.length];}
 function payMonths(h){if(MONTHS_OVERRIDE[h.ticker])return MONTHS_OVERRIDE[h.ticker];if(h.freq==='M')return [1,2,3,4,5,6,7,8,9,10,11,12];if(h.freq==='Q')return [3,6,9,12];if(h.freq==='SA')return [6,12];if(h.freq==='A')return [12];return [];}
 function perPayment(h){if(h.pmts&&h.pmts.length)return h.pmts[0]*h.shares;var ppy=PPY[h.freq]||0;return ppy?(h.div/ppy)*h.shares:0;}
 function eventsFor(y,m){
