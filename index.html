@@ -3280,73 +3280,6 @@ body {
 </div>
 
 
-<style>
-#divcal .dc-wrap{max-width:1040px;margin:0 auto;padding:22px 20px}
-#divcal h1.dc-h1{font-family:'DM Serif Display',serif;font-size:1.7rem;margin:0 0 2px;color:var(--navy);font-weight:400}
-#divcal .dc-sub{color:var(--gray);font-size:0.86rem;margin:0 0 16px}
-#divcal .dc-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-#divcal .dc-nav{display:flex;align-items:center;gap:6px}
-#divcal .dc-bar button{font-family:'DM Sans',sans-serif;font-size:0.82rem;background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 12px;cursor:pointer;color:var(--text)}
-#divcal .dc-bar button:hover{background:var(--lgray)}
-#divcal .dc-seg{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff}
-#divcal .dc-seg button{border:none;border-radius:0;border-right:1px solid var(--border);font-size:0.78rem}
-#divcal .dc-seg button:last-child{border-right:none}
-#divcal .dc-seg button.on{background:var(--navy);color:#fff}
-#divcal .dc-spacer{flex:1}
-#divcal .dc-totals{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-#divcal .dc-tcard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 18px;min-width:180px}
-#divcal .dc-tcard .lbl{font-size:0.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--gray)}
-#divcal .dc-tcard .val{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--navy)}
-#divcal .dc-tcard .meta{font-size:0.72rem;color:var(--gray)}
-#divcal .dc-cals{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:760px){#divcal .dc-cals{grid-template-columns:1fr}}
-#divcal .dc-cal{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
-#divcal .dc-cal h2{font-size:1rem;margin:0 0 12px;color:var(--navy);display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
-#divcal .dc-cal h2 .mt{font-family:'DM Mono',monospace;font-size:0.84rem;color:var(--teal);font-weight:500}
-#divcal .dc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-#divcal .dc-dow{font-size:0.6rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray);text-align:center;padding:2px 0}
-#divcal .dc-cell{min-height:50px;border:1px solid var(--border);border-radius:7px;padding:3px 4px;position:relative;background:#fff}
-#divcal .dc-cell.empty{background:#FaFaF9;border-color:#EFEFEC}
-#divcal .dc-cell.pay{cursor:pointer}
-#divcal .dc-cell.pay:hover{border-color:var(--navy);box-shadow:0 0 0 2px rgba(20,30,53,.08)}
-#divcal .dc-cell.today{box-shadow:0 0 0 2px var(--teal)}
-#divcal .dc-dnum{font-size:0.64rem;color:var(--gray)}
-#divcal .dc-cell.pay .dc-dnum{color:var(--text);font-weight:600}
-#divcal .dc-cell.today .dc-dnum{color:var(--teal);font-weight:700}
-#divcal .dc-ptot{font-family:'DM Mono',monospace;font-size:0.72rem;font-weight:500;color:var(--navy);margin-top:2px;line-height:1.1}
-#divcal .dc-dots{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap}
-#divcal .dc-dot{width:7px;height:7px;border-radius:50%}
-#divcal .dc-p1{background:var(--teal)}#divcal .dc-p2{background:var(--purple)}#divcal .dc-p3{background:var(--blue)}#divcal .dc-p0{background:var(--gold)}
-#divcal .dc-legend{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0 4px;font-size:0.76rem;color:var(--gray);align-items:center}
-#divcal .dc-legend .li{display:flex;align-items:center;gap:5px}
-#divcal .dc-note{font-size:0.75rem;color:var(--gray);background:var(--gold-lt);border:1px solid #EAD89A;border-radius:8px;padding:9px 13px;margin-top:10px}
-#dcTip{position:fixed;z-index:200;background:#fff;border:1px solid var(--navy);border-radius:9px;box-shadow:0 6px 24px rgba(0,0,0,.16);padding:10px 12px;font-size:0.78rem;max-width:290px;display:none;pointer-events:none;font-family:'DM Sans',sans-serif}
-#dcTip .th{font-weight:600;color:var(--navy);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:5px;display:flex;justify-content:space-between;gap:12px}
-#dcTip .row{display:flex;justify-content:space-between;gap:12px;padding:1px 0}
-#dcTip .tk{font-weight:600}#dcTip .ac{color:var(--gray);font-size:0.68rem}#dcTip .am{font-family:'DM Mono',monospace}
-</style>
-<div id="divcal" class="tab-panel">
-  <div class="dc-wrap">
-    <h1 class="dc-h1">Dividend Calendar</h1>
-    <p class="dc-sub">Estimated pay dates · for planning, not exact · hover a day (tap on mobile) to see what pays</p>
-    <div class="dc-bar">
-      <div class="dc-nav"><button id="dcPrev" title="Earlier">←</button><button id="dcToday">Today</button><button id="dcNext" title="Later">→</button></div>
-      <div class="dc-spacer"></div>
-      <span style="font-size:0.76rem;color:var(--gray)">Show:</span>
-      <div class="dc-seg"><button id="dcBtnP1" class="on">Pillar 1 income</button><button id="dcBtnAll">All pillars</button></div>
-    </div>
-    <div class="dc-totals" id="dcTotals"></div>
-    <div class="dc-cals" id="dcCals"></div>
-    <div class="dc-legend">
-      <span class="li"><span class="dc-dot dc-p1"></span> Pillar 1 — Income</span>
-      <span class="li"><span class="dc-dot dc-p0"></span> Capital One interest</span>
-      <span class="li"><span class="dc-dot dc-p2"></span> Pillar 2 — Growth</span>
-      <span class="li"><span class="dc-dot dc-p3"></span> Pillar 3 — Health/LTC</span>
-    </div>
-    <div class="dc-note"><strong>Estimated dates.</strong> Amounts are real (live from your holdings &amp; Cap One); pay days are estimated from each holding's frequency — quarterly default Mar/Jun/Sep/Dec, semi-annual Jun/Dec, annual Dec, with per-ticker overrides as we confirm them. "Pillar 1 income" = P1 dividends + Capital One interest (matches your monthly-income figure); "All pillars" adds swept P2/P3 dividend cash.</div>
-  </div>
-</div>
-<div id="dcTip" style="display: none;"></div>
 
 <script>
 // ════════════════════════════════════════════════════
@@ -4815,7 +4748,6 @@ function switchTab(tab) {
     if(b.getAttribute('onclick').includes(tab)) b.classList.add('active');
   });
   if(tab==='data') { renderDataEditor(); setTimeout(loadSavedKey, 50); }
-  if(tab==='divcal' && window.renderDivCal) { window.renderDivCal(); }
 }
 
 // ════════════════════════════════════════════════════
@@ -5862,107 +5794,6 @@ This cannot be undone unless you cancel without saving.`)) return;
 
 // ── INIT ──────────────────────────────────────────
 renderDashboard();
-</script>
-<script>
-/* Dividend Calendar — independent module (read-only; isolated from the main dashboard script) */
-(function(){
-  try {
-    var PPY = {M:12,Q:4,SA:2,A:1};
-    var KNOWN_DAY = {PDI:1,PDO:1,PTY:1,PDX:1,GOF:1,JEPI:2,JEPQ:2,O:15,MAIN:15};
-    var SPREAD = [3,8,12,17,22,26];
-    var MONTHS_OVERRIDE = { 'SPDW':[6,12] };   // per-ticker pay-month overrides (1-12); extend as confirmed
-    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    var mode = 'p1';
-    var base = (function(){ var n=new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })();
-    function D(){ return (window.DATA || {holdings:[], capOne:{balance:0,apy:0}}); }
-    function fmt(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
-    function fmt2(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-    function day(t){ if(KNOWN_DAY[t]!=null) return KNOWN_DAY[t]; var s=0; for(var k=0;k<t.length;k++) s+=t.charCodeAt(k); return SPREAD[s % SPREAD.length]; }
-    function payMonths(h){
-      if(MONTHS_OVERRIDE[h.ticker]) return MONTHS_OVERRIDE[h.ticker];
-      if(h.freq==='M') return [1,2,3,4,5,6,7,8,9,10,11,12];
-      if(h.freq==='Q') return [3,6,9,12];
-      if(h.freq==='SA') return [6,12];
-      if(h.freq==='A') return [12];
-      return [];
-    }
-    function perPayment(h){
-      if(h.pmts && h.pmts.length) return h.pmts[0]*h.shares;
-      var ppy = PPY[h.freq]||0; return ppy ? (h.div/ppy)*h.shares : 0;
-    }
-    function eventsFor(y, m){
-      var out={}, dim=new Date(y, m+1, 0).getDate();
-      var holds=(D().holdings)||[];
-      for(var i=0;i<holds.length;i++){
-        var h=holds[i];
-        if(!h.freq || h.freq==='-' || !(h.div>0)) continue;
-        if(mode==='p1' && h.pillar!==1) continue;
-        var amt=perPayment(h); if(!(amt>0)) continue;
-        if(payMonths(h).indexOf(m+1) < 0) continue;
-        var d=Math.min(day(h.ticker), dim);
-        (out[d]=out[d]||[]).push({t:h.ticker,a:h.acct,p:h.pillar||1,amt:amt});
-      }
-      var cap=D().capOne;
-      if(cap){ var capMo=(cap.balance||0)*(cap.apy||0)/12; if(capMo>0) (out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo}); }
-      return out;
-    }
-    function monthTotal(ev){ var t=0; for(var dd in ev){ for(var k=0;k<ev[dd].length;k++) t+=ev[dd][k].amt; } return t; }
-    function buildCal(y, m){
-      var ev=eventsFor(y,m), startDow=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), now=new Date();
-      var cells='';
-      for(var i=0;i<startDow;i++) cells+='<div class="dc-cell empty"></div>';
-      for(var dd=1; dd<=dim; dd++){
-        var recs=ev[dd];
-        var isT=(y===now.getFullYear() && m===now.getMonth() && dd===now.getDate());
-        var tc=isT?' today':'';
-        if(recs && recs.length){
-          var tot=0; for(var r=0;r<recs.length;r++) tot+=recs[r].amt;
-          var seen={}, dots='';
-          recs.slice().sort(function(a,b){return a.p-b.p;}).forEach(function(x){ if(!seen[x.p]){ seen[x.p]=1; dots+='<span class="dc-dot dc-p'+x.p+'"></span>'; } });
-          cells+='<div class="dc-cell pay'+tc+'" data-y="'+y+'" data-m="'+m+'" data-d="'+dd+'"><div class="dc-dnum">'+dd+'</div><div class="dc-ptot">'+fmt(tot)+'</div><div class="dc-dots">'+dots+'</div></div>';
-        } else cells+='<div class="dc-cell'+tc+'"><div class="dc-dnum">'+dd+'</div></div>';
-      }
-      var dow=['S','M','T','W','T','F','S'].map(function(x){return '<div class="dc-dow">'+x+'</div>';}).join('');
-      return {html:'<div class="dc-cal"><h2>'+MONTHS[m]+' '+y+' <span class="mt">'+fmt(monthTotal(ev))+'</span></h2><div class="dc-grid">'+dow+cells+'</div></div>', total:monthTotal(ev)};
-    }
-    function render(){
-      var y0=base.getFullYear(), m0=base.getMonth();
-      var d2=new Date(y0,m0+1,1), y1=d2.getFullYear(), m1=d2.getMonth();
-      var c0=buildCal(y0,m0), c1=buildCal(y1,m1);
-      var cals=document.getElementById('dcCals'); if(!cals) return;
-      cals.innerHTML=c0.html+c1.html;
-      var lab=(mode==='p1')?'Pillar 1 + Cap One':'all pillars + Cap One';
-      var tot=document.getElementById('dcTotals');
-      if(tot) tot.innerHTML=
-        '<div class="dc-tcard"><div class="lbl">'+MONTHS[m0]+' '+y0+'</div><div class="val">'+fmt(c0.total)+'</div><div class="meta">'+lab+' · estimated</div></div>'+
-        '<div class="dc-tcard"><div class="lbl">'+MONTHS[m1]+' '+y1+'</div><div class="val">'+fmt(c1.total)+'</div><div class="meta">'+lab+' · estimated</div></div>';
-    }
-    window.renderDivCal = render;   // called by switchTab
-    function showTip(cx, cy, y, m, dd){
-      var tip=document.getElementById('dcTip'); if(!tip) return;
-      var ev=eventsFor(y,m); var recs=(ev[dd]||[]).slice().sort(function(a,b){return b.amt-a.amt;});
-      if(!recs.length){ tip.style.display='none'; return; }
-      var tot=0; for(var i=0;i<recs.length;i++) tot+=recs[i].amt;
-      tip.innerHTML='<div class="th"><span>'+MONTHS[m]+' '+dd+'</span><span>'+fmt2(tot)+'</span></div>'+
-        recs.map(function(r){return '<div class="row"><span><span class="tk">'+r.t+'</span> <span class="ac">'+r.a+'</span></span><span class="am">'+fmt2(r.amt)+'</span></div>';}).join('');
-      tip.style.display='block';
-      var pad=12,w=tip.offsetWidth,h=tip.offsetHeight,x=cx+14,yy=cy+14;
-      if(x+w+pad>innerWidth) x=cx-w-14; if(yy+h+pad>innerHeight) yy=innerHeight-h-pad;
-      tip.style.left=x+'px'; tip.style.top=yy+'px';
-    }
-    function bind(){
-      var g=function(id){return document.getElementById(id);};
-      if(g('dcPrev')) g('dcPrev').onclick=function(){ base=new Date(base.getFullYear(),base.getMonth()-1,1); render(); };
-      if(g('dcNext')) g('dcNext').onclick=function(){ base=new Date(base.getFullYear(),base.getMonth()+1,1); render(); };
-      if(g('dcToday')) g('dcToday').onclick=function(){ var n=new Date(); base=new Date(n.getFullYear(),n.getMonth(),1); render(); };
-      if(g('dcBtnP1')) g('dcBtnP1').onclick=function(){ mode='p1'; g('dcBtnP1').classList.add('on'); g('dcBtnAll').classList.remove('on'); render(); };
-      if(g('dcBtnAll')) g('dcBtnAll').onclick=function(){ mode='all'; g('dcBtnAll').classList.add('on'); g('dcBtnP1').classList.remove('on'); render(); };
-      document.addEventListener('mousemove', function(e){ var c=e.target.closest('#divcal .dc-cell.pay'); var tip=document.getElementById('dcTip'); if(c) showTip(e.clientX,e.clientY,+c.dataset.y,+c.dataset.m,+c.dataset.d); else if(tip) tip.style.display='none'; });
-      document.addEventListener('click', function(e){ var c=e.target.closest('#divcal .dc-cell.pay'); if(c) showTip(innerWidth/2-130,110,+c.dataset.y,+c.dataset.m,+c.dataset.d); });
-    }
-    bind();
-  } catch(err){ try{ console.error('DivCal init error:', err); }catch(e){} }
-})();
 </script>
 
 

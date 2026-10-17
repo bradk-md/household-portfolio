@@ -55,6 +55,9 @@
   #tip .th{font-weight:600;color:var(--navy);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:5px;display:flex;justify-content:space-between;gap:12px}
   #tip .row{display:flex;justify-content:space-between;gap:12px;padding:1px 0}
   #tip .tk{font-weight:600}#tip .ac{color:var(--gray);font-size:0.68rem}#tip .am{font-family:'DM Mono',monospace}
+  #tip .tag{font-size:0.6rem;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:0 4px;margin-left:4px}
+  #tip .tag.dec{background:#E3F2EE;color:#1F6F5C}#tip .tag.est{background:#F3EFE2;color:#8A6D1E}#tip .tag.gss{background:#F8E5E2;color:#9A3B2E}
+  .cell.pay.est{border-style:dashed}
   #status{padding:40px 20px;text-align:center;color:var(--gray)}
 </style></head>
 <body>
@@ -65,7 +68,7 @@
 </div>
 <div class="wrap">
   <h1>Dividend Calendar</h1>
-  <p class="sub">Estimated pay dates &middot; for planning, not exact &middot; hover a day (tap on mobile) to see what pays</p>
+  <p class="sub">Declared pay dates where announced, estimates otherwise (dotted border) &middot; hover a day (tap on mobile) to see what pays</p>
   <div class="bar">
     <div class="nav"><button id="prev" title="Earlier">&larr;</button><button id="today">Today</button><button id="next" title="Later">&rarr;</button></div>
     <div class="spacer"></div>
@@ -81,7 +84,7 @@
     <span class="li"><span class="dot p2"></span> Pillar 2 &mdash; Growth</span>
     <span class="li"><span class="dot p3"></span> Pillar 3 &mdash; Health/LTC</span>
   </div>
-  <div class="note"><strong>Estimated dates.</strong> Amounts are live from your dashboard holdings &amp; Cap One; pay days are estimated by frequency &mdash; quarterly default Mar/Jun/Sep/Dec, semi-annual Jun/Dec, annual Dec, with per-ticker overrides as we confirm them. &ldquo;Pillar 1 income&rdquo; = P1 dividends + Capital One interest; &ldquo;All pillars&rdquo; adds swept P2/P3 dividend cash.</div>
+  <div class="note"><strong>Pay dates.</strong> Amounts are live from your dashboard holdings &amp; Cap One. Dates use the fund&rsquo;s <strong>declared</strong> pay date whenever one has been announced (from paydates.json<span id="pdUpd"></span>). Otherwise they are <strong>estimated</strong> from each fund&rsquo;s usual pay pattern, adjusted for weekends and market holidays. Hover a day to see which is which; days with any estimate show a dotted border. &ldquo;Pillar 1 income&rdquo; = P1 dividends + Capital One interest; &ldquo;All pillars&rdquo; adds swept P2/P3 dividend cash.</div>
 </div>
 <div id="tip"></div>
 <script>
@@ -103,22 +106,66 @@ var MONTHS_OVERRIDE={
   /* Semi-annual / annual */
   'DIS':[1,7],'SPDW':[6,12],'SCHE':[6,12],'SCHC':[6,12],'BLOK':[12],'FDGRX':[12]
 };
-/* Representative pay DAY per ticker (verified). Missing tickers fall back to KNOWN_DAY/SPREAD. */
+/* Usual pay DAY per ticker, used when no declared date is in paydates.json.
+   Number = that day of the month (weekend/holiday -> previous business day); "27+" = roll to the NEXT business day instead.
+   "F" = first business day, "L" = last business day, "B3" = 3rd business day of the month.
+   Tickers missing here fall back to KNOWN_DAY/SPREAD, which is only a guess and is labelled as such. */
 var DAY_OVERRIDE={
   'IRM':3,'LADR':15,'IIPR':15,'WPC':15,'VICI':8,'ORCL':23,'STAG':15,'BIZD':7,
   'ET':19,'OKE':14,'AMLP':17,'EPD':14,'WES':14,'ABR':26,
   'ARCC':30,'SPG':30,'DLR':30,'SCHD':28,'PLD':30,'BTO':30,'TPL':15,'PBA':29,
   'DIS':15,'SPDW':24,'BLOK':31,
-  'SCHM':28,'VUG':28,'VTV':28,'SCHA':28,'SCHE':16,'SCHC':16,'FDGRX':28
+  'SCHM':28,'VUG':28,'VTV':28,'SCHA':28,'SCHE':16,'SCHC':16,'FDGRX':28,
+  /* Monthly payers, from pay history Jul-Oct 2026 */
+  'PDI':'F','PDO':'F','PTY':'F','JPC':'F','JRI':'F','FDRXX':'F',
+  'JEPI':'B3','JEPQ':'B3','SCHZ':'B5',
+  'AGNC':10,'O':15,'MAIN':15,'PFFA':'27+',
+  'BCX':'L','BME':'L','BSTZ':'L','DFP':'L','GHY':'L','GOF':'L','THQ':'L','THW':'L',
+  'UTF':'L','UTG':'L','MDXBX':'L','PRMDX':'L','SWVXX':'L'
 };
+/* NYSE market holidays, for business-day math. Add the next year's dates each December. */
+var HOLIDAYS={'2026-01-01':1,'2026-01-19':1,'2026-02-16':1,'2026-04-03':1,'2026-05-25':1,'2026-06-19':1,'2026-07-03':1,'2026-09-07':1,'2026-11-26':1,'2026-12-25':1,
+  '2027-01-01':1,'2027-01-18':1,'2027-02-15':1,'2027-03-26':1,'2027-05-31':1,'2027-06-18':1,'2027-07-05':1,'2027-09-06':1,'2027-11-25':1,'2027-12-24':1};
+var PAYDATES={};   /* declared dates, loaded from paydates.json: {TICKER:[{ex,pay,amt}]} */
+var PD_UPDATED='';
 var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 var mode='p1';
 var base=(function(){var n=new Date();return new Date(n.getFullYear(),n.getMonth(),1);})();
 function fmt(n){return '$'+Math.round(n).toLocaleString('en-US');}
 function fmt2(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function day(t){if(DAY_OVERRIDE[t]!=null)return DAY_OVERRIDE[t];if(KNOWN_DAY[t]!=null)return KNOWN_DAY[t];var s=0;for(var k=0;k<t.length;k++)s+=t.charCodeAt(k);return SPREAD[s%SPREAD.length];}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function parseISO(s){var p=String(s).split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function isBiz(d){var w=d.getDay();return w!==0&&w!==6&&!HOLIDAYS[iso(d)];}
+function lastBiz(y,m){var d=new Date(y,m+1,0);while(!isBiz(d))d.setDate(d.getDate()-1);return d;}
+function nthBiz(y,m,n){var c=0;for(var dd=1;dd<=31;dd++){var d=new Date(y,m,dd);if(d.getMonth()!==m)break;if(isBiz(d)&&++c===n)return d;}return lastBiz(y,m);}
+/* Estimated pay date for ticker t in month (y,m) -> {d:Date, src:'est'|'guess'} */
+function ruleDate(t,y,m){
+  var r=DAY_OVERRIDE[t],src='est';
+  if(r==null){src='guess';if(KNOWN_DAY[t]!=null)r=KNOWN_DAY[t];else{var s=0;for(var k=0;k<t.length;k++)s+=t.charCodeAt(k);r=SPREAD[s%SPREAD.length];}}
+  if(r==='F')return {d:nthBiz(y,m,1),src:src};
+  if(r==='L')return {d:lastBiz(y,m),src:src};
+  if(typeof r==='string'&&r.charAt(0)==='B')return {d:nthBiz(y,m,parseInt(r.slice(1),10)),src:src};
+  var fwd=(typeof r==='string'&&r.slice(-1)==='+'),n=parseInt(r,10),dim=new Date(y,m+1,0).getDate();
+  var d=new Date(y,m,Math.min(n,dim));
+  if(fwd){while(!isBiz(d))d.setDate(d.getDate()+1);if(d.getMonth()!==m)d=lastBiz(y,m);}
+  else{while(!isBiz(d))d.setDate(d.getDate()-1);if(d.getMonth()!==m)d=nthBiz(y,m,1);}
+  return {d:d,src:src};
+}
 function payMonths(h){if(MONTHS_OVERRIDE[h.ticker])return MONTHS_OVERRIDE[h.ticker];if(h.freq==='M')return [1,2,3,4,5,6,7,8,9,10,11,12];if(h.freq==='Q')return [3,6,9,12];if(h.freq==='SA')return [6,12];if(h.freq==='A')return [12];return [];}
 function perPayment(h){if(h.pmts&&h.pmts.length)return h.pmts[0]*h.shares;var ppy=PPY[h.freq]||0;return ppy?(h.div/ppy)*h.shares:0;}
+/* Pay days for holding h inside month (y,m). A declared date always wins. The month's estimate is dropped
+   when a declared date for the same ticker sits within 15 days of it (that payment is already known,
+   even if it slipped into the neighbouring month). */
+function datesIn(h,y,m){
+  var dec=(PAYDATES[h.ticker]||[]).map(function(x){return parseISO(x.pay);}),res=[];
+  dec.forEach(function(d){if(d.getFullYear()===y&&d.getMonth()===m)res.push({d:d.getDate(),src:'dec'});});
+  if(payMonths(h).indexOf(m+1)>=0){
+    var e=ruleDate(h.ticker,y,m);
+    var covered=dec.some(function(d){return Math.abs(d-e.d)<=15*864e5;});
+    if(!covered)res.push({d:e.d.getDate(),src:e.src});
+  }
+  return res;
+}
 function eventsFor(y,m){
   var out={},dim=new Date(y,m+1,0).getDate();
   var holds=(DATA&&DATA.holdings)||[];
@@ -126,12 +173,11 @@ function eventsFor(y,m){
     if(!h.freq||h.freq==='-'||!(h.div>0))continue;
     if(mode==='p1'&&h.pillar!==1)continue;
     var amt=perPayment(h);if(!(amt>0))continue;
-    if(payMonths(h).indexOf(m+1)<0)continue;
-    var d=Math.min(day(h.ticker),dim);
-    (out[d]=out[d]||[]).push({t:h.ticker,a:h.acct,p:h.pillar||1,amt:amt});
+    var ds=datesIn(h,y,m);
+    for(var j=0;j<ds.length;j++){var d=ds[j].d;(out[d]=out[d]||[]).push({t:h.ticker,a:h.acct,p:h.pillar||1,amt:amt,s:ds[j].src});}
   }
   var cap=DATA&&DATA.capOne;
-  if(cap){var capMo=(cap.balance||0)*(cap.apy||0)/12;if(capMo>0)(out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo});}
+  if(cap){var capMo=(cap.balance||0)*(cap.apy||0)/12;if(capMo>0)(out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo,s:'cap'});}
   return out;
 }
 function monthTotal(ev){var t=0;for(var dd in ev){for(var k=0;k<ev[dd].length;k++)t+=ev[dd][k].amt;}return t;}
@@ -142,7 +188,8 @@ function buildCal(y,m){
     var isT=(y===now.getFullYear()&&m===now.getMonth()&&dd===now.getDate());var tc=isT?' today':'';
     if(recs&&recs.length){var tot=0;for(var r=0;r<recs.length;r++)tot+=recs[r].amt;
       var seen={},dots='';recs.slice().sort(function(a,b){return a.p-b.p;}).forEach(function(x){if(!seen[x.p]){seen[x.p]=1;dots+='<span class="dot p'+x.p+'"></span>';}});
-      cells+='<div class="cell pay'+tc+'" data-y="'+y+'" data-m="'+m+'" data-d="'+dd+'"><div class="dnum">'+dd+'</div><div class="ptot">'+fmt(tot)+'</div><div class="dots">'+dots+'</div></div>';
+      var anyEst=recs.some(function(x){return x.s==='est'||x.s==='guess';});
+      cells+='<div class="cell pay'+(anyEst?' est':'')+tc+'" data-y="'+y+'" data-m="'+m+'" data-d="'+dd+'"><div class="dnum">'+dd+'</div><div class="ptot">'+fmt(tot)+'</div><div class="dots">'+dots+'</div></div>';
     }else cells+='<div class="cell'+tc+'"><div class="dnum">'+dd+'</div></div>';
   }
   var dow=['S','M','T','W','T','F','S'].map(function(x){return '<div class="dow">'+x+'</div>';}).join('');
@@ -164,7 +211,7 @@ function showTip(cx,cy,y,m,dd){
   if(!recs.length){tip.style.display='none';return;}
   var tot=0;for(var i=0;i<recs.length;i++)tot+=recs[i].amt;
   tip.innerHTML='<div class="th"><span>'+MONTHS[m]+' '+dd+'</span><span>'+fmt2(tot)+'</span></div>'+
-    recs.map(function(r){return '<div class="row"><span><span class="tk">'+r.t+'</span> <span class="ac">'+r.a+'</span></span><span class="am">'+fmt2(r.amt)+'</span></div>';}).join('');
+    recs.map(function(r){return '<div class="row"><span><span class="tk">'+r.t+'</span> <span class="ac">'+r.a+'</span>'+(r.s==='dec'?'<span class="tag dec">declared</span>':r.s==='est'?'<span class="tag est">est.</span>':r.s==='guess'?'<span class="tag gss">guess</span>':'')+'</span><span class="am">'+fmt2(r.amt)+'</span></div>';}).join('');
   tip.style.display='block';
   var pad=12,w=tip.offsetWidth,h=tip.offsetHeight,x=cx+14,yy=cy+14;
   if(x+w+pad>innerWidth)x=cx-w-14;if(yy+h+pad>innerHeight)yy=innerHeight-h-pad;
@@ -189,7 +236,11 @@ function extractDATA(html){
   return (new Function('return ('+objText+')'))();
 }
 (function load(){
-  fetch('index.html?nc='+Date.now()).then(function(r){return r.text();}).then(function(html){
+  var pd=fetch('paydates.json?nc='+Date.now()).then(function(r){return r.ok?r.json():null;}).then(function(j){
+    if(j&&j.declared){PAYDATES=j.declared;PD_UPDATED=j.updated||'';var u=document.getElementById('pdUpd');if(u&&PD_UPDATED)u.textContent=', updated '+PD_UPDATED;}
+  }).catch(function(){});
+  var ix=fetch('index.html?nc='+Date.now()).then(function(r){return r.text();});
+  Promise.all([ix,pd]).then(function(res){var html=res[0];
     DATA=extractDATA(html);
     document.getElementById('status').style.display='none';
     render();
