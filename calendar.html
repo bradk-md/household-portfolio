@@ -59,6 +59,13 @@
   #tip .tag.dec{background:#E3F2EE;color:#1F6F5C}#tip .tag.est{background:#F3EFE2;color:#8A6D1E}#tip .tag.gss{background:#F8E5E2;color:#9A3B2E}
   .cell.pay.est{border-style:dashed}
   #status{padding:40px 20px;text-align:center;color:var(--gray)}
+  .chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+  .chips .clbl{font-size:0.76rem;color:var(--gray);margin-right:2px;min-width:58px}
+  .chip{font-family:'DM Sans',sans-serif;font-size:0.78rem;background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px 12px;cursor:pointer;color:var(--text)}
+  .chip:hover{background:var(--lgray)}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chips.types .chip{border-style:dashed}.chips.types .chip.on{border-style:solid}
+  .empty-note{grid-column:1/-1;font-size:0.78rem;color:var(--gray);text-align:center;padding:6px 0 0}
 </style></head>
 <body>
 <div class="tabs">
@@ -75,8 +82,11 @@
     <span style="font-size:0.76rem;color:var(--gray)">Show:</span>
     <div class="seg"><button id="btnP1" class="on">Pillar 1 income</button><button id="btnAll">All pillars</button></div>
   </div>
+  <div class="chips" id="acctRow" style="display:none"></div>
+  <div class="chips types" id="typeRow" style="display:none"></div>
   <div id="status">Loading your live holdings&hellip;</div>
   <div class="totals" id="totals"></div>
+  <div class="empty-note" id="emptyNote" style="display:none">No payments from this selection in these two months with the current Show setting. Try &ldquo;All pillars&rdquo; or another month.</div>
   <div class="cals" id="cals"></div>
   <div class="legend">
     <span class="li"><span class="dot p1"></span> Pillar 1 &mdash; Income</span>
@@ -84,7 +94,7 @@
     <span class="li"><span class="dot p2"></span> Pillar 2 &mdash; Growth</span>
     <span class="li"><span class="dot p3"></span> Pillar 3 &mdash; Health/LTC</span>
   </div>
-  <div class="note"><strong>Pay dates.</strong> Amounts are live from your dashboard holdings &amp; Cap One. Dates use the fund&rsquo;s <strong>declared</strong> pay date whenever one has been announced (from paydates.json<span id="pdUpd"></span>). Otherwise they are <strong>estimated</strong> from each fund&rsquo;s usual pay pattern, adjusted for weekends and market holidays. Hover a day to see which is which; days with any estimate show a dotted border. &ldquo;Pillar 1 income&rdquo; = P1 dividends + Capital One interest; &ldquo;All pillars&rdquo; adds swept P2/P3 dividend cash.</div>
+  <div class="note"><strong>Pay dates.</strong> Amounts are live from your dashboard holdings &amp; Cap One. Dates use the fund&rsquo;s <strong>declared</strong> pay date whenever one has been announced (from paydates.json<span id="pdUpd"></span>). Otherwise they are <strong>estimated</strong> from each fund&rsquo;s usual pay pattern, adjusted for weekends and market holidays. Hover a day to see which is which; days with any estimate show a dotted border. &ldquo;Pillar 1 income&rdquo; = P1 dividends + Capital One interest; &ldquo;All pillars&rdquo; adds swept P2/P3 dividend cash. The page always opens on <strong>All accounts</strong>; pick an account or a tax type (Traditional, Roth, HSA, Taxable) to see only that money. LTC sub-accounts roll into their parent IRA, and Capital One interest counts as Taxable.</div>
 </div>
 <div id="tip"></div>
 <script>
@@ -130,6 +140,20 @@ var PAYDATES={};   /* declared dates, loaded from paydates.json: {TICKER:[{ex,pa
 var PD_UPDATED='';
 var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 var mode='p1';
+var fAcct=null,fType=null;   /* account / tax-type filter; null = All accounts (the default every time the page opens) */
+var ACCT_ORDER=['Brad IRA','Lisa IRA','Brad Roth IRA','Lisa Roth IRA','Joint','Brad HSA','Lisa HSA','Capital One'];
+var TYPE_ORDER=['Traditional','Roth','HSA','Taxable'];
+function acctKey(a){return String(a||'').replace(/\s*\(LTC\)\s*$/,'');}   /* LTC sub-accounts roll into their parent account */
+function taxType(k){
+  if(/401k/i.test(k))return '401k';
+  if(/HSA/i.test(k))return 'HSA';
+  if(/Roth/i.test(k))return 'Roth';
+  if(/IRA/i.test(k))return 'Traditional';
+  if(k==='Joint'||k==='Capital One')return 'Taxable';
+  return 'Other';
+}
+function passes(acctName){var k=acctKey(acctName);if(fAcct)return k===fAcct;if(fType)return taxType(k)===fType;return true;}
+function filterLabel(){return fAcct?fAcct:(fType?fType+' accounts':'All accounts');}
 var base=(function(){var n=new Date();return new Date(n.getFullYear(),n.getMonth(),1);})();
 function fmt(n){return '$'+Math.round(n).toLocaleString('en-US');}
 function fmt2(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
@@ -172,12 +196,13 @@ function eventsFor(y,m){
   for(var i=0;i<holds.length;i++){var h=holds[i];
     if(!h.freq||h.freq==='-'||!(h.div>0))continue;
     if(mode==='p1'&&h.pillar!==1)continue;
+    if(!passes(h.acct))continue;
     var amt=perPayment(h);if(!(amt>0))continue;
     var ds=datesIn(h,y,m);
     for(var j=0;j<ds.length;j++){var d=ds[j].d;(out[d]=out[d]||[]).push({t:h.ticker,a:h.acct,p:h.pillar||1,amt:amt,s:ds[j].src});}
   }
   var cap=DATA&&DATA.capOne;
-  if(cap){var capMo=(cap.balance||0)*(cap.apy||0)/12;if(capMo>0)(out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo,s:'cap'});}
+  if(cap&&passes('Capital One')){var capMo=(cap.balance||0)*(cap.apy||0)/12;if(capMo>0)(out[dim]=out[dim]||[]).push({t:'Cap One interest',a:'Capital One',p:0,amt:capMo,s:'cap'});}
   return out;
 }
 function monthTotal(ev){var t=0;for(var dd in ev){for(var k=0;k<ev[dd].length;k++)t+=ev[dd][k].amt;}return t;}
@@ -201,7 +226,8 @@ function render(){
   var d2=new Date(y0,m0+1,1),y1=d2.getFullYear(),m1=d2.getMonth();
   var c0=buildCal(y0,m0),c1=buildCal(y1,m1);
   document.getElementById('cals').innerHTML=c0.html+c1.html;
-  var lab=(mode==='p1')?'Pillar 1 + Cap One':'all pillars + Cap One';
+  var en=document.getElementById('emptyNote');if(en)en.style.display=(c0.total+c1.total>0)?'none':'block';
+  var lab=((mode==='p1')?'Pillar 1 + Cap One':'all pillars + Cap One')+' &middot; '+filterLabel();
   document.getElementById('totals').innerHTML=
     '<div class="tcard"><div class="lbl">'+MONTHS[m0]+' '+y0+'</div><div class="val">'+fmt(c0.total)+'</div><div class="meta">'+lab+' &middot; estimated</div></div>'+
     '<div class="tcard"><div class="lbl">'+MONTHS[m1]+' '+y1+'</div><div class="val">'+fmt(c1.total)+'</div><div class="meta">'+lab+' &middot; estimated</div></div>';
@@ -225,6 +251,29 @@ document.getElementById('btnAll').onclick=function(){mode='all';btnAll.classList
 document.addEventListener('mousemove',function(e){var c=e.target.closest('.cell.pay');var tip=document.getElementById('tip');if(c)showTip(e.clientX,e.clientY,+c.dataset.y,+c.dataset.m,+c.dataset.d);else if(tip)tip.style.display='none';});
 document.addEventListener('click',function(e){var c=e.target.closest('.cell.pay');if(c)showTip(innerWidth/2-130,110,+c.dataset.y,+c.dataset.m,+c.dataset.d);});
 
+/* ---- account & tax-type chips ---- */
+function buildChips(){
+  var seen={};((DATA&&DATA.holdings)||[]).forEach(function(h){if(h.freq&&h.freq!=='-'&&h.div>0)seen[acctKey(h.acct)]=1;});
+  if(DATA&&DATA.capOne&&DATA.capOne.balance>0)seen['Capital One']=1;
+  var accts=Object.keys(seen).filter(function(a){return taxType(a)!=='401k';});
+  accts.sort(function(a,b){var ia=ACCT_ORDER.indexOf(a),ib=ACCT_ORDER.indexOf(b);if(ia<0)ia=99;if(ib<0)ib=99;return ia-ib||(a<b?-1:1);});
+  var types=TYPE_ORDER.filter(function(t){return accts.some(function(a){return taxType(a)===t;});});
+  accts.forEach(function(a){if(taxType(a)==='Other'&&types.indexOf('Other')<0)types.push('Other');});
+  var ar=document.getElementById('acctRow'),tr=document.getElementById('typeRow');
+  ar.innerHTML='<span class="clbl">Account:</span><button class="chip" data-k="all">All accounts</button>'+accts.map(function(a){return '<button class="chip" data-k="a" data-v="'+a+'">'+a+'</button>';}).join('');
+  tr.innerHTML='<span class="clbl">Tax type:</span>'+types.map(function(t){return '<button class="chip" data-k="t" data-v="'+t+'">'+t+'</button>';}).join('');
+  ar.style.display=tr.style.display='flex';
+  function sync(){[ar,tr].forEach(function(row){row.querySelectorAll('.chip').forEach(function(b){
+    var on=(b.dataset.k==='all')?(!fAcct&&!fType):(b.dataset.k==='a'?fAcct===b.dataset.v:fType===b.dataset.v);
+    b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');});});}
+  function pick(e){var b=e.target.closest('.chip');if(!b)return;
+    if(b.dataset.k==='all'){fAcct=null;fType=null;}
+    else if(b.dataset.k==='a'){fAcct=(fAcct===b.dataset.v)?null:b.dataset.v;fType=null;}
+    else{fType=(fType===b.dataset.v)?null:b.dataset.v;fAcct=null;}
+    sync();render();}
+  ar.onclick=pick;tr.onclick=pick;sync();
+}
+
 // ---- load live DATA from the dashboard (same-origin) ----
 function extractDATA(html){
   var s=html.indexOf('/*DATA_START*/'); var e=html.indexOf('/*DATA_END*/');
@@ -243,6 +292,7 @@ function extractDATA(html){
   Promise.all([ix,pd]).then(function(res){var html=res[0];
     DATA=extractDATA(html);
     document.getElementById('status').style.display='none';
+    buildChips();
     render();
   }).catch(function(err){
     document.getElementById('status').innerHTML='Could not load live holdings ('+err.message+'). Open this page from your dashboard site so it can read index.html.';
