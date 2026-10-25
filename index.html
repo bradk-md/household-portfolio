@@ -2973,7 +2973,7 @@ body {
             <td><select onchange="DATA.holdings[75].pillar=parseInt(this.value)">
               <option value="1" selected="">1</option><option value="2">2</option><option value="3">3</option>
             </select></td>
-            <td><input type="number" step="0.0001" value="284.706" onchange="DATA.holdings[75].shares=parseFloat(this.value)||0"></td>
+            <td><input type="number" step="0.0001" value="539.415" onchange="DATA.holdings[75].shares=parseFloat(this.value)||0"></td>
             <td><input type="number" step="0.01" value="5.11" onchange="DATA.holdings[75].price=parseFloat(this.value)||0"></td><td><input type="number" step="0.01" value="5.09" placeholder="0.00" onchange="DATA.holdings[75].costBasis=parseFloat(this.value)||0"></td>
             <td><input type="number" step="0.0001" value="0.1272" onchange="DATA.holdings[75].div=parseFloat(this.value)||0"></td>
             <td><select onchange="DATA.holdings[75].freq=this.value">
@@ -4244,7 +4244,7 @@ body {
       "name": "PRMDX",
       "acct": "Joint",
       "pillar": 1,
-      "shares": 284.706,
+      "shares": 539.415,
       "price": 5.11,
       "costBasis": 5.09,
       "div": 0.1272,
@@ -5278,6 +5278,12 @@ function parseXLSXRows(rows, filename) {
 
   let currentSchAccount = null; // tracks current account for Schwab files
   const mdxbxTotal = { shares: 0, price: 0, cost: 0 }; // accumulate MDXBX rows
+  // Multi-row positions (Oct 2026): Schwab lists a holding once PER BUCKET (marginable vs
+  // non-marginable / Cash vs Margin type) in the same account — e.g. PRMDX in Joint. Overwriting
+  // on each row kept only the LAST bucket's shares. Track holdings already updated from THIS file
+  // and SUM any further rows into them (cost basis share-weighted). Resets every import, so
+  // re-uploading the same file is safe.
+  const fileSeen = new Set();
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i].map(v => String(v === null || v === undefined ? '' : v).trim());
@@ -5445,6 +5451,16 @@ function parseXLSXRows(rows, filename) {
       const acctMatch = h.acct === dashAcct || (altAcct && h.acct === altAcct);
 
       if (tickerMatch && acctMatch) {
+        if (fileSeen.has(idx)) {
+          // Second+ row for this holding in this file → add this bucket's shares
+          const prev = DATA.holdings[idx].shares || 0, tot = prev + shares;
+          if (cost && cost > 0 && h.costBasis > 0)
+            DATA.holdings[idx].costBasis = parseFloat(((prev * h.costBasis + shares * cost) / tot).toFixed(4));
+          DATA.holdings[idx].shares = parseFloat(tot.toFixed(4));
+          found = true;
+          return; // div/payment logic already ran on the first row
+        }
+        fileSeen.add(idx);
         DATA.holdings[idx].shares = shares;
         if (price  && price > 0) DATA.holdings[idx].price     = price;
         if (cost   && cost  > 0) DATA.holdings[idx].costBasis = cost;
