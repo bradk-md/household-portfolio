@@ -121,6 +121,18 @@
      "date": "Until retirement"
     },
     {
+     "status": "🟠 Planned",
+     "action": "Build \"steady core\" sleeve to offset credit-heavy income: SCHD + VYM + utility ETF (XLU or VPU)",
+     "notes": "SCHD Lisa IRA ({SCHD_REMAINING}sh to 3,520 target) · add VYM in Lisa IRA · XLU or VPU in Brad IRA (utility tilt) · buy in the traditional IRAs with their own cash",
+     "date": "As cash allows"
+    },
+    {
+     "status": "🟠 Planned",
+     "action": "Add to UTG (Reaves Utility Income) — Brad Roth IRA",
+     "notes": "When Roth cash is available · check premium/discount to NAV first",
+     "date": "When Roth cash available"
+    },
+    {
      "category": "Watch List"
     },
     {
@@ -131,8 +143,8 @@
     },
     {
      "status": "🔵 Watch",
-     "action": "ABR dividend — reduced from $1.20 → $1.07/yr",
-     "notes": "Confirmed consistent $0.0697/mo — no cuts · $0.17/qtr confirmed",
+     "action": "ABR dividend SUSPENDED (announced with Q3 results, Oct 30 2026)",
+     "notes": "Last declared $0.17/qtr · dashboard div now $0 (−$70.83/mo) · 1,250sh Brad Roth · decide: hold for a possible restart vs. sell & redeploy to steadier income (gradual)",
      "date": "Ongoing"
     }
    ]
