@@ -507,7 +507,7 @@ body {
       A self-directed three-pillar retirement strategy spanning 7 accounts and over 60 holdings. The three pillars are not separate accounts — they are virtual designations applied across our existing Schwab and Fidelity accounts, with each position permanently assigned to a pillar and managed accordingly.<br><br><strong>Pillar 1 — Income</strong> generates passive dividend income across 6 accounts — no principal sold, dividends redeployed until retirement.<br><strong>Pillar 2 — Growth</strong> is Brad's and Lisa's 401k accounts compounding untouched until RMDs begin in 2035.<br><strong>Pillar 3 — Health/LTC</strong> is a self-funded reserve held virtually inside the IRAs, fully replacing traditional LTC insurance and providing a dedicated pool for future healthcare and miscellaneous medical expenses.
     </p>
     
-    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of November 7, 2026 &nbsp;07:31 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
+    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of November 8, 2026 &nbsp;11:36 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
     
   </div>
   <!-- SUMMARY CARDS -->
@@ -523,7 +523,7 @@ body {
     <div class="sum-card teal">
       <div class="sum-label">Pillar 1 — Income</div>
       <div class="sum-value">$1,193,264</div>
-      <div class="sum-note">61.4% of portfolio · YOC 7.3%</div>
+      <div class="sum-note">61.4% of portfolio · YOC 7.4%</div>
     </div>
     <div class="sum-card purple">
       <div class="sum-label">Pillar 2 — Growth</div>
@@ -538,18 +538,18 @@ body {
     <div class="summary-grid-3" id="summaryRow3">
     <div class="sum-card teal">
       <div class="sum-label">Monthly Income</div>
-      <div class="sum-value">$7,125/mo</div>
-      <div class="sum-note">Pillar 1 $6,965/mo + Cap One $160/mo</div>
+      <div class="sum-value">$7,148/mo</div>
+      <div class="sum-note">Pillar 1 $6,988/mo + Cap One $160/mo</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Annual Income</div>
-      <div class="sum-value">$85,504/yr</div>
+      <div class="sum-value">$85,778/yr</div>
       <div class="sum-note">Pillar 1 + Cap One · 6.8% blended yield</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Total All-In Income</div>
-      <div class="sum-value">$92,978/yr</div>
-      <div class="sum-note">$7,748/mo · incl. $7,475/yr P2/P3 divs → redeployed to P1</div>
+      <div class="sum-value">$93,252/yr</div>
+      <div class="sum-note">$7,771/mo · incl. $7,475/yr P2/P3 divs → redeployed to P1</div>
     </div></div>
   </div>
 
@@ -558,12 +558,15 @@ body {
     <div class="proj-title">Portfolio Growth Projections <span>across all three pillars</span></div>
     <div class="proj-grid" id="portfolioProj">
     <div class="proj-block">
-      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · mix rate)</div>
-      <div class="proj-row"><span class="yr">Now</span><span class="val">$85,504/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 3</span><span class="val">$93,254/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 5</span><span class="val">$98,816/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 10</span><span class="val">$114,249/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 15</span><span class="val">$132,141/yr</span></div>
+      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · <span id="p1MixHdr">2.46% mix</span>)</div>
+      <div class="proj-row"><span class="yr">Now</span><span class="val">$85,778/yr</span></div>
+      <div class="proj-row"><span class="yr">Year 3</span><span class="val">$93,554/yr <span class="p1g" data-n="3" style="color:var(--gray);font-weight:400;font-size:0.85em">· $92,116</span></span></div>
+      <div class="proj-row"><span class="yr">Year 5</span><span class="val">$99,134/yr <span class="p1g" data-n="5" style="color:var(--gray);font-weight:400;font-size:0.85em">· $96,606</span></span></div>
+      <div class="proj-row"><span class="yr">Year 10</span><span class="val">$114,618/yr <span class="p1g" data-n="10" style="color:var(--gray);font-weight:400;font-size:0.85em">· $108,832</span></span></div>
+      <div class="proj-row"><span class="yr">Year 15</span><span class="val">$132,568/yr <span class="p1g" data-n="15" style="color:var(--gray);font-weight:400;font-size:0.85em">· $122,637</span></span></div>
+      <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Bold = 3% goal · gray = projected at mix rate · Mix = expected growth of today's holdings (moves when you buy/sell) · Actual = per-share raises/cuts over the last 12 months · details on the Growth Scorecard tab</span></div>
+      <div class="proj-row" id="p1MixRow" style=""><span class="yr">Mix rate (expected)</span><span class="val" id="p1MixVal" style="white-space: nowrap; color: rgb(183, 121, 31);">2.46% <span style="color:var(--gray);font-weight:400;font-size:0.85em">vs 3% goal</span></span></div>
+      <div class="proj-row" id="p1ActualRow" style="cursor: pointer;" title="Open the Growth Scorecard" onclick="window.location.href='scorecard.html'"><span class="yr">Actual · last 12 months</span><span class="val" id="p1ActualVal" style="white-space: nowrap; color: rgb(192, 57, 43);">−0.68% (−$573/yr)</span></div>
     </div>
     <div class="proj-block">
       <div class="proj-block-hdr purple-hdr">Pillar 2 — Growth</div>
@@ -591,11 +594,11 @@ body {
           <span class="pillar-badge teal-badge">Pillar 1</span>
           <div class="pillar-trigger-content">
             <div class="pillar-trigger-title">Income</div>
-            <div class="pillar-trigger-sub">61.4% of portfolio · $85,504/yr · $7,125/mo (incl. Cap One)</div>
+            <div class="pillar-trigger-sub">61.4% of portfolio · $85,778/yr · $7,148/mo (incl. Cap One)</div>
           </div>
           <div class="pillar-trigger-right">
             <div class="pillar-trigger-val">$1,193,264</div>
-            <div class="pillar-trigger-inc">$85,504/yr · $7,125/mo</div>
+            <div class="pillar-trigger-inc">$85,778/yr · $7,148/mo</div>
           </div>
           <span class="pillar-chevron">▾</span>
         </button>
@@ -605,7 +608,7 @@ body {
             <div class="acct-section">
       <div class="acct-label">
         <span>Brad IRA</span>
-        <span>$403,556 · $23,784/yr</span>
+        <span>$403,556 · $24,058/yr</span>
       </div>
       <table class="holdings-tbl">
         <thead><tr>
@@ -662,7 +665,7 @@ body {
         <td class="num-cell">210</td>
         <td class="num-cell">$228.42</td>
         <td class="num-cell">$47,968</td>
-        <td class="num-cell">$128.13</td><td class="num-cell">$9.0000</td><td class="inc-cell">$1,890</td><td class="num-cell">3.9%</td><td class="num-cell" style="color:var(--teal);font-weight:600">7.0%</td>
+        <td class="num-cell">$128.13</td><td class="num-cell">$9.2000</td><td class="inc-cell">$1,932</td><td class="num-cell">4.0%</td><td class="num-cell" style="color:var(--teal);font-weight:600">7.2%</td>
         
         
         <td class="notes-col">Premier mall REIT</td>
@@ -672,7 +675,7 @@ body {
         <td class="num-cell">450</td>
         <td class="num-cell">$106.52</td>
         <td class="num-cell">$47,934</td>
-        <td class="num-cell">$31.43</td><td class="num-cell">$3.4560</td><td class="inc-cell">$1,555</td><td class="num-cell">3.2%</td><td class="num-cell" style="color:var(--teal);font-weight:600">11.0%</td>
+        <td class="num-cell">$31.43</td><td class="num-cell">$3.9720</td><td class="inc-cell">$1,787</td><td class="num-cell">3.7%</td><td class="num-cell" style="color:var(--teal);font-weight:600">12.6%</td>
         
         
         <td class="notes-col">Data &amp; document storage REIT</td>
@@ -768,7 +771,7 @@ body {
         <td class="notes-col">Cash &amp; Cash Investments (Schwab)</td>
       </tr><tr class="subtotal-row"><td colspan="4" style="font-weight:700">Brad IRA Total</td>
       <td class="num-cell">$403,556</td>
-      <td></td><td></td><td class="inc-cell">$23,784/yr</td><td class="num-cell">5.9%</td><td></td>
+      <td></td><td></td><td class="inc-cell">$24,058/yr</td><td class="num-cell">6.0%</td><td></td>
       
       
       <td></td></tr></tbody></table></div><div class="acct-section">
@@ -1361,7 +1364,7 @@ body {
         Pillar 1 Total
       </td>
       <td class="num-cell" style="color:white">$1,193,264</td>
-      <td></td><td><span class="inc-cell">$83,584/yr · $6,965/mo</span></td><td class="num-cell" style="color:white">7.0%</td>
+      <td></td><td><span class="inc-cell">$83,858/yr · $6,988/mo</span></td><td class="num-cell" style="color:white">7.0%</td>
       
       
       <td></td>
@@ -1369,22 +1372,22 @@ body {
   </tbody></table><div class="inner-proj"><div class="inner-proj-title">Income Trajectory — 3% Natural Dividend Growth</div>
     <div class="inner-proj-grid">
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Annual Income</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$83,584/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$91,334/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$96,896/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$112,329/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$83,858/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$91,634/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$97,214/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$112,698/yr</span></div>
       </div>
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Monthly Income</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$6,965/mo</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$7,611/mo</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$8,075/mo</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$9,361/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$6,988/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$7,636/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$8,101/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$9,391/mo</span></div>
       </div>
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Combined (+ Cap One)</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$85,504/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$93,254/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$98,816/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$114,249/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$85,778/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$93,554/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$99,134/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$114,618/yr</span></div>
       </div>
     </div></div>
           </div>
@@ -1897,7 +1900,7 @@ body {
             </select></td>
             <td><input value="BDC — LMM equity+debt" onchange="DATA.holdings[6].notes=this.value"></td>
             <td style="text-align:center">
-              <button onclick="deletePosition(6)" title="Delete MAIN" style="background:none;border:1px solid #DDD;border-radius:4px;padding:2px 7px;cursor:pointer;font-size:0.8rem;color:#999;transition:all 0.15s" onmouseover="this.style.background='#FDECEA';this.style.color='#C0392B';this.style.borderColor='#C0392B'" onmouseout="this.style.background='none';this.style.color='#999';this.style.borderColor='#DDD'">🗑</button>
+              <button onclick="deletePosition(6)" title="Delete MAIN" style="background: none; border: 1px solid rgb(221, 221, 221); border-radius: 4px; padding: 2px 7px; cursor: pointer; font-size: 0.8rem; color: rgb(153, 153, 153); transition: 0.15s;" onmouseover="this.style.background='#FDECEA';this.style.color='#C0392B';this.style.borderColor='#C0392B'" onmouseout="this.style.background='none';this.style.color='#999';this.style.borderColor='#DDD'">🗑</button>
             </td>
           </tr><tr>
             <td><input value="OKE" onchange="DATA.holdings[7].ticker=this.value"></td>
@@ -3302,7 +3305,7 @@ body {
     <button class="update-btn" onclick="applyUpdates()">↻ Apply Updates &amp; Recalculate</button>
     <button class="update-btn" style="background:var(--navy)" onclick="saveDashboard()">💾 Save Dashboard</button>
     <button class="update-btn" style="background:transparent;color:var(--navy);padding:8px 10px;font-size:0.85rem" onclick="updateGitHubToken()" title="Update GitHub token">⚙️</button>
-    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 7:31:06 AM</span>
+    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 11:36:11 AM</span>
   </div>
 </div>
 </div>
@@ -3314,7 +3317,7 @@ body {
 // DATA — ALL HOLDINGS (edit here or via Data tab)
 // ════════════════════════════════════════════════════
 /*DATA_START*/const DATA = {
-  "asOf": "November 7, 2026",
+  "asOf": "November 8, 2026",
   "capOne": {
     "balance": 60000,
     "apy": 0.032
@@ -3410,7 +3413,7 @@ body {
       "pillar": 1,
       "shares": 210,
       "price": 228.42,
-      "div": 9,
+      "div": 9.2,
       "freq": "Q",
       "notes": "Premier mall REIT",
       "costBasis": 128.13
@@ -3422,7 +3425,7 @@ body {
       "pillar": 1,
       "shares": 450,
       "price": 106.52,
-      "div": 3.456,
+      "div": 3.972,
       "freq": "Q",
       "notes": "Data & document storage REIT",
       "costBasis": 31.43
