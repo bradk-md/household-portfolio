@@ -556,7 +556,7 @@ body {
     <div class="proj-title">Portfolio Growth Projections <span>across all three pillars</span></div>
     <div class="proj-grid" id="portfolioProj">
     <div class="proj-block">
-      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% div growth)</div>
+      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · 2.5% trend)</div>
       <div class="proj-row"><span class="yr">Now</span><span class="val">$85,504/yr</span></div>
       <div class="proj-row"><span class="yr">Year 3</span><span class="val">$93,254/yr</span></div>
       <div class="proj-row"><span class="yr">Year 5</span><span class="val">$98,816/yr</span></div>
@@ -4399,6 +4399,13 @@ function renderDashboard() {
   const yr5  = C.p1Inc*Math.pow(1.03,5)  + C.capOneInc;
   const yr10 = C.p1Inc*Math.pow(1.03,10) + C.capOneInc;
   const yr15 = C.p1Inc*Math.pow(1.03,15) + C.capOneInc;
+  // Historical pace: income-weighted per-share dividend growth of current holdings,
+  // measured 2022 -> Nov 2026 (~2.5%/yr). Shown beside the 3% GOAL so actual pace can be
+  // measured against it. Re-measure occasionally and update this one constant.
+  const P1_HIST_DGR = 0.025;
+  const p1Hist = n => C.p1Inc*Math.pow(1+P1_HIST_DGR,n) + C.capOneInc;
+  const pct = (P1_HIST_DGR*100).toFixed(1).replace(/\.0$/,'');
+  const p1Row = (lbl,goal,hist) => `<div class="proj-row"><span class="yr">${lbl}</span><span class="val">${fmt(goal)}/yr <span style="color:var(--gray);font-weight:400;font-size:0.85em">· ${fmt(hist)}</span></span></div>`;
   const k5a  = C.p2Val*Math.pow(1.07,5);
   const k10a = C.p2Val*Math.pow(1.07,10);
   const k5b  = C.p2Val*Math.pow(1.09,5);
@@ -4419,12 +4426,14 @@ function renderDashboard() {
 
   document.getElementById('portfolioProj').innerHTML = `
     <div class="proj-block">
-      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% div growth)</div>
+      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · ${pct}% trend)</div>
       <div class="proj-row"><span class="yr">Now</span><span class="val">${fmt(C.combinedInc)}/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 3</span><span class="val">${fmt(yr3)}/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 5</span><span class="val">${fmt(yr5)}/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 10</span><span class="val">${fmt(yr10)}/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 15</span><span class="val">${fmt(yr15)}/yr</span></div>
+      ${p1Row('Year 3',yr3,p1Hist(3))}
+      ${p1Row('Year 5',yr5,p1Hist(5))}
+      ${p1Row('Year 10',yr10,p1Hist(10))}
+      ${p1Row('Year 15',yr15,p1Hist(15))}
+      <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Bold = 3% goal · gray = ${pct}% trend (historical pace of current holdings, 2022–2026) · Actual = real raises/cuts on the same shares since the baseline</span></div>
+      <div class="proj-row" id="p1ActualRow" style="display:none"><span class="yr">Actual since <span id="p1ActualSince"></span></span><span class="val" id="p1ActualVal" style="white-space:nowrap"></span></div>
     </div>
     <div class="proj-block">
       <div class="proj-block-hdr purple-hdr">Pillar 2 — Growth</div>
@@ -4443,6 +4452,7 @@ function renderDashboard() {
       <div class="proj-row"><span class="yr">Year 10 · avg (${fmtPct(p3AvgPO)})</span><span class="val">${fmt(Math.round(m10a))}</span></div>
       <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Note: rates are price-only (total return &minus; P3 yield ${fmtPct(p3DivYield)}). Electing to reinvest P3 dividends would add ~${fmtPct(p3DivYield)}/yr back toward total-return (8.5% / 6.6%).</span></div>
     </div>`;
+  renderP1Actual();
 
   // Pillar accordions
   renderPillars(C);
@@ -5863,6 +5873,40 @@ This cannot be undone unless you cancel without saving.`)) return;
 
 // ── INIT ──────────────────────────────────────────
 renderDashboard();
+
+// ── P1 ACTUAL DIVIDEND GROWTH (same-holding, vs baseline snapshot) ─────────
+// Holds the BASELINE share counts fixed and compares baseline div rates to today's,
+// so buys/contributions don't count — only real raises and cuts. Baseline = earliest
+// repo snapshot. Fetched same-origin from GitHub Pages; silently hidden if unavailable.
+function renderP1Actual(){
+  const P1_ACTUAL_BASELINE = 'docs/snapshots/data-2026-08-01.json';
+  const row = document.getElementById('p1ActualRow'); if(!row) return;
+  const draw = base => {
+    try{
+      const MM = new Set(['Cash','SWVXX','FDRXX','SPAXX','SNSXX']);
+      const cur = {};
+      DATA.holdings.forEach(h => { if((h.shares||0)>0) cur[h.ticker+'|'+h.acct] = h.div||0; });
+      let b=0, n=0;
+      (base.holdings||[]).forEach(h => {
+        if(h.pillar!==1 || MM.has(h.ticker) || !((h.shares||0)>0)) return;
+        const k = h.ticker+'|'+h.acct; if(!(k in cur)) return;
+        b += h.shares*(h.div||0); n += h.shares*cur[k];
+      });
+      if(!(b>0)) return;
+      const d = n-b, pc = d/b*100;
+      const t0 = new Date((base.summary&&base.summary.asOf)||base.asOf||'2026-08-01');
+      const days = (Date.now()-t0)/864e5;
+      let txt = `${d>=0?'+':'−'}${fmt(Math.abs(d))}/yr (${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1)}%)`;
+      if(days>=365) txt += ` · ${((Math.pow(n/b,365/days)-1)*100).toFixed(1)}%/yr`;
+      document.getElementById('p1ActualSince').textContent = isNaN(t0) ? 'baseline' : t0.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      const v = document.getElementById('p1ActualVal');
+      v.textContent = txt; v.style.color = d>=0 ? 'var(--teal)' : '#C0392B';
+      row.style.display = '';
+    }catch(e){ /* leave hidden */ }
+  };
+  if(window._p1Base) return draw(window._p1Base);
+  fetch(P1_ACTUAL_BASELINE+'?nc='+Date.now()).then(r=>r.ok?r.json():null).then(j=>{ if(j){ window._p1Base=j; draw(j); } }).catch(()=>{});
+}
 </script>
 
 
