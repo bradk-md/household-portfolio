@@ -5880,6 +5880,8 @@ This cannot be undone unless you cancel without saving.`)) return;
 
 // ── INIT ──────────────────────────────────────────
 renderDashboard();
+// Calendar / Scorecard pages link to index.html#data to open the Update Holdings tab directly
+if (location.hash === '#data') { switchTab('data'); history.replaceState(null, '', location.pathname + location.search); }
 
 // ── P1 DIVIDEND GROWTH (tile) ───────────────────────────────────────────────
 // Same math and data as the Growth Scorecard page (divgrowth.js + divgrowth.json), Pillar 1 only.
