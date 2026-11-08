@@ -481,10 +481,12 @@ body {
 </script></head>
 <body>
 
+<script src="divgrowth.js"></script>
 <!-- ── TABS ────────────────────────────────────────── -->
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
   <button class="tab-btn" onclick="window.location.href='calendar.html'">📅 Dividend Calendar</button>
+  <button class="tab-btn" onclick="window.location.href='scorecard.html'">📈 Growth Scorecard</button>
   <button class="tab-btn" onclick="switchTab('data')">⚙️ Update Holdings</button>
 </div>
 
@@ -505,7 +507,7 @@ body {
       A self-directed three-pillar retirement strategy spanning 7 accounts and over 60 holdings. The three pillars are not separate accounts — they are virtual designations applied across our existing Schwab and Fidelity accounts, with each position permanently assigned to a pillar and managed accordingly.<br><br><strong>Pillar 1 — Income</strong> generates passive dividend income across 6 accounts — no principal sold, dividends redeployed until retirement.<br><strong>Pillar 2 — Growth</strong> is Brad's and Lisa's 401k accounts compounding untouched until RMDs begin in 2035.<br><strong>Pillar 3 — Health/LTC</strong> is a self-funded reserve held virtually inside the IRAs, fully replacing traditional LTC insurance and providing a dedicated pool for future healthcare and miscellaneous medical expenses.
     </p>
     
-    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of November 7, 2026 &nbsp;07:31 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
+    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of November 8, 2026 &nbsp;11:55 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
     
   </div>
   <!-- SUMMARY CARDS -->
@@ -521,7 +523,7 @@ body {
     <div class="sum-card teal">
       <div class="sum-label">Pillar 1 — Income</div>
       <div class="sum-value">$1,193,264</div>
-      <div class="sum-note">61.4% of portfolio · YOC 7.3%</div>
+      <div class="sum-note">61.4% of portfolio · YOC 7.4%</div>
     </div>
     <div class="sum-card purple">
       <div class="sum-label">Pillar 2 — Growth</div>
@@ -536,18 +538,18 @@ body {
     <div class="summary-grid-3" id="summaryRow3">
     <div class="sum-card teal">
       <div class="sum-label">Monthly Income</div>
-      <div class="sum-value">$7,125/mo</div>
-      <div class="sum-note">Pillar 1 $6,965/mo + Cap One $160/mo</div>
+      <div class="sum-value">$7,148/mo</div>
+      <div class="sum-note">Pillar 1 $6,988/mo + Cap One $160/mo</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Annual Income</div>
-      <div class="sum-value">$85,504/yr</div>
+      <div class="sum-value">$85,778/yr</div>
       <div class="sum-note">Pillar 1 + Cap One · 6.8% blended yield</div>
     </div>
     <div class="sum-card teal">
       <div class="sum-label">Total All-In Income</div>
-      <div class="sum-value">$92,978/yr</div>
-      <div class="sum-note">$7,748/mo · incl. $7,475/yr P2/P3 divs → redeployed to P1</div>
+      <div class="sum-value">$93,252/yr</div>
+      <div class="sum-note">$7,771/mo · incl. $7,475/yr P2/P3 divs → redeployed to P1</div>
     </div></div>
   </div>
 
@@ -556,12 +558,15 @@ body {
     <div class="proj-title">Portfolio Growth Projections <span>across all three pillars</span></div>
     <div class="proj-grid" id="portfolioProj">
     <div class="proj-block">
-      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · 2.5% trend)</div>
-      <div class="proj-row"><span class="yr">Now</span><span class="val">$85,504/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 3</span><span class="val">$93,254/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 5</span><span class="val">$98,816/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 10</span><span class="val">$114,249/yr</span></div>
-      <div class="proj-row"><span class="yr">Year 15</span><span class="val">$132,141/yr</span></div>
+      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · <span id="p1MixHdr">2.46% mix</span>)</div>
+      <div class="proj-row"><span class="yr">Now</span><span class="val">$85,778/yr</span></div>
+      <div class="proj-row"><span class="yr">Year 3</span><span class="val">$93,554/yr <span class="p1g" data-n="3" style="color:var(--gray);font-weight:400;font-size:0.85em">· $92,116</span></span></div>
+      <div class="proj-row"><span class="yr">Year 5</span><span class="val">$99,134/yr <span class="p1g" data-n="5" style="color:var(--gray);font-weight:400;font-size:0.85em">· $96,606</span></span></div>
+      <div class="proj-row"><span class="yr">Year 10</span><span class="val">$114,618/yr <span class="p1g" data-n="10" style="color:var(--gray);font-weight:400;font-size:0.85em">· $108,832</span></span></div>
+      <div class="proj-row"><span class="yr">Year 15</span><span class="val">$132,568/yr <span class="p1g" data-n="15" style="color:var(--gray);font-weight:400;font-size:0.85em">· $122,637</span></span></div>
+      <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Bold = 3% goal · gray = projected at mix rate · Mix = expected growth of today's holdings (moves when you buy/sell) · Actual = per-share raises/cuts over the last 12 months · details on the Growth Scorecard tab</span></div>
+      <div class="proj-row" id="p1MixRow" style=""><span class="yr">Mix rate (expected)</span><span class="val" id="p1MixVal" style="white-space: nowrap; color: rgb(183, 121, 31);">2.46% <span style="color:var(--gray);font-weight:400;font-size:0.85em">vs 3% goal</span></span></div>
+      <div class="proj-row" id="p1ActualRow" style="cursor: pointer;" title="Open the Growth Scorecard" onclick="window.location.href='scorecard.html'"><span class="yr">Actual · last 12 months</span><span class="val" id="p1ActualVal" style="white-space: nowrap; color: rgb(192, 57, 43);">−0.68% (−$573/yr)</span></div>
     </div>
     <div class="proj-block">
       <div class="proj-block-hdr purple-hdr">Pillar 2 — Growth</div>
@@ -589,11 +594,11 @@ body {
           <span class="pillar-badge teal-badge">Pillar 1</span>
           <div class="pillar-trigger-content">
             <div class="pillar-trigger-title">Income</div>
-            <div class="pillar-trigger-sub">61.4% of portfolio · $85,504/yr · $7,125/mo (incl. Cap One)</div>
+            <div class="pillar-trigger-sub">61.4% of portfolio · $85,778/yr · $7,148/mo (incl. Cap One)</div>
           </div>
           <div class="pillar-trigger-right">
             <div class="pillar-trigger-val">$1,193,264</div>
-            <div class="pillar-trigger-inc">$85,504/yr · $7,125/mo</div>
+            <div class="pillar-trigger-inc">$85,778/yr · $7,148/mo</div>
           </div>
           <span class="pillar-chevron">▾</span>
         </button>
@@ -603,7 +608,7 @@ body {
             <div class="acct-section">
       <div class="acct-label">
         <span>Brad IRA</span>
-        <span>$403,556 · $23,784/yr</span>
+        <span>$403,556 · $24,058/yr</span>
       </div>
       <table class="holdings-tbl">
         <thead><tr>
@@ -660,7 +665,7 @@ body {
         <td class="num-cell">210</td>
         <td class="num-cell">$228.42</td>
         <td class="num-cell">$47,968</td>
-        <td class="num-cell">$128.13</td><td class="num-cell">$9.0000</td><td class="inc-cell">$1,890</td><td class="num-cell">3.9%</td><td class="num-cell" style="color:var(--teal);font-weight:600">7.0%</td>
+        <td class="num-cell">$128.13</td><td class="num-cell">$9.2000</td><td class="inc-cell">$1,932</td><td class="num-cell">4.0%</td><td class="num-cell" style="color:var(--teal);font-weight:600">7.2%</td>
         
         
         <td class="notes-col">Premier mall REIT</td>
@@ -670,7 +675,7 @@ body {
         <td class="num-cell">450</td>
         <td class="num-cell">$106.52</td>
         <td class="num-cell">$47,934</td>
-        <td class="num-cell">$31.43</td><td class="num-cell">$3.4560</td><td class="inc-cell">$1,555</td><td class="num-cell">3.2%</td><td class="num-cell" style="color:var(--teal);font-weight:600">11.0%</td>
+        <td class="num-cell">$31.43</td><td class="num-cell">$3.9720</td><td class="inc-cell">$1,787</td><td class="num-cell">3.7%</td><td class="num-cell" style="color:var(--teal);font-weight:600">12.6%</td>
         
         
         <td class="notes-col">Data &amp; document storage REIT</td>
@@ -766,7 +771,7 @@ body {
         <td class="notes-col">Cash &amp; Cash Investments (Schwab)</td>
       </tr><tr class="subtotal-row"><td colspan="4" style="font-weight:700">Brad IRA Total</td>
       <td class="num-cell">$403,556</td>
-      <td></td><td></td><td class="inc-cell">$23,784/yr</td><td class="num-cell">5.9%</td><td></td>
+      <td></td><td></td><td class="inc-cell">$24,058/yr</td><td class="num-cell">6.0%</td><td></td>
       
       
       <td></td></tr></tbody></table></div><div class="acct-section">
@@ -1359,7 +1364,7 @@ body {
         Pillar 1 Total
       </td>
       <td class="num-cell" style="color:white">$1,193,264</td>
-      <td></td><td><span class="inc-cell">$83,584/yr · $6,965/mo</span></td><td class="num-cell" style="color:white">7.0%</td>
+      <td></td><td><span class="inc-cell">$83,858/yr · $6,988/mo</span></td><td class="num-cell" style="color:white">7.0%</td>
       
       
       <td></td>
@@ -1367,22 +1372,22 @@ body {
   </tbody></table><div class="inner-proj"><div class="inner-proj-title">Income Trajectory — 3% Natural Dividend Growth</div>
     <div class="inner-proj-grid">
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Annual Income</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$83,584/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$91,334/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$96,896/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$112,329/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$83,858/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$91,634/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$97,214/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$112,698/yr</span></div>
       </div>
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Monthly Income</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$6,965/mo</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$7,611/mo</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$8,075/mo</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$9,361/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$6,988/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$7,636/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$8,101/mo</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$9,391/mo</span></div>
       </div>
       <div class="inner-proj-block"><div class="inner-proj-hdr teal-hdr">Combined (+ Cap One)</div>
-        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$85,504/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$93,254/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$98,816/yr</span></div>
-        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$114,249/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Now</span><span class="val">$85,778/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 3</span><span class="val">$93,554/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 5</span><span class="val">$99,134/yr</span></div>
+        <div class="inner-proj-row"><span class="yr">Year 10</span><span class="val">$114,618/yr</span></div>
       </div>
     </div></div>
           </div>
@@ -1769,7 +1774,7 @@ body {
   <div id="dataEditor"><div class="data-section">
     <div class="data-section-title">⚙️ Portfolio Settings</div>
     <table class="data-tbl"><thead><tr><th>Setting</th><th>Value</th><th>Notes</th></tr></thead><tbody>
-      <tr><td>As of date</td><td><input id="set_asOf" value="November 7, 2026" readonly="" style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
+      <tr><td>As of date</td><td><input id="set_asOf" value="November 8, 2026" readonly="" style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
       <tr><td>Capital One balance</td><td><input id="set_capBal" type="number" value="60000"></td><td>Sacred principal — never touched</td></tr>
       <tr><td>Capital One APY</td><td><input id="set_capApy" type="number" step="0.001" value="0.032"></td><td>e.g. 0.032 for 3.20%</td></tr>
       <tr><td>Crypto value (auto)</td><td>$33,013</td><td>Computed live from the crypto accounts below</td></tr>
@@ -1857,7 +1862,7 @@ body {
             </select></td>
             <td><input type="number" step="0.0001" value="210" onchange="DATA.holdings[4].shares=parseFloat(this.value)||0"></td>
             <td><input type="number" step="0.01" value="228.42" onchange="DATA.holdings[4].price=parseFloat(this.value)||0"></td><td><input type="number" step="0.01" value="128.13" placeholder="0.00" onchange="DATA.holdings[4].costBasis=parseFloat(this.value)||0"></td>
-            <td><input type="number" step="0.0001" value="9" onchange="DATA.holdings[4].div=parseFloat(this.value)||0"></td>
+            <td><input type="number" step="0.0001" value="9.2" onchange="DATA.holdings[4].div=parseFloat(this.value)||0"></td>
             <td><select onchange="DATA.holdings[4].freq=this.value">
               <option>M</option><option selected="">Q</option><option>SA</option><option>A</option><option>-</option>
             </select></td>
@@ -1873,7 +1878,7 @@ body {
             </select></td>
             <td><input type="number" step="0.0001" value="450" onchange="DATA.holdings[5].shares=parseFloat(this.value)||0"></td>
             <td><input type="number" step="0.01" value="106.52" onchange="DATA.holdings[5].price=parseFloat(this.value)||0"></td><td><input type="number" step="0.01" value="31.43" placeholder="0.00" onchange="DATA.holdings[5].costBasis=parseFloat(this.value)||0"></td>
-            <td><input type="number" step="0.0001" value="3.456" onchange="DATA.holdings[5].div=parseFloat(this.value)||0"></td>
+            <td><input type="number" step="0.0001" value="3.972" onchange="DATA.holdings[5].div=parseFloat(this.value)||0"></td>
             <td><select onchange="DATA.holdings[5].freq=this.value">
               <option>M</option><option selected="">Q</option><option>SA</option><option>A</option><option>-</option>
             </select></td>
@@ -3294,13 +3299,13 @@ body {
     <div style="font-size:0.78rem;color:var(--gray)">Drop your CSV or Excel export · or click to browse · updates share counts automatically</div>
     <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.txt" style="display:none" onchange="handleFile(this.files[0])">
   </div>
-  <div id="importMsg" style="font-size: 0.82rem; color: var(--teal); font-weight: 500; margin-bottom: 1rem; display: block;">✓ Import complete — 25 positions updated from Portfolio_Positions_Nov-07-2026.csv. Click Apply to recalculate.</div>
+  <div id="importMsg" style="font-size: 0.82rem; color: var(--teal); font-weight: 500; margin-bottom: 1rem; display: block;">✓ Import complete — 25 positions updated from Portfolio_Positions_Nov-08-2026 (1).csv. Click Apply to recalculate.</div>
 
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <button class="update-btn" onclick="applyUpdates()">↻ Apply Updates &amp; Recalculate</button>
     <button class="update-btn" style="background:var(--navy)" onclick="saveDashboard()">💾 Save Dashboard</button>
     <button class="update-btn" style="background:transparent;color:var(--navy);padding:8px 10px;font-size:0.85rem" onclick="updateGitHubToken()" title="Update GitHub token">⚙️</button>
-    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 7:31:06 AM</span>
+    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 11:55:24 AM</span>
   </div>
 </div>
 </div>
@@ -3312,7 +3317,7 @@ body {
 // DATA — ALL HOLDINGS (edit here or via Data tab)
 // ════════════════════════════════════════════════════
 /*DATA_START*/const DATA = {
-  "asOf": "November 7, 2026",
+  "asOf": "November 8, 2026",
   "capOne": {
     "balance": 60000,
     "apy": 0.032
@@ -3408,10 +3413,13 @@ body {
       "pillar": 1,
       "shares": 210,
       "price": 228.42,
-      "div": 9,
+      "div": 9.2,
       "freq": "Q",
       "notes": "Premier mall REIT",
-      "costBasis": 128.13
+      "costBasis": 128.13,
+      "divHold": {
+        "pmt": 2.25
+      }
     },
     {
       "ticker": "IRM",
@@ -3420,7 +3428,7 @@ body {
       "pillar": 1,
       "shares": 450,
       "price": 106.52,
-      "div": 3.456,
+      "div": 3.972,
       "freq": "Q",
       "notes": "Data & document storage REIT",
       "costBasis": 31.43
@@ -4402,10 +4410,8 @@ function renderDashboard() {
   // Historical pace: income-weighted per-share dividend growth of current holdings,
   // measured 2022 -> Nov 2026 (~2.5%/yr). Shown beside the 3% GOAL so actual pace can be
   // measured against it. Re-measure occasionally and update this one constant.
-  const P1_HIST_DGR = 0.025;
-  const p1Hist = n => C.p1Inc*Math.pow(1+P1_HIST_DGR,n) + C.capOneInc;
-  const pct = (P1_HIST_DGR*100).toFixed(1).replace(/\.0$/,'');
-  const p1Row = (lbl,goal,hist) => `<div class="proj-row"><span class="yr">${lbl}</span><span class="val">${fmt(goal)}/yr <span style="color:var(--gray);font-weight:400;font-size:0.85em">· ${fmt(hist)}</span></span></div>`;
+  // Gray column = projection at the live Pillar 1 mix rate (divgrowth.json via divgrowth.js), filled in by applyDG().
+  const p1Row = (lbl,goal,n) => `<div class="proj-row"><span class="yr">${lbl}</span><span class="val">${fmt(goal)}/yr <span class="p1g" data-n="${n}" style="color:var(--gray);font-weight:400;font-size:0.85em"></span></span></div>`;
   const k5a  = C.p2Val*Math.pow(1.07,5);
   const k10a = C.p2Val*Math.pow(1.07,10);
   const k5b  = C.p2Val*Math.pow(1.09,5);
@@ -4426,14 +4432,15 @@ function renderDashboard() {
 
   document.getElementById('portfolioProj').innerHTML = `
     <div class="proj-block">
-      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · ${pct}% trend)</div>
+      <div class="proj-block-hdr teal-hdr">Pillar 1 — Income (3% goal · <span id="p1MixHdr">mix rate</span>)</div>
       <div class="proj-row"><span class="yr">Now</span><span class="val">${fmt(C.combinedInc)}/yr</span></div>
-      ${p1Row('Year 3',yr3,p1Hist(3))}
-      ${p1Row('Year 5',yr5,p1Hist(5))}
-      ${p1Row('Year 10',yr10,p1Hist(10))}
-      ${p1Row('Year 15',yr15,p1Hist(15))}
-      <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Bold = 3% goal · gray = ${pct}% trend (historical pace of current holdings, 2022–2026) · Actual = real raises/cuts on the same shares since the baseline</span></div>
-      <div class="proj-row" id="p1ActualRow" style="display:none"><span class="yr">Actual since <span id="p1ActualSince"></span></span><span class="val" id="p1ActualVal" style="white-space:nowrap"></span></div>
+      ${p1Row('Year 3',yr3,3)}
+      ${p1Row('Year 5',yr5,5)}
+      ${p1Row('Year 10',yr10,10)}
+      ${p1Row('Year 15',yr15,15)}
+      <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Bold = 3% goal · gray = projected at mix rate · Mix = expected growth of today's holdings (moves when you buy/sell) · Actual = per-share raises/cuts over the last 12 months · details on the Growth Scorecard tab</span></div>
+      <div class="proj-row" id="p1MixRow" style="display:none"><span class="yr">Mix rate (expected)</span><span class="val" id="p1MixVal" style="white-space:nowrap"></span></div>
+      <div class="proj-row" id="p1ActualRow" style="display:none;cursor:pointer" title="Open the Growth Scorecard" onclick="window.location.href='scorecard.html'"><span class="yr">Actual · last 12 months</span><span class="val" id="p1ActualVal" style="white-space:nowrap"></span></div>
     </div>
     <div class="proj-block">
       <div class="proj-block-hdr purple-hdr">Pillar 2 — Growth</div>
@@ -4452,7 +4459,7 @@ function renderDashboard() {
       <div class="proj-row"><span class="yr">Year 10 · avg (${fmtPct(p3AvgPO)})</span><span class="val">${fmt(Math.round(m10a))}</span></div>
       <div class="proj-row" style="border-top:1px solid var(--border);font-size:0.72rem;color:var(--gray)"><span class="yr" style="font-style:italic">Note: rates are price-only (total return &minus; P3 yield ${fmtPct(p3DivYield)}). Electing to reinvest P3 dividends would add ~${fmtPct(p3DivYield)}/yr back toward total-return (8.5% / 6.6%).</span></div>
     </div>`;
-  renderP1Actual();
+  applyDG(C);
 
   // Pillar accordions
   renderPillars(C);
@@ -5874,38 +5881,31 @@ This cannot be undone unless you cancel without saving.`)) return;
 // ── INIT ──────────────────────────────────────────
 renderDashboard();
 
-// ── P1 ACTUAL DIVIDEND GROWTH (same-holding, vs baseline snapshot) ─────────
-// Holds the BASELINE share counts fixed and compares baseline div rates to today's,
-// so buys/contributions don't count — only real raises and cuts. Baseline = earliest
-// repo snapshot. Fetched same-origin from GitHub Pages; silently hidden if unavailable.
-function renderP1Actual(){
-  const P1_ACTUAL_BASELINE = 'docs/snapshots/data-2026-08-01.json';
-  const row = document.getElementById('p1ActualRow'); if(!row) return;
-  const draw = base => {
+// ── P1 DIVIDEND GROWTH (tile) ───────────────────────────────────────────────
+// Same math and data as the Growth Scorecard page (divgrowth.js + divgrowth.json), Pillar 1 only.
+function applyDG(C){
+  const go = dg => {
     try{
-      const MM = new Set(['Cash','SWVXX','FDRXX','SPAXX','SNSXX']);
-      const cur = {};
-      DATA.holdings.forEach(h => { if((h.shares||0)>0) cur[h.ticker+'|'+h.acct] = h.div||0; });
-      let b=0, n=0;
-      (base.holdings||[]).forEach(h => {
-        if(h.pillar!==1 || MM.has(h.ticker) || !((h.shares||0)>0)) return;
-        const k = h.ticker+'|'+h.acct; if(!(k in cur)) return;
-        b += h.shares*(h.div||0); n += h.shares*cur[k];
-      });
-      if(!(b>0)) return;
-      const d = n-b, pc = d/b*100;
-      const t0 = new Date((base.summary&&base.summary.asOf)||base.asOf||'2026-08-01');
-      const days = (Date.now()-t0)/864e5;
-      let txt = `${d>=0?'+':'−'}${fmt(Math.abs(d))}/yr (${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1)}%)`;
-      if(days>=365) txt += ` · ${((Math.pow(n/b,365/days)-1)*100).toFixed(1)}%/yr`;
-      document.getElementById('p1ActualSince').textContent = isNaN(t0) ? 'baseline' : t0.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-      const v = document.getElementById('p1ActualVal');
-      v.textContent = txt; v.style.color = d>=0 ? 'var(--teal)' : '#C0392B';
-      row.style.display = '';
-    }catch(e){ /* leave hidden */ }
+      const S = DG.summary(DG.rows(DATA.holdings, dg, [1]));
+      if(S.expected===null) return;
+      const r = S.expected, goal = dg.goal || 0.03;
+      const hd = document.getElementById('p1MixHdr'); if(hd) hd.textContent = (r*100).toFixed(2)+'% mix';
+      document.querySelectorAll('.p1g').forEach(el => { el.textContent = '· '+fmt(C.p1Inc*Math.pow(1+r, +el.dataset.n) + C.capOneInc); });
+      const mv = document.getElementById('p1MixVal');
+      mv.innerHTML = `${(r*100).toFixed(2)}% <span style="color:var(--gray);font-weight:400;font-size:0.85em">vs ${(goal*100).toFixed(0)}% goal</span>`;
+      mv.style.color = r>=goal ? 'var(--teal)' : '#B7791F';
+      document.getElementById('p1MixRow').style.display = '';
+      if(S.actual!==null){
+        const a = S.actual*100, av = document.getElementById('p1ActualVal');
+        av.textContent = `${a>=0?'+':'−'}${Math.abs(a).toFixed(2)}% (${S.dollars>=0?'+':'−'}${fmt(Math.abs(S.dollars))}/yr)`;
+        av.style.color = S.actual>=goal ? 'var(--teal)' : (S.actual>=0 ? '#B7791F' : '#C0392B');
+        document.getElementById('p1ActualRow').style.display = '';
+      }
+    }catch(e){ /* leave rows hidden */ }
   };
-  if(window._p1Base) return draw(window._p1Base);
-  fetch(P1_ACTUAL_BASELINE+'?nc='+Date.now()).then(r=>r.ok?r.json():null).then(j=>{ if(j){ window._p1Base=j; draw(j); } }).catch(()=>{});
+  if(window._dgData) return go(window._dgData);
+  if(typeof DG==='undefined') return;
+  DG.load().then(j => { if(j){ window._dgData = j; go(j); } }).catch(()=>{});
 }
 </script>
 
