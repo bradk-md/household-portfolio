@@ -1,0 +1,419 @@
+{
+ "updated": "2026-11-08",
+ "goal": 0.03,
+ "method": "exp = per-share dividend CAGR from 2022 (or 2023) annual to Nov 2026, capped \u00b110%, bond funds 0. rate = yago is the payment 12 months ago x frequency; now = live dashboard div. ttm = trailing-12-month per-share sums (variable/index payers), both stored here. excl = capital-gains distributors, left out. Specials/supplementals excluded throughout.",
+ "tickers": {
+  "ABR": {
+   "exp": null,
+   "flag": "suspended",
+   "note": "Q3-25 rate $0.30/qtr; suspended Oct 2026",
+   "method": "rate",
+   "yago": 1.2
+  },
+  "AGNC": {
+   "exp": 0.0,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 1.44
+  },
+  "AMLP": {
+   "exp": 0.0815,
+   "flag": "",
+   "note": "Aug25 vs Aug26",
+   "method": "rate",
+   "yago": 3.92
+  },
+  "ARCC": {
+   "exp": 0.0061,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 1.92
+  },
+  "BAM": {
+   "exp": null,
+   "flag": "",
+   "note": "Sep25 vs Sep26",
+   "method": "rate",
+   "yago": 1.75
+  },
+  "BCX": {
+   "exp": 0.1,
+   "flag": "",
+   "note": "flat managed",
+   "method": "rate",
+   "yago": 0.8364
+  },
+  "BIZD": {
+   "exp": 0.0226,
+   "flag": "variable",
+   "note": "variable quarterly",
+   "method": "ttm",
+   "yago": 1.7138,
+   "now": 1.5595
+  },
+  "BLOK": {
+   "exp": null,
+   "flag": "cap gains",
+   "note": "capital-gains distributions (excluded)",
+   "method": "excl"
+  },
+  "BME": {
+   "exp": 0.0488,
+   "flag": "",
+   "note": "managed (last raise Dec24)",
+   "method": "rate",
+   "yago": 3.1452
+  },
+  "BSTZ": {
+   "exp": -0.0376,
+   "flag": "specials excl.",
+   "note": "regular only; specials excluded; cut Oct25",
+   "method": "rate",
+   "yago": 2.61744
+  },
+  "BTO": {
+   "exp": 0.0091,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 2.6
+  },
+  "DFP": {
+   "exp": 0.0563,
+   "flag": "",
+   "note": "Jul25 vs Jul26",
+   "method": "rate",
+   "yago": 1.4088
+  },
+  "DIS": {
+   "exp": null,
+   "flag": "",
+   "note": "SA Jan+Jul",
+   "method": "ttm",
+   "yago": 1.0,
+   "now": 1.5
+  },
+  "DLR": {
+   "exp": 0.0028,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 4.88
+  },
+  "EPD": {
+   "exp": 0.0411,
+   "flag": "",
+   "note": "Aug25 vs Aug26",
+   "method": "rate",
+   "yago": 2.18
+  },
+  "ET": {
+   "exp": 0.0315,
+   "flag": "",
+   "note": "Aug25 vs Aug26",
+   "method": "rate",
+   "yago": 1.32
+  },
+  "FDGRX": {
+   "exp": null,
+   "flag": "cap gains",
+   "note": "capital-gains distribution (excluded)",
+   "method": "excl"
+  },
+  "GHY": {
+   "exp": 0.0,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 1.26
+  },
+  "GOF": {
+   "exp": 0.0,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 2.1852
+  },
+  "IIPR": {
+   "exp": 0.0259,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 7.6
+  },
+  "IRM": {
+   "exp": 0.0799,
+   "flag": "",
+   "note": "Oct25 vs Oct26",
+   "method": "rate",
+   "yago": 3.14
+  },
+  "JEPI": {
+   "exp": -0.0892,
+   "flag": "variable",
+   "note": "variable; TTM Nov-Oct",
+   "method": "ttm",
+   "yago": 4.7477,
+   "now": 4.5637
+  },
+  "JEPQ": {
+   "exp": null,
+   "flag": "variable",
+   "note": "variable; May-Oct x2 each year",
+   "method": "ttm",
+   "yago": 6.0892,
+   "now": 7.4927
+  },
+  "JPC": {
+   "exp": 0.0386,
+   "flag": "",
+   "note": "cut Dec25",
+   "method": "rate",
+   "yago": 0.798
+  },
+  "JRI": {
+   "exp": 0.0775,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 1.602
+  },
+  "LADR": {
+   "exp": 0.0184,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 0.92
+  },
+  "MAIN": {
+   "exp": 0.0501,
+   "flag": "specials excl.",
+   "note": "regular only; supplementals excluded",
+   "method": "rate",
+   "yago": 3.06
+  },
+  "MDXBX": {
+   "exp": 0.0,
+   "flag": "rate-driven",
+   "note": "muni bond; 11-mo avg annualized; rate-driven",
+   "method": "ttm",
+   "yago": 0.34385,
+   "now": 0.36155
+  },
+  "O": {
+   "exp": 0.0216,
+   "flag": "",
+   "note": "Nov25 vs Nov26 monthly",
+   "method": "rate",
+   "yago": 3.234
+  },
+  "OKE": {
+   "exp": 0.0315,
+   "flag": "",
+   "note": "Aug25 vs Aug26",
+   "method": "rate",
+   "yago": 4.12
+  },
+  "ORCL": {
+   "exp": 0.1,
+   "flag": "",
+   "note": "flat since Apr25 raise",
+   "method": "rate",
+   "yago": 2.0
+  },
+  "PBA": {
+   "exp": -0.0013,
+   "flag": "FX",
+   "note": "USD; CAD dividend, FX-affected",
+   "method": "ttm",
+   "yago": 1.99913,
+   "now": 2.08844
+  },
+  "PDI": {
+   "exp": 0.0,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 2.646
+  },
+  "PDO": {
+   "exp": 0.0,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 1.5348
+  },
+  "PFFA": {
+   "exp": 0.0138,
+   "flag": "",
+   "note": "raise Jan26",
+   "method": "rate",
+   "yago": 2.04
+  },
+  "PLD": {
+   "exp": 0.0722,
+   "flag": "",
+   "note": "Sep25 vs Sep26",
+   "method": "rate",
+   "yago": 4.04
+  },
+  "PRMDX": {
+   "exp": null,
+   "flag": "rate-driven",
+   "note": "no history page; exiting position",
+   "method": "na"
+  },
+  "PTY": {
+   "exp": 0.0,
+   "flag": "",
+   "note": "flat",
+   "method": "rate",
+   "yago": 1.4256
+  },
+  "SCHA": {
+   "exp": 0.089,
+   "flag": "",
+   "note": "index ETF; Dec-Sep TTM",
+   "method": "ttm",
+   "yago": 0.3964,
+   "now": 0.3694
+  },
+  "SCHC": {
+   "exp": null,
+   "flag": "FX",
+   "note": "SA; FX-affected",
+   "method": "ttm",
+   "yago": 1.2639,
+   "now": 1.6813
+  },
+  "SCHD": {
+   "exp": 0.0524,
+   "flag": "",
+   "note": "Dec24-Sep25 vs Dec25-Sep26",
+   "method": "ttm",
+   "yago": 1.0339,
+   "now": 1.0541
+  },
+  "SCHE": {
+   "exp": null,
+   "flag": "FX",
+   "note": "SA; FX-affected",
+   "method": "ttm",
+   "yago": 0.808,
+   "now": 0.9522
+  },
+  "SCHM": {
+   "exp": null,
+   "flag": "",
+   "note": "index ETF",
+   "method": "ttm",
+   "yago": 0.4235,
+   "now": 0.4446
+  },
+  "SCHZ": {
+   "exp": 0.0,
+   "flag": "rate-driven",
+   "note": "bond ETF; rate-driven",
+   "method": "ttm",
+   "yago": 0.946,
+   "now": 0.9618
+  },
+  "SPDW": {
+   "exp": 0.1,
+   "flag": "FX",
+   "note": "SA index ETF; FX-driven",
+   "method": "ttm",
+   "yago": 1.14345,
+   "now": 1.51604
+  },
+  "SPG": {
+   "exp": 0.063,
+   "flag": "",
+   "note": "Sep25 vs Sep26",
+   "method": "rate",
+   "yago": 8.6
+  },
+  "STAG": {
+   "exp": 0.0123,
+   "flag": "",
+   "note": "switched monthly->quarterly Apr26; annualized",
+   "method": "ttm",
+   "yago": 1.49004,
+   "now": 1.55
+  },
+  "THQ": {
+   "exp": 0.0996,
+   "flag": "",
+   "note": "cut Sep26",
+   "method": "rate",
+   "yago": 2.16
+  },
+  "THW": {
+   "exp": -0.0135,
+   "flag": "",
+   "note": "page Sep26; dashboard shows 0.110/mo",
+   "method": "rate",
+   "yago": 1.4004
+  },
+  "TPL": {
+   "exp": null,
+   "flag": "",
+   "note": "Sep25 vs Sep26 split-adjusted",
+   "method": "rate",
+   "yago": 2.13332
+  },
+  "UTF": {
+   "exp": 0.0145,
+   "flag": "",
+   "note": "raise Apr26",
+   "method": "rate",
+   "yago": 1.86
+  },
+  "UTG": {
+   "exp": 0.0233,
+   "flag": "",
+   "note": "Sep25 vs Sep26",
+   "method": "rate",
+   "yago": 2.4
+  },
+  "VICI": {
+   "exp": 0.053,
+   "flag": "",
+   "note": "Oct25 vs Oct26",
+   "method": "rate",
+   "yago": 1.8
+  },
+  "VTV": {
+   "exp": null,
+   "flag": "",
+   "note": "index ETF",
+   "method": "ttm",
+   "yago": 3.9,
+   "now": 4.1646
+  },
+  "VUG": {
+   "exp": null,
+   "flag": "",
+   "note": "index ETF",
+   "method": "ttm",
+   "yago": 0.34094,
+   "now": 0.34615
+  },
+  "WES": {
+   "exp": 0.1,
+   "flag": "",
+   "note": "Aug25 vs Aug26",
+   "method": "rate",
+   "yago": 3.64
+  },
+  "WPC": {
+   "exp": -0.0244,
+   "flag": "",
+   "note": "Oct25 vs Oct26",
+   "method": "rate",
+   "yago": 3.64
+  }
+ }
+}
