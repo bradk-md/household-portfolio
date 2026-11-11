@@ -111,7 +111,7 @@ var MONTHS_OVERRIDE={
   /* Cycle B: Feb/May/Aug/Nov */
   'ET':[2,5,8,11],'OKE':[2,5,8,11],'AMLP':[2,5,8,11],'EPD':[2,5,8,11],'WES':[2,5,8,11],'ABR':[2,5,8,11],
   /* Cycle C: Mar/Jun/Sep/Dec */
-  'ARCC':[3,6,9,12],'SPG':[3,6,9,12],'DLR':[3,6,9,12],'SCHD':[3,6,9,12],'PLD':[3,6,9,12],
+  'ARCC':[3,6,9,12],'SPG':[3,6,9,12],'DLR':[1,3,6,9],'SCHD':[3,6,9,12],'PLD':[3,6,9,12],
   'BTO':[3,6,9,12],'TPL':[3,6,9,12],'PBA':[3,6,9,12],'BAM':[3,6,9,12],
   'SCHM':[3,6,9,12],'VUG':[3,6,9,12],'VTV':[3,6,9,12],'SCHA':[3,6,9,12],
   /* Semi-annual / annual */
@@ -120,13 +120,14 @@ var MONTHS_OVERRIDE={
 /* Usual pay DAY per ticker, used when no declared date is in paydates.json.
    Number = that day of the month (weekend/holiday -> previous business day); "27+" = roll to the NEXT business day instead.
    "F" = first business day, "L" = last business day, "B3" = 3rd business day of the month.
+   An object {d:default, 12:15} sets a different day for specific months (verified Nov 11 2026 via stockanalysis).
    Tickers missing here fall back to KNOWN_DAY/SPREAD, which is only a guess and is labelled as such. */
 var DAY_OVERRIDE={
   'IRM':3,'LADR':15,'IIPR':15,'WPC':15,'VICI':8,'ORCL':23,'STAG':15,'BIZD':7,
   'ET':19,'OKE':14,'AMLP':17,'EPD':14,'WES':14,'ABR':26,
-  'ARCC':30,'SPG':30,'DLR':30,'SCHD':28,'PLD':30,'BTO':30,'TPL':15,'PBA':29,'BAM':'L',
-  'DIS':15,'SPDW':24,'BLOK':31,
-  'SCHM':28,'VUG':28,'VTV':28,'SCHA':28,'SCHE':16,'SCHC':16,'FDGRX':28,
+  'ARCC':30,'SPG':30,'DLR':{d:30,1:16},'SCHD':{d:28,12:15},'PLD':30,'BTO':30,'TPL':15,'PBA':29,'BAM':'L',
+  'DIS':{d:15,7:22},'SPDW':{d:26,12:29},'BLOK':31,
+  'SCHM':{d:28,12:15},'VUG':{d:'L',12:24},'VTV':{d:'L',12:24},'SCHA':{d:28,12:15},'SCHE':{d:16,6:29},'SCHC':{d:16,6:29},'FDGRX':28,
   /* Monthly payers, from pay history Jul-Oct 2026 */
   'PDI':'F','PDO':'F','PTY':'F','JPC':'F','JRI':'F',
   'JEPI':'B3','JEPQ':'B3','SCHZ':'B5',
@@ -166,6 +167,7 @@ function nthBiz(y,m,n){var c=0;for(var dd=1;dd<=31;dd++){var d=new Date(y,m,dd);
 /* Estimated pay date for ticker t in month (y,m) -> {d:Date, src:'est'|'guess'} */
 function ruleDate(t,y,m){
   var r=DAY_OVERRIDE[t],src='est';
+  if(r&&typeof r==='object')r=(r[m+1]!=null)?r[m+1]:r.d;   /* per-month day: {d:default, <month>:day} */
   if(r==null){src='guess';if(KNOWN_DAY[t]!=null)r=KNOWN_DAY[t];else{var s=0;for(var k=0;k<t.length;k++)s+=t.charCodeAt(k);r=SPREAD[s%SPREAD.length];}}
   if(r==='F')return {d:nthBiz(y,m,1),src:src};
   if(r==='L')return {d:lastBiz(y,m),src:src};
