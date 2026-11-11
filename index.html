@@ -3958,10 +3958,17 @@ body {
       "pillar": 1,
       "shares": 295,
       "price": 57.66,
-      "div": 4.1616,
+      "div": 4.2787,
       "freq": "M",
       "notes": "Covered call income ETF",
-      "costBasis": 55.9
+      "costBasis": 55.9,
+      "avg4": true,
+      "hist": [
+        0.34683,
+        0.34134,
+        0.37142,
+        0.36664
+      ]
     },
     {
       "ticker": "BTO",
@@ -4042,10 +4049,17 @@ body {
       "pillar": 1,
       "shares": 245,
       "price": 55.82,
-      "div": 6.4704,
+      "div": 7.4808,
       "freq": "M",
       "notes": "Covered call Nasdaq ETF",
-      "costBasis": 58.77
+      "costBasis": 58.77,
+      "avg4": true,
+      "hist": [
+        0.53922,
+        0.56687,
+        0.68255,
+        0.70497
+      ]
     },
     {
       "ticker": "FDRXX",
@@ -4090,13 +4104,17 @@ body {
       "pillar": 1,
       "shares": 3099.512,
       "price": 9.85,
-      "div": 0.3864,
+      "div": 0.3863,
       "freq": "M",
       "notes": "MD muni bond — tax-exempt",
       "costBasis": 10.14,
-      "divManual": {
-        "div": 0.3864
-      }
+      "avg4": true,
+      "hist": [
+        0.03529,
+        0.0308,
+        0.02942,
+        0.03326
+      ]
     },
     {
       "ticker": "EPD",
@@ -4306,9 +4324,16 @@ body {
       "shares": 1301.05,
       "price": 5.12,
       "costBasis": 5.12,
-      "div": 0.1536,
+      "div": 0.1352,
       "freq": "M",
-      "notes": "MD muni bond — federal + MD state tax-exempt"
+      "notes": "MD muni bond — federal + MD state tax-exempt",
+      "avg4": true,
+      "hist": [
+        0.01279,
+        0.01062,
+        0.0101,
+        0.01157
+      ]
     },
     {
       "ticker": "BAM",
@@ -4778,7 +4803,7 @@ function renderDataEditor() {
             <td><input type="number" step="0.0001" value="${h.div}" onchange="setManualDiv(${h.idx},this.value)"></td>
             <td><select onchange="DATA.holdings[${h.idx}].freq=this.value">
               ${['M','Q','SA','A','-'].map(f=>`<option${h.freq===f?' selected':''}>${f}</option>`).join('')}
-            </select></td>
+            </select><label title="Annual div = average of the last 4 payments × frequency (for payers whose amount varies every month)" style="display:block;font-size:0.68rem;white-space:nowrap;color:var(--gray);margin-top:2px;cursor:pointer"><input type="checkbox" ${h.avg4?'checked':''} onchange="setAvg4(${h.idx},this.checked)" style="width:auto;margin:0 3px 0 0;vertical-align:middle">Avg 4${h.avg4&&h.hist?` (${h.hist.length})`:''}</label></td>
             <td><input value="${h.notes}" onchange="DATA.holdings[${h.idx}].notes=this.value"></td>
             <td style="text-align:center">
               <button onclick="deletePosition(${h.idx})" title="Delete ${h.ticker}"
@@ -5315,7 +5340,7 @@ function parseXLSXRows(rows, filename) {
   const msg = document.getElementById('importMsg');
   msg.style.display = 'block';
 
-  let updated = 0, notFound = [], autoAdded = 0, paymentFlags = []; const manualHolds = []; const PAY_TOL = 0.005; // per-payment match tolerance (was 2%)
+  let updated = 0, notFound = [], autoAdded = 0, paymentFlags = []; const manualHolds = [], avg4Notes = []; const PAY_TOL = 0.005; // per-payment match tolerance (was 2%)
   let symCol=-1, qtyCol=-1, prxCol=-1, costCol=-1, divCol=-1, acctCol=-1, acctNumCol=-1, estAnnCol=-1, valCol=-1, mktValColIdx=-1;
   const FIDELITY_EXCLUDE = ['250209168','Z25678403','258632434'];
 
@@ -5504,6 +5529,7 @@ function parseXLSXRows(rows, filename) {
       mdxbxTotal.shares += shares;
       if (price && price > 0) mdxbxTotal.price = price;
       if (cost  && cost  > 0) mdxbxTotal.cost  = cost;
+      if (lastDiv && lastDiv > 0 && lastDiv < 50 && mdxbxTotal.lastDiv == null) mdxbxTotal.lastDiv = lastDiv;
       continue; // apply after loop
     }
 
@@ -5569,6 +5595,9 @@ function parseXLSXRows(rows, filename) {
         }
         if (manualHeld) {
           // leave stored div untouched
+        } else if (h.avg4 && lastDiv && lastDiv > 0 && lastDiv < 50 && mult > 0) {
+          // Avg 4 (Nov 2026): annual = average of the last four payments × frequency
+          avg4Update(idx, lastDiv, mult, PAY_TOL, paymentFlags, avg4Notes);
         } else if (lastDiv && lastDiv > 0 && lastDiv < 50 && freq === 'SA') {
           // Semi-annual rule (Sep 2026): annual = last TWO payments summed (one full year),
           // because SA payers alternate small/large and payment × 2 is always biased.
@@ -5635,6 +5664,18 @@ function parseXLSXRows(rows, filename) {
         DATA.holdings[idx].shares = parseFloat(mdxbxTotal.shares.toFixed(4));
         if (mdxbxTotal.price > 0) DATA.holdings[idx].price     = mdxbxTotal.price;
         if (mdxbxTotal.cost  > 0) DATA.holdings[idx].costBasis = mdxbxTotal.cost;
+        // Avg 4 for MDXBX (Nov 2026) — same manual-hold rule as every other holding
+        const hm = DATA.holdings[idx], ld = mdxbxTotal.lastDiv, mm = {M:12,Q:4,SA:2,A:1}[hm.freq] || 0;
+        if (hm.avg4 && ld && mm) {
+          let held = false;
+          if (hm.divManual) {
+            if (hm.divManual.basePmt == null) { hm.divManual = Object.assign({}, hm.divManual, { basePmt: ld }); held = true; }
+            else if (Math.abs(ld - hm.divManual.basePmt) / (hm.divManual.basePmt || 1) <= 0.005) held = true;
+            else delete hm.divManual;
+            if (held) manualHolds.push(`${hm.ticker} (${hm.acct}) $${hm.div}`);
+          }
+          if (!held) avg4Update(idx, ld, mm, 0.005, paymentFlags, avg4Notes);
+        }
         updated++;
       }
     });
@@ -5647,6 +5688,7 @@ function parseXLSXRows(rows, filename) {
   const filtered = notFound.filter(t => !['FDRXX','SPAXX','SWVXX','','Account Number'].includes(t));
   if (filtered.length > 0)
     resultText += ` Not matched: ${filtered.slice(0,10).join(', ')}`;
+  if (avg4Notes.length) resultText += ` \u21BB Avg 4 updated: ${avg4Notes.join(', ')}.`;
   if (manualHolds.length) resultText += ` \u270E Kept your manual div: ${manualHolds.join(', ')} (until the statement shows a new payment).`;
   resultText += ' Click Apply to recalculate.';
 
@@ -5661,6 +5703,47 @@ function parseXLSXRows(rows, filename) {
 // Rules: M/Q/A → new payment × frequency; SA → last two payments summed.
 // Specials/supplementals: do NOT accept (count them only when paid).
 // ════════════════════════════════════════════════════
+// AVG 4 (Nov 2026): for genuinely noisy monthly payers (MDXBX, PRMDX, JEPI, JEPQ) the annual
+// div/sh is the AVERAGE OF THE LAST FOUR PAYMENTS × frequency, because no single month is
+// representative. h.avg4 = true turns it on (checkbox beside Freq); h.hist = last four per-payment
+// amounts, newest first. A new payment within 15% of the current average is folded in
+// automatically (noted in the import message); a bigger jump (possible cut, raise or special) is
+// held and flagged for Accept/Keep like any other payment change.
+// Limitation: a new payment identical to the previous one (within 0.5%) can't be told apart from
+// the same payment re-reported, so it isn't added twice; the average barely moves in that case.
+const AVG4_N = 4, AVG4_TOL = 0.15;
+function avg4Of(a) { return a.reduce((x, y) => x + y, 0) / a.length; }
+function avg4Update(idx, lastDiv, mult, payTol, paymentFlags, notes) {
+  const h = DATA.holdings[idx];
+  let hist = Array.isArray(h.hist) && h.hist.length ? h.hist.slice(0, AVG4_N) : [parseFloat((h.div / mult).toFixed(5))];
+  if (Math.abs(lastDiv - hist[0]) / (hist[0] || 1) <= payTol) {
+    // same payment as last recorded → keep the average (and make sure div reflects it)
+    const ann = parseFloat((avg4Of(hist) * mult).toFixed(4));
+    h.hist = hist;
+    if (Math.abs(h.div - ann) > 0.00005) h.div = ann;
+    return;
+  }
+  if (h.divHold && Math.abs(lastDiv - h.divHold.pmt) / (h.divHold.pmt || 1) <= payTol) return; // Brad pressed Keep
+  const cur = avg4Of(hist), next = [parseFloat(lastDiv.toFixed(5))].concat(hist).slice(0, AVG4_N);
+  const ann = parseFloat((avg4Of(next) * mult).toFixed(4));
+  if (Math.abs(lastDiv - cur) / (cur || 1) <= AVG4_TOL) {
+    h.hist = next; h.div = ann; delete h.divHold;
+    notes.push(`${h.ticker} $${ann.toFixed(4)}`);
+  } else {
+    paymentFlags.push({idx, ticker: h.ticker, acct: h.acct, oldPmt: cur, newPmt: lastDiv, suggested: ann, hist: next,
+      rule: `avg of last ${next.length} payments; this one is ${Math.round((lastDiv / cur - 1) * 100)}% vs avg`});
+  }
+}
+function setAvg4(i, on) {
+  const h = DATA.holdings[i];
+  if (!h) return;
+  if (on) {
+    h.avg4 = true;
+    const mult = {M:12,Q:4,SA:2,A:1}[h.freq] || 12;
+    if (!Array.isArray(h.hist) || !h.hist.length) h.hist = [parseFloat((h.div / mult).toFixed(5))];
+  } else delete h.avg4;
+  renderDataEditor();
+}
 let PENDING_FLAGS = [];
 function showPaymentFlags(flags, msg) {
   if (!flags.length) return;
@@ -5698,6 +5781,7 @@ function acceptPaymentFlag(i) {
   const f = PENDING_FLAGS[i];
   if (!f) return;
   DATA.holdings[f.idx].div = f.suggested;
+  if (f.hist) DATA.holdings[f.idx].hist = f.hist;   // Avg 4 flag: keep the new payment in the history
   delete DATA.holdings[f.idx].divManual;
   const row = document.getElementById('pflag_' + i);
   if (row) { const c = row.lastElementChild; c.innerHTML = '<span style="color:var(--teal)">\u2713 accepted</span>'; }
