@@ -507,7 +507,7 @@ body {
       A self-directed three-pillar retirement strategy spanning 7 accounts and over 60 holdings. The three pillars are not separate accounts — they are virtual designations applied across our existing Schwab and Fidelity accounts, with each position permanently assigned to a pillar and managed accordingly.<br><br><strong>Pillar 1 — Income</strong> generates passive dividend income across 6 accounts — no principal sold, dividends redeployed until retirement.<br><strong>Pillar 2 — Growth</strong> is Brad's and Lisa's 401k accounts compounding untouched until RMDs begin in 2035.<br><strong>Pillar 3 — Health/LTC</strong> is a self-funded reserve held virtually inside the IRAs, fully replacing traditional LTC insurance and providing a dedicated pool for future healthcare and miscellaneous medical expenses.
     </p>
     
-    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of November 11, 2026 &nbsp;04:55 PM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
+    <div id="dateBlock" style="width: 100%; margin-top: 0.6rem; text-align: center; font-size: 0.72rem; color: var(--gray); font-family: 'DM Mono', monospace;">As of November 12, 2026 &nbsp;08:47 AM &nbsp;·&nbsp; Prices: Schwab &amp; Fidelity / Finnhub &nbsp;·&nbsp; Dividend rates: verified</div>
     
   </div>
   <!-- SUMMARY CARDS -->
@@ -515,9 +515,9 @@ body {
     <div class="summary-grid-1" id="summaryRow1">
     <div class="sum-card navy" style="text-align:center">
       <div class="sum-label">Investment Portfolio</div>
-      <div class="sum-value">$2,072,272</div>
+      <div class="sum-value">$2,071,324</div>
       <div class="sum-note">incl. reserves &amp; crypto · Portfolio YOC 4.7%</div>
-      <div class="sum-note" style="font-size:0.72rem;opacity:0.85">Crypto $32,071 — iTrust Capital $30,564 · Crypto.com $1,507</div>
+      <div class="sum-note" style="font-size:0.72rem;opacity:0.85">Crypto $31,123 — iTrust Capital $29,662 · Crypto.com $1,461</div>
     </div></div>
     <div class="summary-grid-3" id="summaryRow2">
     <div class="sum-card teal">
@@ -1774,10 +1774,10 @@ body {
   <div id="dataEditor"><div class="data-section">
     <div class="data-section-title">⚙️ Portfolio Settings</div>
     <table class="data-tbl"><thead><tr><th>Setting</th><th>Value</th><th>Notes</th></tr></thead><tbody>
-      <tr><td>As of date</td><td><input id="set_asOf" value="November 11, 2026" readonly="" style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
+      <tr><td>As of date</td><td><input id="set_asOf" value="November 12, 2026" readonly="" style="color:var(--gray);background:#F8F8F6;cursor:default"></td><td>Auto-set to today when you click Apply Updates</td></tr>
       <tr><td>Capital One balance</td><td><input id="set_capBal" type="number" value="60000"></td><td>Sacred principal — never touched</td></tr>
       <tr><td>Capital One APY</td><td><input id="set_capApy" type="number" step="0.001" value="0.032"></td><td>e.g. 0.032 for 3.20%</td></tr>
-      <tr><td>Crypto value (auto)</td><td>$32,071</td><td>Computed live from the crypto accounts below</td></tr>
+      <tr><td>Crypto value (auto)</td><td>$31,123</td><td>Computed live from the crypto accounts below</td></tr>
     </tbody></table>
   </div><div class="data-section">
       <div class="data-section-title" onclick="toggleSection('grp_0')" style="cursor:pointer;user-select:none">
@@ -3206,7 +3206,7 @@ body {
         </tbody>
       </table>
       </div>
-    </div><div class="data-section"><div class="data-section-title" onclick="toggleSection('grp_crypto')" style="cursor:pointer;user-select:none"><span id="caret_grp_crypto" style="display:inline-block;width:1em;color:var(--gray)">▾</span> ₿ Crypto Accounts (edit quantities · auto-priced)</div><div id="grp_crypto" class="section-body"><table class="data-tbl"><thead><tr><th>iTrust Capital (Lisa's IRA)</th><th>Quantity</th><th>Value</th></tr></thead><tbody><tr><td>ADA</td><td><input type="number" step="any" value="2201.5633" onchange="DATA.cryptoAccounts[0].coins['ADA']=parseFloat(this.value)||0"></td><td>$390</td></tr><tr><td>BTC</td><td><input type="number" step="any" value="0.3164" onchange="DATA.cryptoAccounts[0].coins['BTC']=parseFloat(this.value)||0"></td><td>$23,612</td></tr><tr><td>ETH</td><td><input type="number" step="any" value="2.3467" onchange="DATA.cryptoAccounts[0].coins['ETH']=parseFloat(this.value)||0"></td><td>$4,878</td></tr><tr><td>DOT</td><td><input type="number" step="any" value="22.2755" onchange="DATA.cryptoAccounts[0].coins['DOT']=parseFloat(this.value)||0"></td><td>$19</td></tr><tr><td>SOL</td><td><input type="number" step="any" value="19.6103" onchange="DATA.cryptoAccounts[0].coins['SOL']=parseFloat(this.value)||0"></td><td>$1,665</td></tr><tr><td><strong>Subtotal</strong></td><td></td><td><strong>$30,564</strong></td></tr></tbody></table><table class="data-tbl"><thead><tr><th>Crypto.com</th><th>Quantity</th><th>Value</th></tr></thead><tbody><tr><td>ETH</td><td><input type="number" step="any" value="0.31848107" onchange="DATA.cryptoAccounts[1].coins['ETH']=parseFloat(this.value)||0"></td><td>$662</td></tr><tr><td>BTC</td><td><input type="number" step="any" value="0.00847665" onchange="DATA.cryptoAccounts[1].coins['BTC']=parseFloat(this.value)||0"></td><td>$633</td></tr><tr><td>SOL</td><td><input type="number" step="any" value="1.6679" onchange="DATA.cryptoAccounts[1].coins['SOL']=parseFloat(this.value)||0"></td><td>$142</td></tr><tr><td>CRO</td><td><input type="number" step="any" value="1216.25" onchange="DATA.cryptoAccounts[1].coins['CRO']=parseFloat(this.value)||0"></td><td>$59</td></tr><tr><td>DOT</td><td><input type="number" step="any" value="14.3257" onchange="DATA.cryptoAccounts[1].coins['DOT']=parseFloat(this.value)||0"></td><td>$12</td></tr><tr><td><strong>Subtotal</strong></td><td></td><td><strong>$1,507</strong></td></tr></tbody></table><p style="font-size:0.75rem;color:var(--gray);margin:6px 0 0">Prices refresh when you click Refresh All Prices. Edit a quantity when your holdings change, then click Apply — the combined total flows into your Investment Portfolio automatically.</p></div></div></div>
+    </div><div class="data-section"><div class="data-section-title" onclick="toggleSection('grp_crypto')" style="cursor:pointer;user-select:none"><span id="caret_grp_crypto" style="display:inline-block;width:1em;color:var(--gray)">▾</span> ₿ Crypto Accounts (edit quantities · auto-priced)</div><div id="grp_crypto" class="section-body"><table class="data-tbl"><thead><tr><th>iTrust Capital (Lisa's IRA)</th><th>Quantity</th><th>Value</th></tr></thead><tbody><tr><td>ADA</td><td><input type="number" step="any" value="2201.5633" onchange="DATA.cryptoAccounts[0].coins['ADA']=parseFloat(this.value)||0"></td><td>$376</td></tr><tr><td>BTC</td><td><input type="number" step="any" value="0.3164" onchange="DATA.cryptoAccounts[0].coins['BTC']=parseFloat(this.value)||0"></td><td>$22,949</td></tr><tr><td>ETH</td><td><input type="number" step="any" value="2.3467" onchange="DATA.cryptoAccounts[0].coins['ETH']=parseFloat(this.value)||0"></td><td>$4,720</td></tr><tr><td>DOT</td><td><input type="number" step="any" value="22.2755" onchange="DATA.cryptoAccounts[0].coins['DOT']=parseFloat(this.value)||0"></td><td>$18</td></tr><tr><td>SOL</td><td><input type="number" step="any" value="19.6103" onchange="DATA.cryptoAccounts[0].coins['SOL']=parseFloat(this.value)||0"></td><td>$1,599</td></tr><tr><td><strong>Subtotal</strong></td><td></td><td><strong>$29,662</strong></td></tr></tbody></table><table class="data-tbl"><thead><tr><th>Crypto.com</th><th>Quantity</th><th>Value</th></tr></thead><tbody><tr><td>ETH</td><td><input type="number" step="any" value="0.31848107" onchange="DATA.cryptoAccounts[1].coins['ETH']=parseFloat(this.value)||0"></td><td>$641</td></tr><tr><td>BTC</td><td><input type="number" step="any" value="0.00847665" onchange="DATA.cryptoAccounts[1].coins['BTC']=parseFloat(this.value)||0"></td><td>$615</td></tr><tr><td>SOL</td><td><input type="number" step="any" value="1.6679" onchange="DATA.cryptoAccounts[1].coins['SOL']=parseFloat(this.value)||0"></td><td>$136</td></tr><tr><td>CRO</td><td><input type="number" step="any" value="1216.25" onchange="DATA.cryptoAccounts[1].coins['CRO']=parseFloat(this.value)||0"></td><td>$58</td></tr><tr><td>DOT</td><td><input type="number" step="any" value="14.3257" onchange="DATA.cryptoAccounts[1].coins['DOT']=parseFloat(this.value)||0"></td><td>$12</td></tr><tr><td><strong>Subtotal</strong></td><td></td><td><strong>$1,461</strong></td></tr></tbody></table><p style="font-size:0.75rem;color:var(--gray);margin:6px 0 0">Prices refresh when you click Refresh All Prices. Edit a quantity when your holdings change, then click Apply — the combined total flows into your Investment Portfolio automatically.</p></div></div></div>
   <!-- PRICE REFRESH -->
   <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1.25rem">
     <div style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:0.5rem">📡 Live Price Refresh — Finnhub</div>
@@ -3314,7 +3314,7 @@ body {
     <button class="update-btn" onclick="applyUpdates()">↻ Apply Updates &amp; Recalculate</button>
     <button class="update-btn" style="background:var(--navy)" onclick="saveDashboard()">💾 Save Dashboard</button>
     <button class="update-btn" style="background:transparent;color:var(--navy);padding:8px 10px;font-size:0.85rem" onclick="updateGitHubToken()" title="Update GitHub token">⚙️</button>
-    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 4:55:36 PM</span>
+    <span class="update-msg" id="updateMsg" style="">✓ Dashboard updated — 8:47:59 AM</span>
   </div>
 </div>
 </div>
@@ -3326,12 +3326,12 @@ body {
 // DATA — ALL HOLDINGS (edit here or via Data tab)
 // ════════════════════════════════════════════════════
 /*DATA_START*/const DATA = {
-  "asOf": "November 11, 2026",
+  "asOf": "November 12, 2026",
   "capOne": {
     "balance": 60000,
     "apy": 0.032
   },
-  "crypto": 32071.249337332098,
+  "crypto": 31123.2639404749,
   "cryptoAccounts": [
     {
       "name": "iTrust Capital (Lisa's IRA)",
@@ -3355,16 +3355,16 @@ body {
     }
   ],
   "cryptoPrices": {
-    "BTC": 74626,
-    "ETH": 2078.73,
-    "ADA": 0.177372,
-    "DOT": 0.853932,
-    "SOL": 84.9,
-    "CRO": 0.04813386
+    "BTC": 72532,
+    "ETH": 2011.16,
+    "ADA": 0.170911,
+    "DOT": 0.828202,
+    "SOL": 81.52,
+    "CRO": 0.04770546
   },
   "cryptoSubtotals": {
-    "iTrust Capital (Lisa's IRA)": 30564.2540089136,
-    "Crypto.com": 1506.9953284184999
+    "iTrust Capital (Lisa's IRA)": 29662.0656268173,
+    "Crypto.com": 1461.1983136576
   },
   "holdings": [
     {
