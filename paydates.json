@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21",
+ "updated": "2026-11-26",
  "note": "Declared (announced) pay dates. Only add a date once the fund has formally declared it. Dates are YYYY-MM-DD. Amounts are reference only; the calendar always uses dashboard amounts.",
  "declared": {
   "AGNC": [
@@ -225,6 +225,11 @@
    {
     "ex": "2027-02-05",
     "pay": "2027-02-12",
+    "amt": 0.27
+   },
+   {
+    "ex": "2027-03-08",
+    "pay": "2027-03-15",
     "amt": 0.27
    }
   ],
